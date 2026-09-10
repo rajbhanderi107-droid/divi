@@ -42,6 +42,19 @@ Event times are fixed to IST. `DTSTART` is written in UTC (`T143000Z` is
 8:00 PM IST); there is deliberately no `DTEND`, because the night has no
 published end time.
 
+### Ten nights, provisionally
+
+The site runs 11–20 October 2026 — ten nights. Divi has not announced 2026
+yet: divigarba.com counts down to 11 October under the words "Nine Nights Of
+2026", and NavratriGarba lists 11–19 October. The start date agrees
+everywhere; only the length is open, and Divi themselves ran ten nights in
+2025 (22 September – 1 October). Ten is a deliberate choice pending the
+announcement, not an oversight.
+
+Should it become nine, the length lives in one place — `dates` at the top of
+`planner.js` — but the prose does not: the hero, the event strip, the details
+section and the FAQ all say ten in words, and the terms repeat the dates.
+
 ## The gallery
 
 `app.js` holds the photographs in one array of `[file, title]` pairs, and
