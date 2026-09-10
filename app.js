@@ -24,3 +24,11 @@ document.querySelectorAll('.hero-visual,.story-image,.gallery-card .photo,.featu
 function resetDepth(){depthResets.forEach(reset=>reset())}reducedMotion.addEventListener('change',resetDepth);finePointer.addEventListener('change',resetDepth);window.addEventListener('resize',resetDepth);window.addEventListener('scroll',resetDepth,{passive:true});
 track.addEventListener('keydown',event=>{const cards=[...track.querySelectorAll('.gallery-card')],index=cards.indexOf(document.activeElement);if(index<0)return;let target=index;if(event.key==='ArrowRight')target=Math.min(cards.length-1,index+1);else if(event.key==='ArrowLeft')target=Math.max(0,index-1);else if(event.key==='Home')target=0;else if(event.key==='End')target=cards.length-1;else return;event.preventDefault();cards[target].focus({preventScroll:true});cards[target].scrollIntoView({behavior:motion(),block:'nearest',inline:'nearest'})});
 window.addEventListener('resize',()=>{updateNav();updateGalleryControls()});
+
+/* Start the hero clip after load so it never competes with the LCP image, and
+   skip it entirely on reduced motion or a metered connection. */
+(()=>{const video=document.querySelector('.hero-video');if(!video)return;
+const conn=navigator.connection||{};
+if(matchMedia('(prefers-reduced-motion: reduce)').matches||conn.saveData||/2g/.test(conn.effectiveType||''))return;
+const start=()=>{video.addEventListener('playing',()=>video.classList.add('is-live'),{once:true});video.play().catch(()=>{})};
+if(document.readyState==='complete')start();else window.addEventListener('load',start,{once:true})})();
