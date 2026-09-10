@@ -62,6 +62,33 @@ section and the FAQ all say ten in words, and the terms repeat the dates.
 `assets/` and add a pair — the card, the lightbox entry, the numbering,
 the keyboard order and the neighbour preloading all follow from that list.
 
+## Images
+
+Every raster asset is WebP, sized to how it is actually used rather than to
+what came out of the camera: the planner background sits under a near-opaque
+gradient, so it is compressed hard; the organiser's logo renders at 122px and
+was shipped at 4140px wide. The whole set is 2.8 MB on disk, and a first load
+pulls about 164 KB because everything below the fold is lazy.
+
+`favicon.png` stays a PNG on purpose — Safari does not reliably take a WebP
+icon.
+
+To replace a photograph, drop it in and match the existing long edge (1400px
+for gallery photographs, 1600–1800px for the scene images).
+
+## Head
+
+The `<head>` carries Open Graph and Twitter card tags and a schema.org
+`Festival` with one `subEvent` per night, so the ten nights are legible to
+search engines rather than only to a reader.
+
+**Three absolute URLs hardcode the origin** — `canonical`, `og:url` and
+`og:image`/`twitter:image`. Social crawlers cannot resolve relative paths, so
+these must change when the site moves; an HTML comment marks them. There is no
+`offers` block, because ticket prices are the ticket provider's and are not
+known here; add one when they are, or the event will not qualify for rich
+results.
+
 ## Booking
 
 Passes are sold through SortMyScene, embedded in a dialog and also linked out
