@@ -102,3 +102,22 @@ body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobil
 [data-motion=on] .rv-fade{opacity:0;transition:opacity var(--dur-slow) var(--ease-out)}
 [data-motion=on] .rv-fade.is-in{opacity:1}
 @media(prefers-reduced-motion:reduce){.rv-fade{opacity:1!important;transition:none!important}}
+
+/* The rangoli. Drawn rather than photographed, so it is crisp at any size and
+   costs 7 KB inline with no request. It sits behind the hero copy — on a phone
+   that column is mostly empty ground, which is what the screenshot showed. */
+.hero-rangoli{position:absolute;z-index:0;pointer-events:none;color:#f3d7a2;
+ left:-14%;top:-12%;width:min(78vw,760px);aspect-ratio:1;opacity:.16;
+ animation:rangoli-turn 210s linear infinite}
+@keyframes rangoli-turn{to{transform:rotate(360deg)}}
+[data-motion=on] .hero-rangoli{opacity:0;animation:rangoli-in 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+@keyframes rangoli-in{to{opacity:.16}}
+
+@media(max-width:900px){.hero-rangoli{left:-26%;top:-6%;width:min(96vw,640px);opacity:.19}
+ [data-motion=on] .hero-rangoli{animation:rangoli-in-m 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+ @keyframes rangoli-in-m{to{opacity:.19}}}
+@media(max-width:620px){.hero-rangoli{left:-30%;top:2%;width:124vw;opacity:.22}
+ [data-motion=on] .hero-rangoli{animation:rangoli-in-s 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+ @keyframes rangoli-in-s{to{opacity:.22}}}
+
+@media(prefers-reduced-motion:reduce){.hero-rangoli{animation:none!important;opacity:.16!important}}

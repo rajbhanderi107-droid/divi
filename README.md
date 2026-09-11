@@ -96,6 +96,26 @@ A bare duration falls back to the browser's generic `ease`, and a page of
 mixed curves is most of what separates "fine" from "smooth". The one exception
 is the hero video's 1.1s crossfade, which is symmetric on purpose.
 
+## The rangoli, and the arrows
+
+The hero's copy column was bare ground on a phone. `.hero-rangoli` is an inline
+SVG drawn to the geometry a rangoli actually has — petal rings whose counts
+rise outward (8, 16, 24, 32), a dotted band, a lotus centre — generated rather
+than eyeballed, so it is crisp at any size and costs about 8 KB with no
+request. It turns once every 210 seconds, which is slow enough to notice only
+if you stay.
+
+Two things had to be corrected by looking at it on a real phone rather than
+reasoning about it. A 2.4 stroke on a 1000-unit viewBox shown near 500px lands
+around 1.2px and vanishes into the ground texture; the strokes are 1.75x
+heavier for that reason. And the opacity that reads on a desktop is too faint
+on a small screen, so it rises from .16 to .22 as the viewport narrows.
+
+**Arrows carry U+FE0E.** Without the variation selector, iOS renders U+2197 and
+U+2193 with *emoji* presentation — the Book ticket arrow came out as a blue
+emoji tile rather than a glyph in the type's own colour. Any arrow added later
+needs the same selector.
+
 ## The garba circle
 
 `hero3d.js` draws the thing the event actually is: five rings of lamps on a
