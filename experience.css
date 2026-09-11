@@ -230,35 +230,44 @@ html.lenis,html.lenis body{height:auto}
    drawing of what is built, once as a pin on a map. */
 .location-copy{display:flex;flex-direction:column;align-items:flex-start}
 .location-ground{display:grid;gap:26px}
-/* The plan is drawn in gold line, and gold line needs a night behind it — on
-   the terracotta the whole drawing simply vanished. So the ground gets its own
-   dark plate, which is also what it is: a patch of unlit farm with the lights
-   strung over it. */
-.ground-plan{position:relative;padding:40px 30px 30px;border-radius:4px;
- background:radial-gradient(ellipse 72% 66% at 50% 42%,#1a0a04 0%,#140804 46%,#0d0503 78%,#0a0403 100%);
- border:1px solid #e6b96e22;
- box-shadow:inset 0 0 90px #00000088,0 24px 60px -40px #000000cc}
-.ground-plan:before{content:'';position:absolute;inset:0;border-radius:4px;pointer-events:none;
- background:radial-gradient(ellipse 60% 52% at 50% 40%,#f0b56714 0%,transparent 70%)}
-.ground-plan svg{position:relative;display:block;width:100%;max-width:460px;margin-inline:auto;overflow:visible}
-.ground-plan circle,.ground-plan line,.ground-plan rect{fill:none;stroke:#e6b96e;vector-effect:non-scaling-stroke}
-.gp-sand{stroke:none}
-.gp-rail{stroke:#e6b96e;stroke-opacity:.7;stroke-width:1}
-.gp-posts circle{fill:#ffd58f;fill-opacity:.85;stroke:none}
-.gp-seats{stroke-opacity:.42;stroke-width:1;stroke-dasharray:3 7}
-.gp-turn{stroke:#ffe0a6;stroke-opacity:1;stroke-width:2.2;stroke-linecap:round;stroke-dasharray:2 13;
- transform-origin:210px 210px}
-.gp-rangoli circle{fill:#e08a3c;fill-opacity:.22;stroke:#f0b567;stroke-opacity:.72;stroke-width:1}
-.gp-altar-ring{stroke-opacity:.45;stroke-width:1;stroke-dasharray:2 6}
-.gp-altar{fill:#f0c98a;fill-opacity:.22;stroke:#f0c98a;stroke-opacity:.7;stroke-width:1}
-.gp-canopy line{stroke:#f4d9a6;stroke-opacity:.62;stroke-width:1.5;stroke-linecap:round}
-.gp-key{list-style:none;display:grid;grid-template-columns:repeat(2,auto);
- gap:9px 30px;justify-content:center;
- margin:26px 0 0;padding:0;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;
- color:#f4e8d0;opacity:.66}
-.gp-key li:last-child{grid-column:1/-1;justify-self:center}
-.gp-key li{display:flex;align-items:center;gap:8px}
-.gp-key li:before{content:'';width:16px;height:1px;background:#e6b96e;flex:none}
+/* The ground, turning behind the section.
+   It was a boxed diagram sitting in the column, competing with the address for
+   the reader's attention. It is not information — it is the same circle the
+   whole site turns on, so it belongs behind the words: very faint, very large,
+   and always moving. */
+.ground-plan{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ display:grid;place-items:center start;opacity:1;
+ -webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 30%,transparent 78%);
+ mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 30%,transparent 78%)}
+.ground-plan svg{width:min(104vh,62%);height:auto;overflow:visible;
+ margin-left:-8%;
+ transform:rotate(0deg);transform-origin:50% 50%}
+.location{position:relative}
+.location>*:not(.ground-plan){position:relative;z-index:1}
+
+/* The drawing itself. Line only: the sand gradient that used to sit under it
+   belonged to the dark plate the plan had when it was a card, and on the
+   terracotta it is just a smudge, so it is gone.
+
+   And the line is dark, not gold. Screen blending was the reflex from the hero,
+   where gold on obsidian is the whole point — but screen can only lighten, and
+   on a ground this warm and this bright the gold had nowhere left to go and
+   simply disappeared. Divi's own posts ghost their artwork darker into the
+   cloth; multiplying a deep maroon line does the same thing here, and the
+   circle reads like something printed into the fabric rather than laid on it. */
+.ground-plan{mix-blend-mode:multiply}
+.gp-sand{display:none}
+.ground-plan circle,.ground-plan line,.ground-plan rect{fill:none;stroke:#4a1508;
+ vector-effect:non-scaling-stroke}
+.gp-rail{stroke-opacity:.8;stroke-width:2}
+.gp-posts circle{fill:#4a1508;fill-opacity:.85;stroke:none}
+.gp-seats{stroke-opacity:.55;stroke-width:1.8;stroke-dasharray:3 7}
+.gp-turn{stroke:#4a1508;stroke-opacity:.85;stroke-width:3.4;stroke-linecap:round;
+ stroke-dasharray:2 13;transform-origin:210px 210px}
+.gp-rangoli circle{fill:#4a1508;fill-opacity:.14;stroke:#4a1508;stroke-opacity:.7;stroke-width:1.8}
+.gp-altar-ring{stroke-opacity:.55;stroke-width:1.6;stroke-dasharray:2 6}
+.gp-altar{fill:#4a1508;fill-opacity:.22;stroke:#4a1508;stroke-opacity:.75;stroke-width:1.8}
+.gp-canopy line{stroke:#4a1508;stroke-opacity:.72;stroke-width:2.4;stroke-linecap:round}
 
 /* Before you set out. Every line of this is already in the terms on this page;
    putting it where people decide to come saves them going to look. */
@@ -274,14 +283,15 @@ html.lenis,html.lenis body{height:auto}
 /* The two inner rings turn against each other, exactly as they do in the hero
    and on the ground itself. */
 @media (prefers-reduced-motion:no-preference){
+ .ground-plan svg{animation:gp-turn 240s linear infinite}
  .gp-turn-a{animation:gp-turn 78s linear infinite}
  .gp-turn-b{animation:gp-turn 62s linear infinite reverse}
 }
 @keyframes gp-turn{to{transform:rotate(360deg)}}
 @media (max-width:900px){
  .arrival{grid-template-columns:1fr}
- .ground-plan svg{max-width:340px}
- .gp-key{font-size:10px;gap:5px 14px}
+ .ground-plan{opacity:.78}
+ .ground-plan svg{width:132%;margin-left:-16%}
 }
 
 /* Grid children default to min-width:auto, so they will not shrink below their
@@ -317,3 +327,121 @@ html.lenis,html.lenis body{height:auto}
  .divi-ornament.is-drawn svg{clip-path:inset(0 0 0 0)}
  .divi-ornament.is-drawn .orn-flame{opacity:1}
 }
+
+/* ---- the map, drawn straight onto the cloth -------------------------------
+   No plate, no border, no card. The roads are real — OpenStreetMap geometry
+   for the two and a half kilometres around the ground, projected and
+   simplified — and they are drawn directly on the terracotta the same way the
+   turning ground behind the copy is.
+
+   The two layers are deliberately opposite. The ground is ghosted dark into
+   the cloth and stays quiet. The map is the brightest thing in the section:
+   lit gold going to near-white on the arteries, so the Ring Road and the
+   highway are the first things the eye finds and the lanes fill in behind
+   them. Nothing here is blended — screen has nowhere to go on a ground this
+   warm, which is the mistake that lost the ground drawing twice. */
+.map{position:relative;height:auto;border:0;border-radius:0;overflow:visible;
+ background:none;box-shadow:none}
+.map .mp{display:block;width:100%;height:auto;overflow:hidden;
+ /* Clipping the drawing to its frame leaves a hard vertical edge where the
+    roads stop. With no card to explain that edge it has to be dissolved, so
+    the map fades out into the cloth on the sides it meets nothing on. */
+ -webkit-mask-image:linear-gradient(to right,transparent 0,#000 13%,#000 100%),
+  linear-gradient(to bottom,#000 0,#000 84%,transparent 100%);
+ mask-image:linear-gradient(to right,transparent 0,#000 13%,#000 100%),
+  linear-gradient(to bottom,#000 0,#000 84%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-composite:intersect}
+.map .mp path{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+
+/* Heavier and brighter as the road gets bigger — and every one of them cased
+   in a dark halo. A pale line on a ground this busy washes out however bright
+   it is: the terracotta has texture at exactly the width of a road. Casing is
+   how paper maps have always solved this, and it buys the contrast a panel
+   behind the map would have bought, without the panel. */
+.map .mp>g{filter:drop-shadow(0 0 2.5px #2d0d03) drop-shadow(0 1px 1px #2d0d03cc)}
+.mp-d path{stroke:#ffe9bb;stroke-opacity:.8;stroke-width:1.1}
+.mp-c path{stroke:#fff0ca;stroke-opacity:.92;stroke-width:1.7}
+.mp-b path{stroke:#fff7e0;stroke-opacity:1;stroke-width:2.4}
+.mp-a path{stroke:#fffdf4;stroke-opacity:1;stroke-width:3.6}
+.mp-water path{stroke:#a8cfe2;stroke-opacity:.75;stroke-width:2}
+
+.mp-label{fill:#fff3d2;fill-opacity:.9;font-size:11px;letter-spacing:1.6px;
+ text-transform:uppercase;text-anchor:middle;font-family:Mukta,Arial,sans-serif;
+ paint-order:stroke;stroke:#3d1206;stroke-width:3.5;stroke-opacity:.55;stroke-linejoin:round}
+
+/* No transform-box here. Setting it made the group's own `translate(500 350)`
+   resolve against its fill-box instead of the viewport, which threw the pin to
+   (220, -149) — a 1067px mark sitting entirely off a 648px map. The scale it
+   needs belongs in the markup beside the translate, where the two compose. */
+.map .mp .mp-pin{filter:none}
+.mp-pin-core{fill:#ffd98c;fill-opacity:.34;stroke:#fff2cd;stroke-opacity:1;stroke-width:1.8}
+.mp-pin-flame{fill:#ffdc8f;filter:drop-shadow(0 0 14px #ffb23c) drop-shadow(0 0 3px #2d0d03)}
+/* transform-box DOES belong here: these circles sit at local (0,0) inside the
+   translated pin group, and `transform-origin:center` alone resolves against
+   the view box — so the animation was scaling each ring about (500,350) in
+   local space and flinging it ~900px off the map, dragging the pin's whole
+   bounding box with it. fill-box makes the scale happen about the circle. */
+.mp-ring{fill:none;stroke:#ffe3a8;stroke-width:1.8;
+ transform-box:fill-box;transform-origin:center;
+ filter:drop-shadow(0 0 2px #2d0d03)}
+.mp-here{fill:#fff6e2;fill-opacity:1;font-size:16px;letter-spacing:2.8px;text-transform:uppercase;
+ text-anchor:middle;font-family:Mukta,Arial,sans-serif;
+ paint-order:stroke;stroke:#3d1206;stroke-width:4.5;stroke-opacity:.6;stroke-linejoin:round}
+.mp-north path{fill:#ffe3ae;fill-opacity:.85;stroke:none}
+.mp-north text{fill:#ffe3ae;fill-opacity:.85;font-size:13px;text-anchor:middle;font-family:Mukta,Arial,sans-serif}
+.mp-scale path{fill:none;stroke:#ffe3ae;stroke-opacity:.8;stroke-width:1.2}
+.mp-scale text{fill:#fff3d2;fill-opacity:.8;font-size:11px;letter-spacing:1.4px;font-family:Mukta,Arial,sans-serif}
+
+/* Out of the drawing and into the flow, now that there is no card to sit on. */
+.map-open{position:static;display:inline-flex;align-items:center;gap:14px;margin-top:24px;
+ padding:14px 22px;background:none;border:1px solid #ffe3ae70;color:#fff3d2;box-shadow:none;
+ font-size:11px;letter-spacing:1.8px;text-transform:uppercase;
+ transition:border-color .25s var(--ease-out,ease),background .25s var(--ease-out,ease)}
+.map-open:hover{border-color:#ffeec2;background:#ffe3ae14}
+.map-credit{position:static;margin:14px 0 0;font-size:10px;letter-spacing:.4px;
+ color:#f0dcb9;opacity:.5}
+.map-credit a{text-decoration:underline;text-underline-offset:2px}
+
+/* The rings go out from the ground the way the circles do on it. */
+@media (prefers-reduced-motion:no-preference){
+ .mp-ring-1{animation:mp-out 3.6s ease-out infinite}
+ .mp-ring-2{animation:mp-out 3.6s ease-out infinite 1.8s}
+ .mp-pin-flame{animation:mp-flicker 2.6s ease-in-out infinite}
+}
+@keyframes mp-out{0%{transform:scale(.35);stroke-opacity:.9}100%{transform:scale(2.8);stroke-opacity:0}}
+@keyframes mp-flicker{0%,100%{opacity:.88}50%{opacity:1}}
+@media (max-width:900px){
+ .mp-label{font-size:15px;letter-spacing:1px}
+ .mp-here{font-size:21px}
+ .map-open{margin-top:18px;padding:13px 18px;font-size:10px}
+}
+}
+
+/* The map card was built around a 330px-tall Google iframe. The drawing has
+   its own proportion and has to be allowed to keep it, and the button that
+   used to sit on the iframe was styled as `.map>a` — which is exactly what the
+   new one is, so it needs to be answered at that weight rather than hoped
+   past. Scoped to the location column so it wins wherever the old heights are
+   set, media query or not. */
+.location-ground .map{height:auto;aspect-ratio:1000/700}
+.location-ground .map>a.map-open{left:auto;right:16px;bottom:16px;
+ background:#1a0a05cc;color:#f4e8d0;border:1px solid #e6b96e55;box-shadow:none;
+ padding:11px 17px;font-size:11px;letter-spacing:1.8px}
+.location-ground .map>a.map-open:hover{border-color:#edc766;background:#2a1206e6}
+.location-ground .map>a.map-open span{margin-left:0}
+@media (max-width:900px){
+ .location-ground .map>a.map-open{right:12px;bottom:12px;padding:10px 14px;font-size:10px}
+}
+
+/* The map card was built around a 330px-tall Google iframe, and the drawing
+   has its own proportion to keep. The button that used to sit on that iframe
+   was styled as `.map>a` — which is exactly what the new one is — so it has to
+   be answered at that weight rather than hoped past. */
+.location-ground .map{height:auto;border:0;border-radius:0;background:none;box-shadow:none}
+.location-ground .map>a.map-open{position:static;left:auto;right:auto;bottom:auto;
+ background:none;color:#fff3d2;border:1px solid #ffe3ae70;box-shadow:none}
+.location-ground .map>a.map-open:hover{border-color:#ffeec2;background:#ffe3ae14}
+.location-ground .map>a.map-open span{margin-left:0}
+
+/* The turning ground has to survive the terracotta it now sits on. Behind the
+   words it can be bright, because it is line rather than mass. */
