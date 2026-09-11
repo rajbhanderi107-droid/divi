@@ -1,0 +1,447 @@
+/* Divi: original brown textile, antique gold, and dimensional photography. */
+:root{--cream:#faf4e9;--ink:#39200f;--wine:#583017;--gold:#e3bc7c;--muted:#bda98d;--line:#c19d6150}
+body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blur(18px);border-color:#e3bc7c26;box-shadow:0 2px 30px #2113091f}nav a{letter-spacing:1.2px}nav a.active{color:var(--gold)}.brand img{height:66px}.book{border-radius:3px;background:linear-gradient(115deg,#f0d398,#dab06d);box-shadow:inset 0 1px 0 #fff6,0 4px 0 #1a0c142e;min-height:48px;transition:transform var(--dur-base) var(--ease-out),box-shadow var(--dur-base) var(--ease-out),background var(--dur-base) var(--ease-out)}.book:hover{box-shadow:inset 0 1px 0 #fff8,0 7px 20px #d7ad7226}.book:focus-visible{outline-offset:7px}.book span{transition:transform var(--dur-base) var(--ease-out)}.book:hover span{transform:translate(3px,-3px)}
+.hero{position:relative;isolation:isolate;min-height:calc(100svh - 92px);grid-template-columns:48% 52%;background:#291709;color:var(--cream);overflow:hidden}.hero:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#251509f5 2%,#3c230fdc 45%,#4c2b11c7),url('assets/scene-circle.webp') center/cover;opacity:.95}.hero:after{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 82% 30%,#bf8b421d,transparent 55%)}.hero-copy{padding:70px 9% 40px 12%;justify-content:center;position:relative;z-index:3}.hero .eyebrow{color:var(--gold);display:flex;align-items:center;gap:17px}.hero .eyebrow:before{content:'';width:36px;height:1px;background:var(--gold)}h1{font-size:clamp(50px,4.7vw,80px);color:#efce96;letter-spacing:-1.8px;text-shadow:0 3px 20px #0003;margin-top:12px}.hero-tag{font-size:clamp(31px,3.3vw,52px);margin-bottom:28px;font-weight:400;letter-spacing:-.7px}.hero .intro{color:#f7ebdc}.hero .description{color:#cbb9ad;line-height:1.95;font-size:15px;max-width:410px}.hero-book{background:linear-gradient(115deg,#f0d398,#dab06d);color:#39200f;min-width:180px;margin-top:4px}.hero-book:hover{background:#edca8b}.hero-bottom{color:#c4af9e;letter-spacing:1.4px;margin-top:45px;padding-top:26px;border-top:1px solid #e3bc7c30}.hero-bottom a{border-color:#e3bc7c50;color:var(--gold);transition:transform var(--dur-base) var(--ease-out)}.hero-bottom a:hover{transform:translateY(4px)}
+.hero-visual{margin:46px 8% 46px 0;min-height:610px;align-self:stretch;border-radius:48% 48% 4px 4px;overflow:visible;box-shadow:0 0 0 1px #e3bc7c88,10px 14px 0 -4px #291709,10px 14px 0 -3px #bc925747,0 40px 80px #0005;transform:perspective(1400px) rotateY(-6deg) rotateX(1deg);background:#2c171a;transform-style:preserve-3d}.hero-visual>img{border-radius:inherit;transform:translateZ(1px);animation:unveil 1.4s ease-out;object-position:50% 44%}.hero-visual:after{border-radius:0 0 4px 4px;pointer-events:none;background:linear-gradient(transparent,#201006e6);transform:translateZ(2px)}.hero-visual .depth-border{position:absolute;inset:13px;border:1px solid #f0d59b80;border-radius:inherit;z-index:2;pointer-events:none;transform:translateZ(22px)}.image-caption{transform:translateZ(45px);bottom:32px;left:35px;right:35px;text-shadow:0 2px 12px #000;gap:12px}.image-caption span:first-child{font-size:34px}.image-caption span:last-child{font-size:11px;max-width:105px;text-align:right}.hero-visual.depth-active{box-shadow:0 0 0 1px #e3bc7c88,10px 14px 0 -4px #291709,10px 14px 0 -3px #bc925747,0 40px 80px #0006}
+.event-strip{padding:30px 6%;background:#f0e5d4;border:0;box-shadow:0 1px 0 var(--line)}.event-strip>div{padding-left:42px}.event-strip dt{font-size:29px}.event-strip dd{font-size:13px;letter-spacing:.5px}.ritual{padding:110px 6% 105px}.section-heading h2{font-size:clamp(48px,5.3vw,78px)}.section-heading>p{max-width:220px;margin-bottom:4px}.feature{border-radius:3px;overflow:visible;box-shadow:0 20px 45px #58301716;min-height:520px}.feature-image{border-radius:3px 0 0 3px;overflow:hidden;min-height:520px}.feature-image img{max-height:none}.feature-copy{background:linear-gradient(145deg,#654021,#38200e);border-radius:0 3px 3px 0}.feature-copy h2{font-size:clamp(54px,5.7vw,84px)}.feature-copy p{font-size:15px;max-width:270px}.round-arrow{width:52px;height:52px;transition:background var(--dur-base) var(--ease-out),transform var(--dur-base) var(--ease-out)}.round-arrow:hover{background:#e3bc7c20;transform:rotate(12deg)}.stories{gap:34px;margin-top:70px}.stories article:nth-child(2){padding-top:60px}.stories article:nth-child(3){padding-top:120px}.story-image{height:360px;box-shadow:0 10px 28px #3e240f10}.stories article:first-child .story-image{border-radius:140px 140px 2px 2px}.stories article:nth-child(3) .story-image{border-radius:2px 2px 140px 140px}.stories h3{font-size:33px;line-height:1.1;margin-top:14px}.stories p{font-size:15px;line-height:1.8}.stories .eyebrow{color:#886037}
+.gallery{background:#281709;color:var(--cream);padding:85px 6% 75px}.gallery .eyebrow{color:var(--gold)}.gallery h2 i{color:var(--gold)}.gallery .section-heading>div>p:not(.eyebrow){color:#c9b6aa}.gallery-controls button{color:var(--cream);border-color:#9d8060;min-width:46px;height:46px}.gallery-controls button:hover{background:var(--gold);color:var(--ink)}.gallery-controls button:disabled{opacity:.3;cursor:default;background:transparent;color:var(--cream)}.gallery-track{gap:30px;perspective:1400px;padding:28px 4px 34px;scrollbar-color:#b98c59 #ffffff0a;overscroll-behavior-x:contain}.gallery-card{flex-basis:29%;color:var(--cream);transform-style:preserve-3d;transition:transform var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out)}.gallery-card .photo{height:420px;border:1px solid #dabb872e;box-shadow:0 20px 34px #0004;transform:perspective(1100px) rotateY(-5deg);border-radius:3px}.gallery-card:nth-child(even){padding-top:36px}.gallery-card:nth-child(even) .photo{transform:perspective(1100px) rotateY(5deg)}.gallery-card:hover .photo,.gallery-card:focus-visible .photo{transform:perspective(1100px) rotateY(0deg) translateY(-8px);box-shadow:0 30px 44px #0006}.gallery-card .caption{border-top:1px solid #dec79428;padding-top:15px;gap:20px}.gallery-card .caption span{color:var(--gold)}.gallery-card h3{font-size:28px}.gallery-card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.details{isolation:isolate;overflow:hidden;background:#43260f;padding:105px 6% 90px}.details:before{content:'';position:absolute;inset:0;z-index:-2;background:url('assets/scene-everyone.webp') center 42%/cover;opacity:.2}.details:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(#42230ded,transparent 45%,#42230df0)}.details h2{font-size:clamp(84px,11vw,160px);text-shadow:0 10px 45px #0004;letter-spacing:-3px}.details .book{margin-top:10px}.details .chakra{font-size:29px!important;line-height:1.25;color:#e7d0bf}.location{padding:100px 6%;gap:80px}.location h2{font-size:64px}.map{height:370px;border-radius:4px;box-shadow:14px 14px 0 #e9ddca}.outline-button{min-height:48px}.footer-top{padding-bottom:42px}.contacts a{padding:8px 0;border-bottom:1px solid transparent}.contacts a:hover{border-color:var(--gold)}.footer-bottom{line-height:1.8}dialog{border-radius:8px;box-shadow:0 30px 100px #0005}#lightbox{border-radius:0;box-shadow:none}#lightbox figure img{touch-action:pan-y;user-select:none}#lightbox figcaption{color:var(--gold);letter-spacing:.3px}#lightbox>button:not(.close){width:48px;height:48px;border:1px solid #e3bc7c55;background:#211409d9}#lightbox .close{background:#211409d9;border:1px solid #e3bc7c55;border-radius:50%;width:48px;height:48px}#lightbox figure img.changing{animation:photo-enter .28s ease-out}@keyframes photo-enter{from{opacity:.5;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+@supports(animation-timeline:view()){.stories article{animation:rise-in linear both;animation-timeline:view();animation-range:entry 0% entry 65%}@keyframes rise-in{from{opacity:.45;translate:0 45px}to{opacity:1;translate:0 0}}}
+@media(min-width:1650px){.hero-copy{padding-left:15%;padding-right:13%}.hero-visual{min-height:760px;margin-right:12%}.description{max-width:450px}.hero{max-height:1100px}}
+@media(max-width:1000px){.hero-copy{padding:40px 9%;}.hero-visual{min-height:640px;margin:32px 8% 32px 0}h1{font-size:46px}.hero-tag{font-size:34px}.hero .description{font-size:14px}.image-caption{left:24px;right:24px}.image-caption span:first-child{font-size:27px}.image-caption span:last-child{font-size:10px}.feature-image{min-height:470px}.feature{min-height:470px}.story-image{height:290px}.stories{gap:22px}.stories h3{font-size:29px}.gallery-card{flex-basis:39%}.location{gap:40px}.event-strip dt{font-size:25px}.event-strip>div{padding-left:20px}}
+@media(max-width:620px){header{height:106px}.hero{min-height:0;display:flex;padding-bottom:15px}.hero-copy{padding:35px 7% 16px}.hero .eyebrow{font-size:12px;letter-spacing:2px}.hero .eyebrow:before{width:26px}h1{font-size:clamp(39px,12.3vw,62px);letter-spacing:-1.6px;margin-top:8px}.hero-tag{font-size:36px;line-height:1.1;margin-bottom:23px}.hero .description{font-size:15px;line-height:1.85;margin-bottom:23px}.hero .intro{font-size:15px}.hero-visual{height:440px;min-height:0;margin:25px 7% 24px;border-radius:47% 47% 3px 3px;transform:perspective(1000px) rotateY(-3deg);width:86%;align-self:center;box-shadow:0 0 0 1px #e3bc7c70,7px 9px 0 -3px #291709,7px 9px 0 -2px #bc925747,0 22px 38px #0004}.hero-visual .depth-border{inset:10px;transform:none}.image-caption{bottom:22px;left:25px;right:25px;transform:none}.image-caption span:first-child{font-size:28px}.image-caption span:last-child{font-size:10px}.event-strip{padding:13px 7%}.event-strip>div{padding:14px 0}.event-strip dt{font-size:24px}.event-strip dd{font-size:12px;letter-spacing:0}.ritual{padding:60px 6%}.section-heading h2{font-size:49px}.section-heading>p{max-width:none}.feature{min-height:0}.feature-image{height:330px;min-height:0;border-radius:3px 3px 0 0}.feature-copy{padding:33px 8%;border-radius:0 0 3px 3px}.feature-copy h2{font-size:49px}.feature-copy p{max-width:80%;font-size:15px}.round-arrow{width:44px;height:44px}.stories{gap:36px;margin-top:38px}.stories article:nth-child(2),.stories article:nth-child(3){padding-top:0}.story-image{height:350px}.stories article:first-child .story-image{border-radius:140px 140px 3px 3px}.stories article:nth-child(3) .story-image{border-radius:3px}.stories h3{font-size:33px}.gallery{padding:60px 6% 40px}.gallery .section-heading>div>p:not(.eyebrow){max-width:185px}.gallery-track{gap:22px;padding-top:18px}.gallery-card{flex-basis:83%}.gallery-card .photo{height:370px;transform:perspective(1100px) rotateY(-3deg)}.gallery-card:nth-child(even){padding-top:24px}.gallery-card h3{font-size:27px}.gallery-controls button{min-width:44px;height:44px}.details{padding:70px 6%}.details h2{font-size:clamp(74px,21vw,112px);letter-spacing:-2px}.details .chakra{font-size:27px!important}.location{padding:60px 6%;gap:30px}.location h2{font-size:52px}.map{height:310px;box-shadow:8px 8px 0 #e9ddca}.footer-top{padding-bottom:30px}.contacts{gap:4px}.footer-bottom{font-size:12px}#lightbox{padding:58px 20px 50px}#lightbox>button:not(.close){top:auto;bottom:0;width:46px;height:46px}.light-prev{left:calc(50% - 60px)}.light-next{right:calc(50% - 60px)}#lightbox figure img{height:63dvh}#lightbox .close{right:8px;width:46px;height:46px}}
+@media(prefers-reduced-motion:reduce){.hero-visual,.hero-visual>img,.image-caption,.depth-border,.gallery-card .photo,.gallery-card:nth-child(even) .photo{transform:none!important}.stories article{animation:none;translate:none;opacity:1}#lightbox figure img.changing{animation:none}}
+
+/* ── The nine nights ───────────────────────────────────────────────────────
+   Each night is a gateway: the hero's arch and its inset keyline, at the
+   scale of a frame rather than a doorway. The rail reads left to right, so
+   the nine forms arrive in the order the nights actually fall. */
+.nights{padding:90px 6% 80px;background:linear-gradient(#5d2609e8,#7b3414f2),url('assets/master-bg-divi.webp') center/cover;color:#fff0c8;overflow:hidden}
+.nights .section-heading{align-items:end;margin-bottom:44px}
+.nights .eyebrow{color:var(--gold)}
+.nights h2{color:var(--cream)}
+.nights h2 i{color:var(--gold)}
+.nights .section-heading>p{color:#efd9b6;font-size:13px;line-height:1.9;max-width:46ch}
+
+.night-rail{display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:26px;scrollbar-width:thin;scrollbar-color:#c79a5e transparent}
+.night-frame{flex:0 0 252px;scroll-snap-align:start;display:flex;flex-direction:column}
+.night-art{position:relative;height:170px;border-radius:46% 46% 3px 3px;overflow:hidden;background:#33190a;box-shadow:0 0 0 1px #eec98c5c,0 18px 34px #2b12055c}
+.night-art img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+/* The hero's carved keyline, inherited so it follows the arch exactly. */
+.night-keyline{position:absolute;inset:9px;border:1px solid #f4dcae66;border-radius:50% 50% 2px 2px/52% 52% 2px 2px;pointer-events:none}
+
+.night-index{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:18px 0 0;font-size:10px;letter-spacing:2.4px;text-transform:uppercase;color:#e9c795;font-weight:700}
+.night-frame h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:31px;line-height:1.1;margin:7px 0 0;color:var(--cream)}
+.night-line{font-size:12.5px;line-height:1.85;color:#e8d2b2;margin:10px 0 0}
+
+/* The tenth has no Navadurga to show, and should not borrow one. */
+.night-art-closing{background:radial-gradient(ellipse at 50% 62%,#f0b567 0%,#c96c27 26%,#8d3d15 58%,#43200a 100%)}
+.night-tenth-mark{position:absolute;left:50%;top:54%;width:58px;height:58px;transform:translate(-50%,-50%) rotate(45deg);border:1px solid #fff0c8cc;border-radius:9px;background:#ffe7b31f;box-shadow:0 0 0 10px #ffe7b322,0 0 0 20px #ffe7b312,0 0 38px 10px #f7c07a4d}
+.is-tenth h3{color:var(--gold)}
+
+@media(max-width:900px){.nights{padding:70px 6% 62px}.night-frame{flex-basis:228px}.night-art{height:152px}.night-frame h3{font-size:28px}}
+@media(max-width:620px){.nights{padding:56px 6% 50px}.nights .section-heading{display:block}.nights .section-heading>p{margin-top:16px}.night-rail{gap:18px}.night-frame{flex-basis:76vw}.night-art{height:180px}}
+.night-controls{margin-top:20px}
+.night-controls button{border-color:#e7c48166;background:transparent;color:#fff0c8}
+.night-controls button:hover:not(:disabled){background:var(--gold);color:#3d1a0c;border-color:var(--gold)}
+.night-controls button:disabled{opacity:.32;cursor:default}
+.night-rail:focus-visible{outline:3px solid #f0cd89;outline-offset:6px}
+
+/* The turning circle sits on the hero's floor, behind the copy. It fades in
+   under its own steam once the first frame has rendered, so a browser without
+   WebGL — or a visitor who asked for less motion — simply never sees a canvas. */
+.hero{position:relative}
+.hero-floor{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 86% 68% at 32% 108%,#1c0a04dd 0%,#341706b8 32%,#4c220a5c 54%,transparent 76%)}
+.hero-circle{position:absolute;left:0;right:0;bottom:0;height:76%;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.hero-circle.is-live{opacity:1}
+.hero-copy{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.hero-circle{display:none}}
+
+/* The backdrop sits below everything the page paints. Sections with opaque
+   grounds cover it; the ritual and location stretches, whose gradients are
+   mostly transparent, let it through. */
+.page-backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;opacity:.33}
+body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobile-booking{position:relative;z-index:1}
+
+/* Depth for the corridor. The rail keeps its own scrolling; only the frames
+   move in Z, and only once the script has said so — without it the class is
+   never added and the rail is flat, which is the no-JS and reduced-motion
+   rendering. */
+.night-rail.is-corridor{perspective:1400px;perspective-origin:50% 42%}
+.night-rail.is-corridor .night-frame{transform-style:preserve-3d;will-change:transform}
+
+/* ── Motion, ported from WhiteDot's cinematic-v2 ──────────────────────
+   Its tokens verbatim, so the two sites move the same way. Every rule is
+   scoped to [data-motion="on"], which the head script sets synchronously
+   before first paint — so without it nothing here applies and the page is
+   static, visible and CLS-safe. */
+:root{--dur-fast:180ms;--dur-base:320ms;--dur-slow:620ms;
+ --ease-out:cubic-bezier(.16,1,.3,1);--ease-in-out:cubic-bezier(.65,0,.35,1);--ease-in:cubic-bezier(.5,0,.75,0)}
+
+[data-motion=on] .rv{opacity:0;transform:translateY(16px);
+ transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
+[data-motion=on] .rv.is-in{opacity:1;transform:none}
+
+[data-motion=on] .rv-group>*{opacity:0;transform:translateY(16px);
+ transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out);
+ transition-delay:calc(var(--stagger-i,0)*90ms)}
+[data-motion=on] .rv-group.is-in>*{opacity:1;transform:none}
+
+/* Parallax moves one property; the transform lives here so the script never
+   touches layout. */
+[data-motion=on] .px-slow,[data-motion=on] .px-fast{transform:translate3d(0,var(--parallax,0),0);will-change:transform}
+
+@media(prefers-reduced-motion:reduce){
+ .rv,.rv-group>*{opacity:1!important;transform:none!important;transition:none!important}
+ .px-slow,.px-fast{transform:none!important}
+}
+
+/* Opacity-only reveal, for blocks whose transform belongs to something else —
+   the nights rail sets perspective for the corridor, and the gallery track
+   scrolls. Moving either one would fight the effect that already owns it. */
+[data-motion=on] .rv-fade{opacity:0;transition:opacity var(--dur-slow) var(--ease-out)}
+[data-motion=on] .rv-fade.is-in{opacity:1}
+@media(prefers-reduced-motion:reduce){.rv-fade{opacity:1!important;transition:none!important}}
+
+/* The rangoli. Drawn rather than photographed, so it is crisp at any size and
+   costs 7 KB inline with no request. It sits behind the hero copy — on a phone
+   that column is mostly empty ground, which is what the screenshot showed. */
+.hero-rangoli{position:absolute;z-index:0;pointer-events:none;color:#f3d7a2;
+ left:-14%;top:-12%;width:min(78vw,760px);aspect-ratio:1;opacity:.16;
+ animation:rangoli-turn 210s linear infinite}
+@keyframes rangoli-turn{to{transform:rotate(360deg)}}
+[data-motion=on] .hero-rangoli{opacity:0;animation:rangoli-in 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+@keyframes rangoli-in{to{opacity:.16}}
+
+@media(max-width:900px){.hero-rangoli{left:-26%;top:-6%;width:min(96vw,640px);opacity:.19}
+ [data-motion=on] .hero-rangoli{animation:rangoli-in-m 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+ @keyframes rangoli-in-m{to{opacity:.19}}}
+@media(max-width:620px){.hero-rangoli{left:-30%;top:2%;width:124vw;opacity:.22}
+ [data-motion=on] .hero-rangoli{animation:rangoli-in-s 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+ @keyframes rangoli-in-s{to{opacity:.22}}}
+
+@media(prefers-reduced-motion:reduce){.hero-rangoli{animation:none!important;opacity:.16!important}}
+
+/* ── The ten nights, as a page ────────────────────────────────────────
+   The home page's rail is the teaser; this is the telling. The artwork is
+   167x70 native, so each night is a wide band rather than a tall block — the
+   aspect the source actually has, shown near the size it can hold. */
+.np-hero{padding:96px 6% 70px;max-width:1240px;margin-inline:auto;text-align:center}
+.np-hero .eyebrow{color:var(--gold)}
+.np-hero h1{color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(46px,7vw,104px);
+ line-height:.98;letter-spacing:-2px;margin:6px 0 26px;white-space:normal;text-wrap:balance}
+.np-hero h1 i{color:var(--gold)}
+.np-lead{font-size:15px;line-height:1.95;max-width:60ch;margin:0 auto;color:#eed9b3}
+.np-note{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#e0bb86;margin-top:26px}
+
+.np-list{display:flex;flex-direction:column;gap:8px;padding-bottom:30px}
+.np-night{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,78px);
+ align-items:center;padding:58px 6%;max-width:1340px;margin-inline:auto;width:100%}
+.np-night:nth-child(odd){background:linear-gradient(#3f1c0824,#25120433)}
+.np-right .np-art{order:2}
+
+.np-art{position:relative;border-radius:46% 46% 4px 4px;overflow:hidden;background:#33190a;aspect-ratio:420/176;
+ box-shadow:0 0 0 1px #c8a06d5c,0 26px 50px #3f1c0a2e}
+.np-art img{width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.np-art .night-keyline{border-radius:50% 50% 2px 2px/52% 52% 2px 2px}
+.np-art-closing{background:radial-gradient(ellipse at 50% 62%,#f0b567 0%,#c96c27 26%,#8d3d15 58%,#43200a 100%)}
+.np-art-closing .night-tenth-mark{width:74px;height:74px}
+
+.np-index{display:flex;gap:18px;align-items:baseline;margin:0;font-size:10px;letter-spacing:2.6px;
+ text-transform:uppercase;font-weight:700;color:#e9c795}
+.np-gu{font-family:'Anek Gujarati','Noto Sans Gujarati',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.35;
+ margin:14px 0 0;color:var(--gold)}
+.np-copy h2{color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4vw,52px);
+ line-height:1.05;margin:2px 0 0;letter-spacing:-.5px}
+.np-epithet{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;color:var(--gold);margin:10px 0 0}
+.np-body{font-size:13.5px;line-height:2;color:#e8d2b2;margin:18px 0 0;max-width:52ch}
+
+.np-cta{text-align:center;padding:92px 6% 104px;background:linear-gradient(#6a2b0edb,#753314e8),url('assets/master-bg-divi.webp') center/cover;color:#fff0c8}
+.np-cta .eyebrow{color:var(--gold)}
+.np-cta h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(40px,6vw,76px);margin:4px 0 16px;color:var(--cream)}
+.np-cta>p{font-size:13.5px;line-height:1.95;max-width:52ch;margin:0 auto;color:#eed9b3}
+.np-cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.np-cta-actions .outline-button{margin:0;border-color:#e7c48166;color:#fff0c8}
+.np-cta-actions .outline-button:hover{background:var(--gold);color:#3d1a0c}
+
+@media(max-width:900px){
+ .np-hero{padding:74px 6% 54px}
+ .np-night{grid-template-columns:1fr;gap:26px;padding:46px 6%}
+ .np-right .np-art{order:0}
+ .np-body{max-width:none}
+}
+@media(max-width:620px){
+ .np-hero{padding:58px 6% 44px}
+ .np-night{padding:38px 6%}
+ .np-epithet{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;color:var(--gold);margin:10px 0 0}
+ .np-cta{padding:70px 6% 80px}
+}
+.np-more{color:var(--gold);border-bottom:1px solid #e7c17b66;white-space:nowrap}
+.np-more:hover{border-bottom-color:var(--gold)}
+
+/* ── Divi's newer design system ───────────────────────────────────────
+   Tokens lifted verbatim from divigarba.vercel.app, names and all. They
+   are the brand's own vocabulary — obsidian ground, sindoor red, mukut
+   gold — and worth carrying rather than inventing parallel names. */
+:root{
+ --obsidian:#070504;--maroon:#180807;--temple:#350a08;--sindoor:#8f1712;
+ --antique:#c9a24a;--gold-lit:#edc766;--mukut:#f0c14b;--ivory:#f4e8d0;
+}
+
+/* Lenis's own requirements, inlined rather than fetched — it is five rules. */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}
+
+/* ---- the canopy overhead --------------------------------------------------
+   The real ceiling, cut from the photograph and hung over the hero. Screen
+   blending is what makes it belong: the near-black night in the picture
+   disappears into the obsidian of the page, leaving only the lit canopy, so
+   the hero reads as a room you are standing in rather than a panel with a
+   picture on it. The layer drifts with the scroll and leans with the pointer
+   through the three custom properties ceiling.js writes. */
+.hero-ceiling{position:absolute;top:0;left:0;width:100%;z-index:1;pointer-events:none;
+ mix-blend-mode:screen;opacity:0;transition:opacity 1.6s var(--ease-out,ease);
+ transform:translate3d(var(--ceil-x,0),var(--ceil-y,0),0) scale(var(--ceil-scale,1.04));
+ transform-origin:50% 0;will-change:transform;
+ -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 46%,#0009 72%,transparent 97%);
+ mask-image:linear-gradient(to bottom,#000 0%,#000 46%,#0009 72%,transparent 97%)}
+.hero-ceiling.is-live{opacity:.96}
+.hero-ceiling img{width:100%;height:auto;display:block}
+.hero-ceiling-shade{position:absolute;inset:0;mix-blend-mode:multiply;
+ background:linear-gradient(100deg,#0d0d0d 0%,#2b2b2b 22%,#6e6e6e 42%,#c8c8c8 58%,#fff 74%)}
+.hero-ceiling-glow{position:absolute;top:0;left:0}
+.hero-circle{z-index:2}
+@media (max-width:900px){
+ /* On one column the copy runs the full width, so the ceiling sits higher and
+    keeps out of the way of the words rather than dimming itself sideways. */
+ .hero-ceiling{opacity:0}
+ .hero-ceiling.is-live{opacity:.78}
+ .hero-ceiling-shade{background:linear-gradient(180deg,#fff 0%,#cfcfcf 62%,#6a6a6a 100%)}
+}
+
+/* ---- the ground, drawn from above -----------------------------------------
+   The location section is no longer an address and an empty map card. The plan
+   is the site's own argument made literally: Divi is a set of rings, and the
+   whole page has been saying so since the hero. Both the plan and the map sit
+   in one column so the section reads as one place described twice — once as a
+   drawing of what is built, once as a pin on a map. */
+.location-copy{display:flex;flex-direction:column;align-items:flex-start}
+.location-ground{display:grid;gap:26px}
+/* The ground, turning behind the section.
+   It was a boxed diagram sitting in the column, competing with the address for
+   the reader's attention. It is not information — it is the same circle the
+   whole site turns on, so it belongs behind the words: very faint, very large,
+   and always moving. */
+.ground-plan{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ display:grid;place-items:center start;opacity:1;
+ -webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 30%,transparent 78%);
+ mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 30%,transparent 78%)}
+.ground-plan svg{width:min(104vh,62%);height:auto;overflow:visible;
+ margin-left:-8%;
+ transform:rotate(0deg);transform-origin:50% 50%}
+.location{position:relative}
+.location>*:not(.ground-plan){position:relative;z-index:1}
+
+/* The drawing itself. Line only: the sand gradient that used to sit under it
+   belonged to the dark plate the plan had when it was a card, and on the
+   terracotta it is just a smudge, so it is gone.
+
+   And the line is dark, not gold. Screen blending was the reflex from the hero,
+   where gold on obsidian is the whole point — but screen can only lighten, and
+   on a ground this warm and this bright the gold had nowhere left to go and
+   simply disappeared. Divi's own posts ghost their artwork darker into the
+   cloth; multiplying a deep maroon line does the same thing here, and the
+   circle reads like something printed into the fabric rather than laid on it. */
+.ground-plan{mix-blend-mode:multiply}
+.gp-sand{display:none}
+.ground-plan circle,.ground-plan line,.ground-plan rect{fill:none;stroke:#4a1508;
+ vector-effect:non-scaling-stroke}
+.gp-rail{stroke-opacity:.8;stroke-width:2}
+.gp-posts circle{fill:#4a1508;fill-opacity:.85;stroke:none}
+.gp-seats{stroke-opacity:.55;stroke-width:1.8;stroke-dasharray:3 7}
+.gp-turn{stroke:#4a1508;stroke-opacity:.85;stroke-width:3.4;stroke-linecap:round;
+ stroke-dasharray:2 13;transform-origin:210px 210px}
+.gp-rangoli circle{fill:#4a1508;fill-opacity:.14;stroke:#4a1508;stroke-opacity:.7;stroke-width:1.8}
+.gp-altar-ring{stroke-opacity:.55;stroke-width:1.6;stroke-dasharray:2 6}
+.gp-altar{fill:#4a1508;fill-opacity:.22;stroke:#4a1508;stroke-opacity:.75;stroke-width:1.8}
+.gp-canopy line{stroke:#4a1508;stroke-opacity:.72;stroke-width:2.4;stroke-linecap:round}
+
+/* Before you set out. Every line of this is already in the terms on this page;
+   putting it where people decide to come saves them going to look. */
+.arrival{list-style:none;margin:38px 0 0;padding:0;display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#f0dcb922;
+ border:1px solid #f0dcb922;width:100%}
+.arrival li{background:#2a1206;padding:20px 22px;display:flex;flex-direction:column;gap:5px}
+.arrival span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#e6b96e;opacity:.8}
+.arrival strong{font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;font-weight:600;
+ color:var(--ivory,#f4e8d0);line-height:1.1}
+.arrival em{font-style:normal;font-size:12px;line-height:1.55;color:#f0dcb9;opacity:.66}
+
+/* The two inner rings turn against each other, exactly as they do in the hero
+   and on the ground itself. */
+@media (prefers-reduced-motion:no-preference){
+ .ground-plan svg{animation:gp-turn 240s linear infinite}
+ .gp-turn-a{animation:gp-turn 78s linear infinite}
+ .gp-turn-b{animation:gp-turn 62s linear infinite reverse}
+}
+@keyframes gp-turn{to{transform:rotate(360deg)}}
+@media (max-width:900px){
+ .arrival{grid-template-columns:1fr}
+ .ground-plan{opacity:.78}
+ .ground-plan svg{width:132%;margin-left:-16%}
+}
+
+/* Grid children default to min-width:auto, so they will not shrink below their
+   own min-content. At the two-column phone breakpoint that made the longest
+   line in the strip — "From 8:00 PM · Last entry 2:00 AM" — refuse to wrap and
+   push the whole document 15px wider than the screen. Letting them shrink lets
+   the line wrap where it should. */
+.event-strip>div{min-width:0}
+.event-strip dt,.event-strip dd{min-width:0}
+
+/* ---- Divi's flourish ------------------------------------------------------
+   The gold hairline rule with the diya standing in the middle of it, which is
+   the one piece of furniture every card Divi publishes carries. It draws
+   itself in when its section arrives rather than simply appearing. */
+.divi-ornament{margin:0 0 26px;line-height:0;pointer-events:none}
+.divi-ornament svg{width:262px;max-width:82%;height:auto;overflow:visible;display:block}
+.orn-line path{fill:none;stroke:#e0b562;stroke-width:1.1;stroke-opacity:.85;stroke-linecap:round}
+.orn-line circle{fill:#edc766;fill-opacity:.95}
+.orn-flame path{fill:#f7c15a;fill-opacity:1;stroke:none;
+ filter:drop-shadow(0 0 5px #f0a93a88)}
+.orn-flame .orn-lip{fill:none;stroke:#e0b562;stroke-width:1.6;stroke-opacity:.95;stroke-linecap:round;filter:none}
+/* Sections that centre their type get a centred flourish. */
+.details .divi-ornament,.np-cta .divi-ornament,.np-hero .divi-ornament{margin-inline:auto}
+.details .divi-ornament svg,.np-cta .divi-ornament svg,.np-hero .divi-ornament svg{margin-inline:auto}
+
+/* The rule draws itself out from the flame when the mark comes into view.
+   Gated on a class the ornament gives itself, never on the page's reveal
+   classes: a section without those would have kept the mark clipped to nothing
+   for ever. */
+@media (prefers-reduced-motion:no-preference){
+ .divi-ornament svg{clip-path:inset(0 50% 0 50%);transition:clip-path 1.1s cubic-bezier(.16,1,.3,1) .1s}
+ .divi-ornament .orn-flame{opacity:0;transition:opacity .5s ease .55s}
+ .divi-ornament.is-drawn svg{clip-path:inset(0 0 0 0)}
+ .divi-ornament.is-drawn .orn-flame{opacity:1}
+}
+
+/* ---- the map, drawn straight onto the cloth -------------------------------
+   No plate, no border, no card. The roads are real — OpenStreetMap geometry
+   for the two and a half kilometres around the ground, projected and
+   simplified — and they are drawn directly on the terracotta the same way the
+   turning ground behind the copy is.
+
+   The two layers are deliberately opposite. The ground is ghosted dark into
+   the cloth and stays quiet. The map is the brightest thing in the section:
+   lit gold going to near-white on the arteries, so the Ring Road and the
+   highway are the first things the eye finds and the lanes fill in behind
+   them. Nothing here is blended — screen has nowhere to go on a ground this
+   warm, which is the mistake that lost the ground drawing twice. */
+.map{position:relative;height:auto;border:0;border-radius:0;overflow:visible;
+ background:none;box-shadow:none}
+.map .mp{display:block;width:100%;height:auto;overflow:hidden;
+ /* Clipping the drawing to its frame leaves a hard vertical edge where the
+    roads stop. With no card to explain that edge it has to be dissolved, so
+    the map fades out into the cloth on the sides it meets nothing on. */
+ -webkit-mask-image:linear-gradient(to right,transparent 0,#000 13%,#000 100%),
+  linear-gradient(to bottom,#000 0,#000 84%,transparent 100%);
+ mask-image:linear-gradient(to right,transparent 0,#000 13%,#000 100%),
+  linear-gradient(to bottom,#000 0,#000 84%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-composite:intersect}
+.map .mp path{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+
+/* Heavier and brighter as the road gets bigger — and every one of them cased
+   in a dark halo. A pale line on a ground this busy washes out however bright
+   it is: the terracotta has texture at exactly the width of a road. Casing is
+   how paper maps have always solved this, and it buys the contrast a panel
+   behind the map would have bought, without the panel. */
+.map .mp>g{filter:drop-shadow(0 0 2.5px #2d0d03) drop-shadow(0 1px 1px #2d0d03cc)}
+.mp-d path{stroke:#ffe9bb;stroke-opacity:.8;stroke-width:1.1}
+.mp-c path{stroke:#fff0ca;stroke-opacity:.92;stroke-width:1.7}
+.mp-b path{stroke:#fff7e0;stroke-opacity:1;stroke-width:2.4}
+.mp-a path{stroke:#fffdf4;stroke-opacity:1;stroke-width:3.6}
+.mp-water path{stroke:#a8cfe2;stroke-opacity:.75;stroke-width:2}
+
+.mp-label{fill:#fff3d2;fill-opacity:.9;font-size:11px;letter-spacing:1.6px;
+ text-transform:uppercase;text-anchor:middle;font-family:Mukta,Arial,sans-serif;
+ paint-order:stroke;stroke:#3d1206;stroke-width:3.5;stroke-opacity:.55;stroke-linejoin:round}
+
+/* No transform-box here. Setting it made the group's own `translate(500 350)`
+   resolve against its fill-box instead of the viewport, which threw the pin to
+   (220, -149) — a 1067px mark sitting entirely off a 648px map. The scale it
+   needs belongs in the markup beside the translate, where the two compose. */
+.map .mp .mp-pin{filter:none}
+.mp-pin-core{fill:#ffd98c;fill-opacity:.34;stroke:#fff2cd;stroke-opacity:1;stroke-width:1.8}
+.mp-pin-flame{fill:#ffdc8f;filter:drop-shadow(0 0 14px #ffb23c) drop-shadow(0 0 3px #2d0d03)}
+/* transform-box DOES belong here: these circles sit at local (0,0) inside the
+   translated pin group, and `transform-origin:center` alone resolves against
+   the view box — so the animation was scaling each ring about (500,350) in
+   local space and flinging it ~900px off the map, dragging the pin's whole
+   bounding box with it. fill-box makes the scale happen about the circle. */
+.mp-ring{fill:none;stroke:#ffe3a8;stroke-width:1.8;
+ transform-box:fill-box;transform-origin:center;
+ filter:drop-shadow(0 0 2px #2d0d03)}
+.mp-here{fill:#fff6e2;fill-opacity:1;font-size:16px;letter-spacing:2.8px;text-transform:uppercase;
+ text-anchor:middle;font-family:Mukta,Arial,sans-serif;
+ paint-order:stroke;stroke:#3d1206;stroke-width:4.5;stroke-opacity:.6;stroke-linejoin:round}
+.mp-north path{fill:#ffe3ae;fill-opacity:.85;stroke:none}
+.mp-north text{fill:#ffe3ae;fill-opacity:.85;font-size:13px;text-anchor:middle;font-family:Mukta,Arial,sans-serif}
+.mp-scale path{fill:none;stroke:#ffe3ae;stroke-opacity:.8;stroke-width:1.2}
+.mp-scale text{fill:#fff3d2;fill-opacity:.8;font-size:11px;letter-spacing:1.4px;font-family:Mukta,Arial,sans-serif}
+
+/* Out of the drawing and into the flow, now that there is no card to sit on. */
+.map-open{position:static;display:inline-flex;align-items:center;gap:14px;margin-top:24px;
+ padding:14px 22px;background:none;border:1px solid #ffe3ae70;color:#fff3d2;box-shadow:none;
+ font-size:11px;letter-spacing:1.8px;text-transform:uppercase;
+ transition:border-color .25s var(--ease-out,ease),background .25s var(--ease-out,ease)}
+.map-open:hover{border-color:#ffeec2;background:#ffe3ae14}
+.map-credit{position:static;margin:14px 0 0;font-size:10px;letter-spacing:.4px;
+ color:#f0dcb9;opacity:.5}
+.map-credit a{text-decoration:underline;text-underline-offset:2px}
+
+/* The rings go out from the ground the way the circles do on it. */
+@media (prefers-reduced-motion:no-preference){
+ .mp-ring-1{animation:mp-out 3.6s ease-out infinite}
+ .mp-ring-2{animation:mp-out 3.6s ease-out infinite 1.8s}
+ .mp-pin-flame{animation:mp-flicker 2.6s ease-in-out infinite}
+}
+@keyframes mp-out{0%{transform:scale(.35);stroke-opacity:.9}100%{transform:scale(2.8);stroke-opacity:0}}
+@keyframes mp-flicker{0%,100%{opacity:.88}50%{opacity:1}}
+@media (max-width:900px){
+ .mp-label{font-size:15px;letter-spacing:1px}
+ .mp-here{font-size:21px}
+ .map-open{margin-top:18px;padding:13px 18px;font-size:10px}
+}
+}
+
+/* The map card was built around a 330px-tall Google iframe. The drawing has
+   its own proportion and has to be allowed to keep it, and the button that
+   used to sit on the iframe was styled as `.map>a` — which is exactly what the
+   new one is, so it needs to be answered at that weight rather than hoped
+   past. Scoped to the location column so it wins wherever the old heights are
+   set, media query or not. */
+.location-ground .map{height:auto;aspect-ratio:1000/700}
+.location-ground .map>a.map-open{left:auto;right:16px;bottom:16px;
+ background:#1a0a05cc;color:#f4e8d0;border:1px solid #e6b96e55;box-shadow:none;
+ padding:11px 17px;font-size:11px;letter-spacing:1.8px}
+.location-ground .map>a.map-open:hover{border-color:#edc766;background:#2a1206e6}
+.location-ground .map>a.map-open span{margin-left:0}
+@media (max-width:900px){
+ .location-ground .map>a.map-open{right:12px;bottom:12px;padding:10px 14px;font-size:10px}
+}
+
+/* The map card was built around a 330px-tall Google iframe, and the drawing
+   has its own proportion to keep. The button that used to sit on that iframe
+   was styled as `.map>a` — which is exactly what the new one is — so it has to
+   be answered at that weight rather than hoped past. */
+.location-ground .map{height:auto;border:0;border-radius:0;background:none;box-shadow:none}
+.location-ground .map>a.map-open{position:static;left:auto;right:auto;bottom:auto;
+ background:none;color:#fff3d2;border:1px solid #ffe3ae70;box-shadow:none}
+.location-ground .map>a.map-open:hover{border-color:#ffeec2;background:#ffe3ae14}
+.location-ground .map>a.map-open span{margin-left:0}
+
+/* The turning ground has to survive the terracotta it now sits on. Behind the
+   words it can be bright, because it is line rather than mass. */

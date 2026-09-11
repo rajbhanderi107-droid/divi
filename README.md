@@ -1,1 +1,327 @@
-# divi
+# Divi Garba — Navratri 2026
+
+The event site for Divi Garba, organised by Panchatva Events. Ten nights,
+11–20 October 2026, at Master Farm, B/s Sardardham, Vaishnodevi Circle.
+
+Static: plain HTML, CSS and ES modules. No build step.
+
+One external dependency, and only one: `hero3d.js` pulls three.js 0.149.0 from
+cdnjs to draw the garba circle. It is pinned (0.149.0 is the last release
+shipping a working UMD build — `three.min.js` in 0.150+ is a deprecation stub,
+not the library), fetched only after `load`, and never fetched at all under
+`prefers-reduced-motion`, Save-Data or 2G. If it fails to arrive, or the
+browser has no WebGL, no canvas is inserted and the hero is exactly what it
+was. Nothing else on the page depends on it.
+
+    python3 -m http.server 8000    # then open http://localhost:8000
+
+Deploy by copying the whole folder to any static host.
+
+## Layout
+
+    index.html       Every section: hero, ritual, gallery, planner, details, map.
+    style.css        Base type, colour and layout.
+    experience.css   Gallery, lightbox, depth effects.
+    brand.css        The brown palette and brand marks.
+    app.js           Gallery, lightbox, booking dialog, terms, nav, depth.
+    planner.js       Night picker, .ics download, sharing, countdown.
+    assets/          Logos, mandala, scene photographs, 13 gallery photographs.
+
+## The planner
+
+`planner.js` owns everything under **Plan your visit**:
+
+- The ten night buttons, whose selection is also readable from a `?nights=`
+  query parameter, so a shared link reopens someone else's plan.
+- **Add to calendar**, which builds a `VCALENDAR` in the browser and hands it
+  back as a Blob. One `VEVENT` per selected night, each with a two-hour
+  `VALARM`. Lines are folded per RFC 5545 — on octets, not characters, because
+  a Gujarati caption is three bytes a letter and a character-count fold can
+  still emit an over-length line. Continuation lines begin with a space, which
+  counts toward the 75, so they carry 74 octets of content.
+- **Share event**, which uses the Web Share sheet where there is one and the
+  clipboard otherwise, and falls back to a visible link if both are refused.
+  It shares whatever origin the page is served from, so it is correct on a
+  staging host as well as in production.
+- The countdown to the first beat, which stops ticking while the tab is hidden
+  and switches to a "dates have passed" line after the last entry.
+
+Event times are fixed to IST. `DTSTART` is written in UTC (`T143000Z` is
+8:00 PM IST); there is deliberately no `DTEND`, because the night has no
+published end time.
+
+### Ten nights
+
+The site runs 11-20 October 2026, ten nights, confirmed for this year. That is
+not in conflict with divigarba.com counting nine: Navratri's nine nights are
+11-19 October, one for each form of Durga, and 20 October is Vijayadashami.
+Divi runs all ten.
+
+The length lives in one place — `dates` at the top of `planner.js` — but the
+prose does not: the hero, the event strip, the details section, the FAQ and the
+nights rail all say ten in words, and the terms repeat the dates.
+
+## Motion
+
+`motion.js` is WhiteDot's cinematic-v2 motion library ported to vanilla — same
+durations (180 / 320 / 620ms), same easings, same hard rules, so the two sites
+move the same way.
+
+- **Reveal.** IntersectionObserver adds `.is-in`. There is a 1800ms safety net
+  behind it, kept from the original for the reason the original gives: a hash
+  jump or layout churn can carry an element through the viewport in a single
+  frame and miss the callback, leaving content permanently invisible.
+- **Stagger.** `--stagger-i` is written on each child; the delay is CSS.
+- **Parallax.** rAF-throttled, observer-gated, writes one custom property.
+  The transform is in the stylesheet, so the script never touches layout.
+
+The premium flag is set **synchronously in the head**, before first paint, and
+every rule is scoped to `[data-motion="on"]`. Without it — no JS, reduced
+motion, Save-Data, 2G — nothing applies and the page is static, visible and
+CLS-safe. That ordering is the point: set it later and elements paint visible,
+then vanish, then fade back.
+
+The countdown eases up from zero the first time it is seen and then hands
+over to the live clock — `useCountUp`, and once only, since a figure that
+re-counts every time you scroll past it is a toy. Under reduced motion it
+renders its real value immediately.
+
+The two rails take an opacity-only reveal (`.rv-fade`). Their transforms
+belong to something else: the nights rail sets the corridor's perspective and
+GSAP drives its frames, and the gallery track scrolls. Two systems writing one
+property is how this gets janky.
+
+Every transition on the page is on `--ease-out`, `cubic-bezier(.16,1,.3,1)`.
+A bare duration falls back to the browser's generic `ease`, and a page of
+mixed curves is most of what separates "fine" from "smooth". The one exception
+is the hero video's 1.1s crossfade, which is symmetric on purpose.
+
+## The rangoli, and the arrows
+
+The hero's copy column was bare ground on a phone. `.hero-rangoli` is an inline
+SVG drawn to the geometry a rangoli actually has — petal rings whose counts
+rise outward (8, 16, 24, 32), a dotted band, a lotus centre — generated rather
+than eyeballed, so it is crisp at any size and costs about 8 KB with no
+request. It turns once every 210 seconds, which is slow enough to notice only
+if you stay.
+
+Two things had to be corrected by looking at it on a real phone rather than
+reasoning about it. A 2.4 stroke on a 1000-unit viewBox shown near 500px lands
+around 1.2px and vanishes into the ground texture; the strokes are 1.75x
+heavier for that reason. And the opacity that reads on a desktop is too faint
+on a small screen, so it rises from .16 to .22 as the viewport narrows.
+
+**Arrows carry U+FE0E.** Without the variation selector, iOS renders U+2197 and
+U+2193 with *emoji* presentation — the Book ticket arrow came out as a blue
+emoji tile rather than a glyph in the type's own colour. Any arrow added later
+needs the same selector.
+
+## Fixing the floor shadow, and the particle boost
+
+The circle's glow was rendering — opacity, z-index, everything checked out —
+and was still nearly invisible on screen. The cause was a CSS collision, not
+a rendering bug: `.hero::before` and `.hero:before` are the *same*
+pseudo-element, and both `experience.css` and `brand.css` declared one on
+`.hero`. `brand.css` loads last, so its rule (the background photo) always
+won, and the dark floor-shadow gradient built specifically so the additive
+lamp glow would have contrast never actually painted. The lamps were glowing
+against whatever the last-loaded background happened to be.
+
+Fixed by giving the floor shadow its own element — `.hero-floor`, a real div,
+impossible to collide with anything reusing `:before`/`:after` on `.hero` in
+any stylesheet — and explicit z-index on every hero decorative layer instead
+of letting several of them share `z-index:0` and rely on DOM insertion order
+(`.hero-circle`'s canvas is prepended by JS at runtime; that ordering was
+never guaranteed).
+
+With real contrast under it, the rings and embers were boosted hard: lamp
+point size 150→235, ring density up ~40%, a wider hot core (the previous
+`pow(core, 9.0)` was needle-thin), embers 260→520 with a wider rise and
+spread. Verified against real WebGL (swiftshader), not just presence checks —
+screenshotted before and after to confirm the difference is visually real,
+not just numbers moving.
+
+Known gap: on a phone the hero stacks copy above the arch photo, and the
+canvas — anchored to the bottom of the whole stacked section — ends up mostly
+behind that now-opaque photo, showing only a sliver of embers at the seam.
+Pre-existing framing constraint, not something this pass fixed.
+
+## The garba circle
+
+`hero3d.js` draws the thing the event actually is: five rings of lamps on a
+floor, adjacent rings turning against each other the way the circles on the
+ground do, seen from the edge. It sits behind the hero copy where the page had
+only texture; the photograph, the video and the still mandala are untouched.
+
+Two things were learned making it read at all:
+
+- **Additive blending needs something to add to.** On the hero's bright
+  terracotta the lamps were invisible. The `.hero::before` shadow is not
+  decoration — it is what the light lands on, and it is also true to the
+  subject, since a garba ground at night is dark and lit by its own lamps.
+- **Ring radius is bounded by the field of view.** At 42° and z≈9, anything
+  past a radius of about 3.8 puts the camera inside the rings, and the circle
+  reads as scattered sparks rather than as a circle.
+
+Embers rise off the lamps in the same scene rather than a second canvas —
+one context, one frame loop, and they share the rings' lighting. They are
+WhiteDot's grain field with a different subject: there, limestone dust; here,
+what a lamp throws off.
+
+It pauses off-screen and on a hidden tab, caps device pixel ratio at 1.5, and
+fades in on its own first frame so nothing pops.
+
+## The backdrop
+
+`backdrop.js` drifts the nine forms behind the page at low opacity: each panel
+on its own slow course, pulled by scroll and pushed away from the pointer. It
+is Canvas 2D rather than a second WebGL context — nine `drawImage` calls a
+frame cost nothing and need no library.
+
+It reads through the sections whose grounds are translucent (`.ritual` at 8%
+and `.location` at 25%) and is covered by the ones that paint themselves
+opaque. That is the intent: presence where the page is plain, nothing where it
+already has something to say.
+
+Three things this got wrong first, all worth keeping in mind before touching it:
+
+- **`globalCompositeOperation` blends within the canvas**, whose pixels start
+  transparent, so `overlay` there composites against nothing. Blending with the
+  *page* is `mix-blend-mode` on the element. The canvas draws plainly.
+- **JavaScript `%` is a remainder, not a modulo.** The scroll wrap went
+  negative once `scroll * depth` passed the offset, and panels flew off the top
+  rather than round to the bottom. This is why it appeared not to work at all,
+  even at full opacity.
+- **A hard rectangle reads as a pasted image.** Each panel is feathered once on
+  load through a radial `destination-in` mask, so it reads as a watermark in
+  the ground.
+
+Strength is two dials: `globalAlpha` in the draw loop and `opacity` on
+`.page-backdrop`. Under `prefers-reduced-motion` it renders a single static
+frame — still visible, but it does not move.
+
+## The nine nights
+
+`#nights` tells the story: Navratri is nine nights, each belonging to a form of
+Durga, and Divi keeps all nine then adds a tenth for Dussehra. That is why the
+site can run ten nights while divigarba.com says nine — nights 1–9 are
+11–19 October, and 20 October is Vijayadashami.
+
+The nine forms run in **traditional order**, which is Skandamata fifth and
+Katyayani sixth. The source artwork numbered those two the other way round;
+the images are paired with the deity each one depicts, not with the number it
+carried in the sheet, because worshippers read the order and would notice.
+
+The rail carries the same controls as the gallery, from one `wireRail` in
+`app.js` rather than a second copy of the stepping and end-disabling logic.
+Its frames are articles, not buttons, so the rail itself takes focus and the
+browser's own arrow keys scroll it — that is what the `tabindex` and group
+role are for, and without them a scrollable region is unreachable by keyboard.
+
+Each frame is a gateway — the hero's arch and its inset keyline at frame scale.
+The keyline cannot take `border-radius: inherit`: a percentage radius
+re-resolves against the smaller inset box and the arc comes out flatter than
+the frame's, which reads as a line drawn across the art. Its percentages are
+the frame's scaled by the inset, so the two arcs stay concentric at every card
+width.
+
+The tenth frame has no Navadurga and does not borrow one — there is no tenth
+form to show. It is an open, lit gateway, and deliberately the brightest frame
+in the rail: Dussehra is the night the other nine build toward, not a footnote
+to them.
+
+Source art was supplied as a 512×279 contact sheet, so each panel is 167×70
+native. They are sharpened, veiled 22% toward terracotta and grained to sit
+with the photography, and shown near their native size for that reason. Higher
+resolution originals would drop straight in at the same filenames.
+
+## The corridor
+
+`nights3d.js` adds depth to the nights rail: frames near its centre stand
+forward and face you, frames toward the edges fall back and turn away, so
+scrolling reads as travelling down a row of gateways.
+
+It adds nothing to the DOM and removes nothing. The rail, its arrows, its
+keyboard route and its order are untouched — the script only adds a class and
+transforms, so without it (no JS, reduced motion, Save-Data, 2G, or GSAP
+failing to load) the rail is the flat rail it already was.
+
+GSAP earns its 72 KB here for `quickTo`, which keeps one smoothed value per
+property per element instead of creating a tween on every scroll event.
+
+Pushing a frame back in Z shrinks it toward the vanishing point, which closes
+the gap to its neighbour: at -135px the far cards overlapped the near ones'
+captions. -98px with `z-index` set by proximity keeps any remaining overlap
+reading as depth rather than collision.
+
+## nights.html
+
+The home page's rail is the teaser; `nights.html` is the telling. Ten nights,
+alternating left and right, each with its Gujarati name, its form, its epithet
+and what that night is like on the ground.
+
+It does **not** load `app.js`. That file owns the gallery, the lightbox, the
+hero depth and the scroll-spy, none of which exist here, and most of its
+queries would throw. `page.js` carries only the shell: the booking and terms
+dialogs, and the reading progress bar. `hero3d.js` and `nights3d.js` guard on
+elements this page lacks and return before fetching their libraries.
+
+Anchors in the shared header and footer are rewritten to `index.html#...` when
+the page is generated, since a bare `#plan` here goes nowhere.
+
+Its text is light on the site's terracotta. The first pass used the dark
+palette of a cream ground and the index line and epithet were invisible —
+worth remembering, because `body` is already `#fff0c8` and a new section
+inherits that, not a light ground.
+
+### Upscaling the night art
+
+The panels are 167x70 native. They are resampled to 840x352 in **1.5x steps
+with a light sharpen between**, not in one jump: a single 5x resample turns
+every edge into a soft ramp that no amount of sharpening afterwards recovers.
+Compare the tiger's stripes and the bell's rim to see it.
+
+They come from the native crops rather than the earlier 420px files, so
+artifacts do not compound. Nine frames are 482 KB, up from 152 KB — all lazy,
+and none of them on the critical path. This is still an upscale and cannot
+invent detail: full-resolution originals remain the real fix.
+
+## The gallery
+
+`app.js` holds the photographs in one array of `[file, title]` pairs, and
+`photoPath` picks the extension. To add a photograph, drop the file in
+`assets/` and add a pair — the card, the lightbox entry, the numbering,
+the keyboard order and the neighbour preloading all follow from that list.
+
+## Images
+
+Every raster asset is WebP, sized to how it is actually used rather than to
+what came out of the camera: the planner background sits under a near-opaque
+gradient, so it is compressed hard; the organiser's logo renders at 122px and
+was shipped at 4140px wide. The whole set is 2.8 MB on disk, and a first load
+pulls about 164 KB because everything below the fold is lazy.
+
+`favicon.png` stays a PNG on purpose — Safari does not reliably take a WebP
+icon.
+
+To replace a photograph, drop it in and match the existing long edge (1400px
+for gallery photographs, 1600–1800px for the scene images).
+
+## Head
+
+The `<head>` carries Open Graph and Twitter card tags and a schema.org
+`Festival` with one `subEvent` per night, so the ten nights are legible to
+search engines rather than only to a reader.
+
+**Three absolute URLs hardcode the origin** — `canonical`, `og:url` and
+`og:image`/`twitter:image`. Social crawlers cannot resolve relative paths, so
+these must change when the site moves; an HTML comment marks them. There is no
+`offers` block, because ticket prices are the ticket provider's and are not
+known here; add one when they are, or the event will not qualify for rich
+results.
+
+## Booking
+
+Passes are sold through SortMyScene, embedded in a dialog and also linked out
+for anyone whose browser blocks the frame. The planner never claims to reserve
+entry, and says so beneath the buttons.

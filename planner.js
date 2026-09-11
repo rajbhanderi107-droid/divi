@@ -1,0 +1,35 @@
+(() => {
+ const dates=Array.from({length:10},(_,i)=>11+i), selected=new Set();
+ const options=document.querySelector('#night-options'),summary=document.querySelector('#night-summary'),calendar=document.querySelector('#calendar-download'),share=document.querySelector('#share-plan'),status=document.querySelector('#plan-status'),selectAll=document.querySelector('#select-all-nights');
+ const initial=new URL(location.href).searchParams.get('nights');
+ if(initial)initial.split(',').forEach(value=>{if(/^\d{2}$/.test(value)&&dates.includes(Number(value)))selected.add(Number(value))});
+ const weekday=new Intl.DateTimeFormat('en',{weekday:'short',timeZone:'Asia/Kolkata'});
+ dates.forEach(day=>{const button=document.createElement('button');button.className='night-option';button.setAttribute('aria-label',`${day} October 2026`);button.innerHTML=`<span>${weekday.format(new Date(`2026-10-${day}T20:00:00+05:30`))}</span><strong>${day}</strong><span>Oct</span>`;button.dataset.day=day;button.onclick=()=>{selected.has(day)?selected.delete(day):selected.add(day);update()};options.append(button)});
+ const sorted=()=>[...selected].sort((a,b)=>a-b);
+ function update(){options.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(selected.has(Number(b.dataset.day)))));calendar.disabled=selected.size===0;summary.textContent=selected.size?`${sorted().join(', ')} October · ${selected.size} ${selected.size===1?'night':'nights'} selected`:'Choose a night to plan with your friends.';share.textContent=selected.size?'Share these nights':'Share event';selectAll.textContent=selected.size===10?'Clear selection':'Select all ten';status.textContent='';}
+ selectAll.onclick=()=>{if(selected.size===10)selected.clear();else dates.forEach(d=>selected.add(d));update()};
+ // RFC 5545 folds on octets, not characters: a Gujarati caption is three bytes a
+ // letter, so a 73-character fold can still emit an over-length line. Continuation
+ // lines begin with a space, which counts toward the 75, leaving 74 for content.
+ const fold=line=>{const bytes=new TextEncoder().encode(line);if(bytes.length<=75)return line;const decoder=new TextDecoder(),out=[];let start=0;while(start<bytes.length){let end=Math.min(start+(out.length?74:75),bytes.length);while(end>start&&end<bytes.length&&(bytes[end]&0xc0)===0x80)end--;out.push(decoder.decode(bytes.slice(start,end)));start=end}return out.join('\r\n ')};
+ const escapeICS=value=>value.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+ calendar.onclick=()=>{if(!selected.size)return;const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Divi Demo//Event Planner//EN','CALSCALE:GREGORIAN'];for(const day of sorted()){lines.push('BEGIN:VEVENT',`UID:divi-202610${day}@divigarba.com`,`DTSTAMP:${stamp}`,`DTSTART:202610${day}T143000Z`,'SUMMARY:Divi Garba',`LOCATION:${escapeICS('Master Farm, B/s Sardardham, Vaishnodevi Circle')}`,`DESCRIPTION:${escapeICS('Gates open at 8:00 PM IST. Last entry 2:00 AM IST. No re-entry allowed. A valid event pass is required. This calendar entry is not a ticket or reservation. Event end time is not specified.')}`,'BEGIN:VALARM','TRIGGER:-PT2H','ACTION:DISPLAY','DESCRIPTION:Divi Garba starts in two hours','END:VALARM','END:VEVENT')}lines.push('END:VCALENDAR');const url=URL.createObjectURL(new Blob([lines.map(fold).join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='Divi-Garba-2026.ics';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);status.textContent='Calendar file downloaded. Open it to add the selected nights to your calendar.'};
+ share.onclick=async()=>{const url=new URL(location.pathname,location.origin);const text=`Divi Garba · ${selected.size?sorted().join(', ')+' October':'11–20 October'} 2026\nFrom 8:00 PM IST · Master Farm, B/s Sardardham, Vaishnodevi Circle\nA valid event pass is required.`;try{if(navigator.share){await navigator.share({title:'Divi Garba 2026',text,url:url.href});status.textContent='Share options opened.'}else{await navigator.clipboard.writeText(text+'\n'+url.href);status.textContent='Event details and link copied. Paste them into your group chat.'}}catch(error){if(error.name==='AbortError')return;status.textContent='Copy this link to share your plan: ';const link=document.createElement('a');link.href=url.href;link.textContent=url.href;status.append(link)}};
+ const start=new Date('2026-10-11T20:00:00+05:30').getTime(),lastEntry=new Date('2026-10-21T02:00:00+05:30').getTime(),label=document.querySelector('#countdown-label'),values=document.querySelector('#countdown-values');
+ function countdown(){const now=Date.now(),remaining=start-now;if(remaining<=0){label.textContent=now<=lastEntry?'Divi Garba · 11–20 October':'The 2026 dates have passed';values.textContent=now<=lastEntry?'From 8:00 PM IST':'';return}const mins=Math.floor(remaining/60000),parts=[['Days',Math.floor(mins/1440)],['Hours',Math.floor(mins%1440/60)],['Minutes',mins%60]];values.replaceChildren(...parts.map(([name,value])=>{const part=document.createElement('span');const number=document.createElement('strong');number.textContent=String(value).padStart(2,'0');part.append(number,document.createTextNode(name));return part}))}
+ update();countdown();
+ /* WhiteDot's useCountUp: the figures ease up from zero the first time they
+    are seen, then the live clock takes over. Only when motion is on, and only
+    once — a number that re-counts every time you scroll past it is a toy. */
+ (()=>{if(document.documentElement.dataset.motion!=='on'||typeof IntersectionObserver==='undefined')return;
+  const io=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)return;io.disconnect();
+   const targets=[...values.querySelectorAll('strong')].map(el=>({el,to:Number(el.textContent)||0}));
+   if(!targets.length)return;
+   const t0=performance.now(),ms=1100,ease=x=>1-Math.pow(1-x,3);
+   (function step(now){const p=Math.min(1,(now-t0)/ms);
+    for(const t of targets)t.el.textContent=String(Math.round(t.to*ease(p))).padStart(2,'0');
+    if(p<1)requestAnimationFrame(step);else countdown();})(t0);},{threshold:.4});
+  io.observe(values);})();
+ setInterval(()=>{if(!document.hidden)countdown()},30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)countdown()});
+ const mobile=document.querySelector('.mobile-booking');new IntersectionObserver(entries=>{mobile.classList.toggle('visible',!entries[0].isIntersecting)},{threshold:0}).observe(document.querySelector('.hero'));
+})();
