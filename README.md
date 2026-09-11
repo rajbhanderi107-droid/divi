@@ -81,6 +81,16 @@ motion, Save-Data, 2G — nothing applies and the page is static, visible and
 CLS-safe. That ordering is the point: set it later and elements paint visible,
 then vanish, then fade back.
 
+The countdown eases up from zero the first time it is seen and then hands
+over to the live clock — `useCountUp`, and once only, since a figure that
+re-counts every time you scroll past it is a toy. Under reduced motion it
+renders its real value immediately.
+
+The two rails take an opacity-only reveal (`.rv-fade`). Their transforms
+belong to something else: the nights rail sets the corridor's perspective and
+GSAP drives its frames, and the gallery track scrolls. Two systems writing one
+property is how this gets janky.
+
 Every transition on the page is on `--ease-out`, `cubic-bezier(.16,1,.3,1)`.
 A bare duration falls back to the browser's generic `ease`, and a page of
 mixed curves is most of what separates "fine" from "smooth". The one exception
@@ -102,6 +112,11 @@ Two things were learned making it read at all:
 - **Ring radius is bounded by the field of view.** At 42° and z≈9, anything
   past a radius of about 3.8 puts the camera inside the rings, and the circle
   reads as scattered sparks rather than as a circle.
+
+Embers rise off the lamps in the same scene rather than a second canvas —
+one context, one frame loop, and they share the rings' lighting. They are
+WhiteDot's grain field with a different subject: there, limestone dust; here,
+what a lamp throws off.
 
 It pauses off-screen and on a hidden tab, caps device pixel ratio at 1.5, and
 fades in on its own first frame so nothing pops.

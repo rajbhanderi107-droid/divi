@@ -80,6 +80,7 @@
   }
 
   reveal('.rv');
+  reveal('.rv-fade', { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
   stagger('.rv-group');
   parallax('.px-slow', 34);
   parallax('.px-fast', 64);

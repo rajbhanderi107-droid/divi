@@ -17,6 +17,19 @@
  share.onclick=async()=>{const url=new URL(location.pathname,location.origin);const text=`Divi Garba · ${selected.size?sorted().join(', ')+' October':'11–20 October'} 2026\nFrom 8:00 PM IST · Master Farm, B/s Sardardham, Vaishnodevi Circle\nA valid event pass is required.`;try{if(navigator.share){await navigator.share({title:'Divi Garba 2026',text,url:url.href});status.textContent='Share options opened.'}else{await navigator.clipboard.writeText(text+'\n'+url.href);status.textContent='Event details and link copied. Paste them into your group chat.'}}catch(error){if(error.name==='AbortError')return;status.textContent='Copy this link to share your plan: ';const link=document.createElement('a');link.href=url.href;link.textContent=url.href;status.append(link)}};
  const start=new Date('2026-10-11T20:00:00+05:30').getTime(),lastEntry=new Date('2026-10-21T02:00:00+05:30').getTime(),label=document.querySelector('#countdown-label'),values=document.querySelector('#countdown-values');
  function countdown(){const now=Date.now(),remaining=start-now;if(remaining<=0){label.textContent=now<=lastEntry?'Divi Garba · 11–20 October':'The 2026 dates have passed';values.textContent=now<=lastEntry?'From 8:00 PM IST':'';return}const mins=Math.floor(remaining/60000),parts=[['Days',Math.floor(mins/1440)],['Hours',Math.floor(mins%1440/60)],['Minutes',mins%60]];values.replaceChildren(...parts.map(([name,value])=>{const part=document.createElement('span');const number=document.createElement('strong');number.textContent=String(value).padStart(2,'0');part.append(number,document.createTextNode(name));return part}))}
- update();countdown();setInterval(()=>{if(!document.hidden)countdown()},30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)countdown()});
+ update();countdown();
+ /* WhiteDot's useCountUp: the figures ease up from zero the first time they
+    are seen, then the live clock takes over. Only when motion is on, and only
+    once — a number that re-counts every time you scroll past it is a toy. */
+ (()=>{if(document.documentElement.dataset.motion!=='on'||typeof IntersectionObserver==='undefined')return;
+  const io=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)return;io.disconnect();
+   const targets=[...values.querySelectorAll('strong')].map(el=>({el,to:Number(el.textContent)||0}));
+   if(!targets.length)return;
+   const t0=performance.now(),ms=1100,ease=x=>1-Math.pow(1-x,3);
+   (function step(now){const p=Math.min(1,(now-t0)/ms);
+    for(const t of targets)t.el.textContent=String(Math.round(t.to*ease(p))).padStart(2,'0');
+    if(p<1)requestAnimationFrame(step);else countdown();})(t0);},{threshold:.4});
+  io.observe(values);})();
+ setInterval(()=>{if(!document.hidden)countdown()},30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)countdown()});
  const mobile=document.querySelector('.mobile-booking');new IntersectionObserver(entries=>{mobile.classList.toggle('visible',!entries[0].isIntersecting)},{threshold:0}).observe(document.querySelector('.hero'));
 })();

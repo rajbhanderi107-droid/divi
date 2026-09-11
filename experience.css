@@ -95,3 +95,10 @@ body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobil
  .rv,.rv-group>*{opacity:1!important;transform:none!important;transition:none!important}
  .px-slow,.px-fast{transform:none!important}
 }
+
+/* Opacity-only reveal, for blocks whose transform belongs to something else —
+   the nights rail sets perspective for the corridor, and the gallery track
+   scrolls. Moving either one would fight the effect that already owns it. */
+[data-motion=on] .rv-fade{opacity:0;transition:opacity var(--dur-slow) var(--ease-out)}
+[data-motion=on] .rv-fade.is-in{opacity:1}
+@media(prefers-reduced-motion:reduce){.rv-fade{opacity:1!important;transition:none!important}}

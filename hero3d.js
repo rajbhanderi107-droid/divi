@@ -98,6 +98,49 @@
       rings.push(points);
     }
 
+    // Embers off the lamps: born low near the rings, rising and fading out.
+    const EMBERS = 260;
+    const ePos = new Float32Array(EMBERS * 3), eSeed = new Float32Array(EMBERS), eLife = new Float32Array(EMBERS);
+    for (let i = 0; i < EMBERS; i++) {
+      const a = Math.random() * Math.PI * 2, rad = 1.2 + Math.random() * 2.7;
+      ePos[i * 3] = Math.cos(a) * rad;
+      ePos[i * 3 + 1] = Math.random() * 3.2;
+      ePos[i * 3 + 2] = Math.sin(a) * rad;
+      eSeed[i] = Math.random() * 6.283;
+      eLife[i] = Math.random();
+    }
+    const eg = new THREE.BufferGeometry();
+    eg.setAttribute('position', new THREE.BufferAttribute(ePos, 3));
+    eg.setAttribute('seed', new THREE.BufferAttribute(eSeed, 1));
+    const em = new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uTime: { value: 0 }, uFade: { value: 0 } },
+      vertexShader: `
+        attribute float seed; uniform float uTime;
+        varying float vA;
+        void main(){
+          vec3 p = position;
+          float t = fract(uTime * 0.055 + seed * 0.159);
+          p.y = position.y + t * 3.4;                     // rise
+          p.x += sin(uTime * 0.6 + seed * 5.0) * 0.16;    // and wander
+          p.z += cos(uTime * 0.5 + seed * 4.0) * 0.16;
+          vA = (1.0 - t) * (1.0 - t) * 0.85;              // fading as they go
+          vec4 mv = modelViewMatrix * vec4(p, 1.0);
+          gl_PointSize = (26.0 + 10.0 * sin(seed + uTime * 3.0)) / -mv.z;
+          gl_Position = projectionMatrix * mv;
+        }`,
+      fragmentShader: `
+        uniform float uFade; varying float vA;
+        void main(){
+          vec2 d = gl_PointCoord - 0.5; float r = length(d);
+          if (r > 0.5) discard;
+          float core = smoothstep(0.5, 0.0, r);
+          gl_FragColor = vec4(vec3(1.0, 0.72, 0.36) * (0.7 + core), core * core * vA * uFade);
+        }`
+    });
+    const embers3d = new THREE.Points(eg, em);
+    scene.add(embers3d);
+
     let w = 0, h = 0;
     const resize = () => {
       const rect = hero.getBoundingClientRect();
@@ -139,6 +182,9 @@
         ring.material.uniforms.uTime.value = t;
         ring.material.uniforms.uFade.value = fade;
       }
+      em.uniforms.uTime.value = t;
+      em.uniforms.uFade.value = fade;
+      embers3d.rotation.y += 0.012 * dt;
       renderer.render(scene, camera);
     }
     requestAnimationFrame(frame);
