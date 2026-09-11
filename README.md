@@ -61,6 +61,31 @@ The length lives in one place — `dates` at the top of `planner.js` — but the
 prose does not: the hero, the event strip, the details section, the FAQ and the
 nights rail all say ten in words, and the terms repeat the dates.
 
+## Motion
+
+`motion.js` is WhiteDot's cinematic-v2 motion library ported to vanilla — same
+durations (180 / 320 / 620ms), same easings, same hard rules, so the two sites
+move the same way.
+
+- **Reveal.** IntersectionObserver adds `.is-in`. There is a 1800ms safety net
+  behind it, kept from the original for the reason the original gives: a hash
+  jump or layout churn can carry an element through the viewport in a single
+  frame and miss the callback, leaving content permanently invisible.
+- **Stagger.** `--stagger-i` is written on each child; the delay is CSS.
+- **Parallax.** rAF-throttled, observer-gated, writes one custom property.
+  The transform is in the stylesheet, so the script never touches layout.
+
+The premium flag is set **synchronously in the head**, before first paint, and
+every rule is scoped to `[data-motion="on"]`. Without it — no JS, reduced
+motion, Save-Data, 2G — nothing applies and the page is static, visible and
+CLS-safe. That ordering is the point: set it later and elements paint visible,
+then vanish, then fade back.
+
+Every transition on the page is on `--ease-out`, `cubic-bezier(.16,1,.3,1)`.
+A bare duration falls back to the browser's generic `ease`, and a page of
+mixed curves is most of what separates "fine" from "smooth". The one exception
+is the hero video's 1.1s crossfade, which is symmetric on purpose.
+
 ## The garba circle
 
 `hero3d.js` draws the thing the event actually is: five rings of lamps on a
