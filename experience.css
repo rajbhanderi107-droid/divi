@@ -62,3 +62,10 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
    mostly transparent, let it through. */
 .page-backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;opacity:.33}
 body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobile-booking{position:relative;z-index:1}
+
+/* Depth for the corridor. The rail keeps its own scrolling; only the frames
+   move in Z, and only once the script has said so — without it the class is
+   never added and the rail is flat, which is the no-JS and reduced-motion
+   rendering. */
+.night-rail.is-corridor{perspective:1400px;perspective-origin:50% 42%}
+.night-rail.is-corridor .night-frame{transform-style:preserve-3d;will-change:transform}

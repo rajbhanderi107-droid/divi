@@ -145,6 +145,25 @@ native. They are sharpened, veiled 22% toward terracotta and grained to sit
 with the photography, and shown near their native size for that reason. Higher
 resolution originals would drop straight in at the same filenames.
 
+## The corridor
+
+`nights3d.js` adds depth to the nights rail: frames near its centre stand
+forward and face you, frames toward the edges fall back and turn away, so
+scrolling reads as travelling down a row of gateways.
+
+It adds nothing to the DOM and removes nothing. The rail, its arrows, its
+keyboard route and its order are untouched — the script only adds a class and
+transforms, so without it (no JS, reduced motion, Save-Data, 2G, or GSAP
+failing to load) the rail is the flat rail it already was.
+
+GSAP earns its 72 KB here for `quickTo`, which keeps one smoothed value per
+property per element instead of creating a tween on every scroll event.
+
+Pushing a frame back in Z shrinks it toward the vanishing point, which closes
+the gap to its neighbour: at -135px the far cards overlapped the near ones'
+captions. -98px with `z-index` set by proximity keeps any remaining overlap
+reading as depth rather than collision.
+
 ## The gallery
 
 `app.js` holds the photographs in one array of `[file, title]` pairs, and
