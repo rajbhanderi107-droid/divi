@@ -81,6 +81,35 @@ Two things were learned making it read at all:
 It pauses off-screen and on a hidden tab, caps device pixel ratio at 1.5, and
 fades in on its own first frame so nothing pops.
 
+## The backdrop
+
+`backdrop.js` drifts the nine forms behind the page at low opacity: each panel
+on its own slow course, pulled by scroll and pushed away from the pointer. It
+is Canvas 2D rather than a second WebGL context — nine `drawImage` calls a
+frame cost nothing and need no library.
+
+It reads through the sections whose grounds are translucent (`.ritual` at 8%
+and `.location` at 25%) and is covered by the ones that paint themselves
+opaque. That is the intent: presence where the page is plain, nothing where it
+already has something to say.
+
+Three things this got wrong first, all worth keeping in mind before touching it:
+
+- **`globalCompositeOperation` blends within the canvas**, whose pixels start
+  transparent, so `overlay` there composites against nothing. Blending with the
+  *page* is `mix-blend-mode` on the element. The canvas draws plainly.
+- **JavaScript `%` is a remainder, not a modulo.** The scroll wrap went
+  negative once `scroll * depth` passed the offset, and panels flew off the top
+  rather than round to the bottom. This is why it appeared not to work at all,
+  even at full opacity.
+- **A hard rectangle reads as a pasted image.** Each panel is feathered once on
+  load through a radial `destination-in` mask, so it reads as a watermark in
+  the ground.
+
+Strength is two dials: `globalAlpha` in the draw loop and `opacity` on
+`.page-backdrop`. Under `prefers-reduced-motion` it renders a single static
+frame — still visible, but it does not move.
+
 ## The nine nights
 
 `#nights` tells the story: Navratri is nine nights, each belonging to a form of

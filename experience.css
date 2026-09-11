@@ -56,3 +56,9 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
 .hero-circle.is-live{opacity:1}
 .hero-copy{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.hero-circle{display:none}}
+
+/* The backdrop sits below everything the page paints. Sections with opaque
+   grounds cover it; the ritual and location stretches, whose gradients are
+   mostly transparent, let it through. */
+.page-backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;opacity:.33}
+body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobile-booking{position:relative;z-index:1}
