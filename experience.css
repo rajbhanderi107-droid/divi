@@ -194,3 +194,30 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
 .lenis.lenis-stopped{overflow:clip}
 .lenis.lenis-smooth iframe{pointer-events:none}
+
+/* ---- the canopy overhead --------------------------------------------------
+   The real ceiling, cut from the photograph and hung over the hero. Screen
+   blending is what makes it belong: the near-black night in the picture
+   disappears into the obsidian of the page, leaving only the lit canopy, so
+   the hero reads as a room you are standing in rather than a panel with a
+   picture on it. The layer drifts with the scroll and leans with the pointer
+   through the three custom properties ceiling.js writes. */
+.hero-ceiling{position:absolute;top:0;left:0;width:100%;z-index:1;pointer-events:none;
+ mix-blend-mode:screen;opacity:0;transition:opacity 1.6s var(--ease-out,ease);
+ transform:translate3d(var(--ceil-x,0),var(--ceil-y,0),0) scale(var(--ceil-scale,1.04));
+ transform-origin:50% 0;will-change:transform;
+ -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 46%,#0009 72%,transparent 97%);
+ mask-image:linear-gradient(to bottom,#000 0%,#000 46%,#0009 72%,transparent 97%)}
+.hero-ceiling.is-live{opacity:.96}
+.hero-ceiling img{width:100%;height:auto;display:block}
+.hero-ceiling-shade{position:absolute;inset:0;mix-blend-mode:multiply;
+ background:linear-gradient(100deg,#0d0d0d 0%,#2b2b2b 22%,#6e6e6e 42%,#c8c8c8 58%,#fff 74%)}
+.hero-ceiling-glow{position:absolute;top:0;left:0}
+.hero-circle{z-index:2}
+@media (max-width:900px){
+ /* On one column the copy runs the full width, so the ceiling sits higher and
+    keeps out of the way of the words rather than dimming itself sideways. */
+ .hero-ceiling{opacity:0}
+ .hero-ceiling.is-live{opacity:.78}
+ .hero-ceiling-shade{background:linear-gradient(180deg,#fff 0%,#cfcfcf 62%,#6a6a6a 100%)}
+}
