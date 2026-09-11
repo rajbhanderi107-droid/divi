@@ -42,18 +42,16 @@ Event times are fixed to IST. `DTSTART` is written in UTC (`T143000Z` is
 8:00 PM IST); there is deliberately no `DTEND`, because the night has no
 published end time.
 
-### Ten nights, provisionally
+### Ten nights
 
-The site runs 11–20 October 2026 — ten nights. Divi has not announced 2026
-yet: divigarba.com counts down to 11 October under the words "Nine Nights Of
-2026", and NavratriGarba lists 11–19 October. The start date agrees
-everywhere; only the length is open, and Divi themselves ran ten nights in
-2025 (22 September – 1 October). Ten is a deliberate choice pending the
-announcement, not an oversight.
+The site runs 11-20 October 2026, ten nights, confirmed for this year. That is
+not in conflict with divigarba.com counting nine: Navratri's nine nights are
+11-19 October, one for each form of Durga, and 20 October is Vijayadashami.
+Divi runs all ten.
 
-Should it become nine, the length lives in one place — `dates` at the top of
-`planner.js` — but the prose does not: the hero, the event strip, the details
-section and the FAQ all say ten in words, and the terms repeat the dates.
+The length lives in one place — `dates` at the top of `planner.js` — but the
+prose does not: the hero, the event strip, the details section, the FAQ and the
+nights rail all say ten in words, and the terms repeat the dates.
 
 ## The nine nights
 
@@ -74,8 +72,10 @@ the frame's, which reads as a line drawn across the art. Its percentages are
 the frame's scaled by the inset, so the two arcs stay concentric at every card
 width.
 
-The tenth frame has no Navadurga and does not borrow one. It is an empty lit
-gateway, which is the honest picture of a night that is not one of the nine.
+The tenth frame has no Navadurga and does not borrow one — there is no tenth
+form to show. It is an open, lit gateway, and deliberately the brightest frame
+in the rail: Dussehra is the night the other nine build toward, not a footnote
+to them.
 
 Source art was supplied as a 512×279 contact sheet, so each panel is 167×70
 native. They are sharpened, veiled 22% toward terracotta and grained to sit
