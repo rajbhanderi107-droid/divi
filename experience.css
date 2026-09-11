@@ -149,7 +149,7 @@ body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobil
 
 .np-index{display:flex;gap:18px;align-items:baseline;margin:0;font-size:10px;letter-spacing:2.6px;
  text-transform:uppercase;font-weight:700;color:#e9c795}
-.np-gu{font-family:'Noto Sans Gujarati',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.35;
+.np-gu{font-family:'Anek Gujarati','Noto Sans Gujarati',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.35;
  margin:14px 0 0;color:var(--gold)}
 .np-copy h2{color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4vw,52px);
  line-height:1.05;margin:2px 0 0;letter-spacing:-.5px}
@@ -178,3 +178,19 @@ body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobil
 }
 .np-more{color:var(--gold);border-bottom:1px solid #e7c17b66;white-space:nowrap}
 .np-more:hover{border-bottom-color:var(--gold)}
+
+/* ── Divi's newer design system ───────────────────────────────────────
+   Tokens lifted verbatim from divigarba.vercel.app, names and all. They
+   are the brand's own vocabulary — obsidian ground, sindoor red, mukut
+   gold — and worth carrying rather than inventing parallel names. */
+:root{
+ --obsidian:#070504;--maroon:#180807;--temple:#350a08;--sindoor:#8f1712;
+ --antique:#c9a24a;--gold-lit:#edc766;--mukut:#f0c14b;--ivory:#f4e8d0;
+}
+
+/* Lenis's own requirements, inlined rather than fetched — it is five rules. */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}

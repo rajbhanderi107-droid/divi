@@ -41,3 +41,52 @@ body{color:#fff0c8;background:#843612 url('assets/master-bg-divi.webp') center t
  .organiser{width:86px;padding-left:11px}
  .brand img{width:46px}
 }
+
+/* ── The hero, on Divi's newer obsidian ground ────────────────────────
+   divigarba.vercel.app moved the brand onto near-black with gold. This
+   brings the hero across. It is not only closer to the current brand — it
+   is what the 3D layer has needed all along: additive light has nothing to
+   add to on a lit terracotta ground, and everything to add to on obsidian.
+   The warm sections below are unchanged, so the page still opens dark and
+   then steps into the warm ground it always had. */
+.hero{background:var(--obsidian)}
+.hero:before{background:
+  radial-gradient(ellipse 70% 60% at 78% 26%,#5c290e5c,transparent 62%),
+  linear-gradient(160deg,#180807f0 0%,#0b0605f5 52%,#070504 100%),
+  url('assets/master-bg-divi.webp') center/cover;
+ opacity:1}
+.hero:after{background:radial-gradient(ellipse at 74% 28%,#c9a24a1f,transparent 58%)}
+
+.hero .eyebrow{color:var(--mukut)}
+.hero .eyebrow:before{background:var(--mukut)}
+h1{color:var(--ivory);text-shadow:0 2px 30px #000a,0 0 60px #8f171233}
+.hero-tag{color:var(--gold-lit)}
+.hero .intro{color:var(--ivory)}
+.hero .description{color:#d8c9ad}
+.hero-bottom{color:#bda98a;border-top-color:#c9a24a33}
+.hero-bottom a{border-color:#c9a24a4d;color:var(--mukut)}
+
+/* The floor shadow can be quieter now that the ground is already dark —
+   it only has to seat the circle, not manufacture the contrast. */
+.hero-floor{background:radial-gradient(ellipse 88% 70% at 32% 108%,#00000094 0%,#0705046b 38%,transparent 72%)}
+
+/* Gold linework reads properly on obsidian; it never did on terracotta. */
+.hero-rangoli{color:var(--antique)}
+[data-motion=on] .hero-rangoli{animation:rangoli-in-dark 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+@keyframes rangoli-in-dark{to{opacity:.3}}
+.hero-mandala{opacity:.13;filter:sepia(1) saturate(2.2) brightness(1.1)}
+
+.hero-visual{background:var(--obsidian);
+ box-shadow:0 0 0 1px #c9a24a7a,10px 14px 0 -4px #140a06,10px 14px 0 -3px #c9a24a3d,0 46px 90px #000000a6}
+.hero-visual .depth-border{border-color:#f0c14b5c}
+
+/* The strip under the hero bridges obsidian into the warm ground below. */
+.event-strip{background:linear-gradient(#140a06,#4d200bf0);border-top-color:#c9a24a33}
+.event-strip dt{color:var(--ivory)}
+.event-strip dd{color:#cdb491}
+
+@media(max-width:620px){
+ .hero-rangoli{color:var(--antique)}
+ [data-motion=on] .hero-rangoli{animation:rangoli-in-dark-s 1.6s var(--ease-out) .35s forwards,rangoli-turn 210s linear infinite}
+ @keyframes rangoli-in-dark-s{to{opacity:.34}}
+}
