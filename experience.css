@@ -35,8 +35,8 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
 .night-line{font-size:12.5px;line-height:1.85;color:#e8d2b2;margin:10px 0 0}
 
 /* The tenth has no Navadurga to show, and should not borrow one. */
-.night-art-closing{background:radial-gradient(circle at 50% 58%,#a9571f 0%,#7b3414 42%,#3d1b08 100%)}
-.night-tenth-mark{position:absolute;left:50%;top:52%;width:62px;height:62px;transform:translate(-50%,-50%) rotate(45deg);border:1px solid #f6ddb0aa;border-radius:8px;box-shadow:0 0 0 9px #f6ddb01f}
+.night-art-closing{background:radial-gradient(ellipse at 50% 62%,#f0b567 0%,#c96c27 26%,#8d3d15 58%,#43200a 100%)}
+.night-tenth-mark{position:absolute;left:50%;top:54%;width:58px;height:58px;transform:translate(-50%,-50%) rotate(45deg);border:1px solid #fff0c8cc;border-radius:9px;background:#ffe7b31f;box-shadow:0 0 0 10px #ffe7b322,0 0 0 20px #ffe7b312,0 0 38px 10px #f7c07a4d}
 .is-tenth h3{color:var(--gold)}
 
 @media(max-width:900px){.nights{padding:70px 6% 62px}.night-frame{flex-basis:228px}.night-art{height:152px}.night-frame h3{font-size:28px}}
