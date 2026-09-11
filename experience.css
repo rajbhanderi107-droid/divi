@@ -121,3 +121,60 @@ body>header,body>main,body>footer,body>.reading-progress,body>dialog,body>.mobil
  @keyframes rangoli-in-s{to{opacity:.22}}}
 
 @media(prefers-reduced-motion:reduce){.hero-rangoli{animation:none!important;opacity:.16!important}}
+
+/* ── The ten nights, as a page ────────────────────────────────────────
+   The home page's rail is the teaser; this is the telling. The artwork is
+   167x70 native, so each night is a wide band rather than a tall block — the
+   aspect the source actually has, shown near the size it can hold. */
+.np-hero{padding:96px 6% 70px;max-width:1240px;margin-inline:auto;text-align:center}
+.np-hero .eyebrow{color:var(--gold)}
+.np-hero h1{color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(46px,7vw,104px);
+ line-height:.98;letter-spacing:-2px;margin:6px 0 26px;white-space:normal;text-wrap:balance}
+.np-hero h1 i{color:var(--gold)}
+.np-lead{font-size:15px;line-height:1.95;max-width:60ch;margin:0 auto;color:#eed9b3}
+.np-note{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#e0bb86;margin-top:26px}
+
+.np-list{display:flex;flex-direction:column;gap:8px;padding-bottom:30px}
+.np-night{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,78px);
+ align-items:center;padding:58px 6%;max-width:1340px;margin-inline:auto;width:100%}
+.np-night:nth-child(odd){background:linear-gradient(#3f1c0824,#25120433)}
+.np-right .np-art{order:2}
+
+.np-art{position:relative;border-radius:46% 46% 4px 4px;overflow:hidden;background:#33190a;aspect-ratio:420/176;
+ box-shadow:0 0 0 1px #c8a06d5c,0 26px 50px #3f1c0a2e}
+.np-art img{width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.np-art .night-keyline{border-radius:50% 50% 2px 2px/52% 52% 2px 2px}
+.np-art-closing{background:radial-gradient(ellipse at 50% 62%,#f0b567 0%,#c96c27 26%,#8d3d15 58%,#43200a 100%)}
+.np-art-closing .night-tenth-mark{width:74px;height:74px}
+
+.np-index{display:flex;gap:18px;align-items:baseline;margin:0;font-size:10px;letter-spacing:2.6px;
+ text-transform:uppercase;font-weight:700;color:#e9c795}
+.np-gu{font-family:'Noto Sans Gujarati',sans-serif;font-size:clamp(26px,3.4vw,40px);line-height:1.35;
+ margin:14px 0 0;color:var(--gold)}
+.np-copy h2{color:var(--cream);font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4vw,52px);
+ line-height:1.05;margin:2px 0 0;letter-spacing:-.5px}
+.np-epithet{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;color:var(--gold);margin:10px 0 0}
+.np-body{font-size:13.5px;line-height:2;color:#e8d2b2;margin:18px 0 0;max-width:52ch}
+
+.np-cta{text-align:center;padding:92px 6% 104px;background:linear-gradient(#6a2b0edb,#753314e8),url('assets/master-bg-divi.webp') center/cover;color:#fff0c8}
+.np-cta .eyebrow{color:var(--gold)}
+.np-cta h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(40px,6vw,76px);margin:4px 0 16px;color:var(--cream)}
+.np-cta>p{font-size:13.5px;line-height:1.95;max-width:52ch;margin:0 auto;color:#eed9b3}
+.np-cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.np-cta-actions .outline-button{margin:0;border-color:#e7c48166;color:#fff0c8}
+.np-cta-actions .outline-button:hover{background:var(--gold);color:#3d1a0c}
+
+@media(max-width:900px){
+ .np-hero{padding:74px 6% 54px}
+ .np-night{grid-template-columns:1fr;gap:26px;padding:46px 6%}
+ .np-right .np-art{order:0}
+ .np-body{max-width:none}
+}
+@media(max-width:620px){
+ .np-hero{padding:58px 6% 44px}
+ .np-night{padding:38px 6%}
+ .np-epithet{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:21px;color:var(--gold);margin:10px 0 0}
+ .np-cta{padding:70px 6% 80px}
+}
+.np-more{color:var(--gold);border-bottom:1px solid #e7c17b66;white-space:nowrap}
+.np-more:hover{border-bottom-color:var(--gold)}

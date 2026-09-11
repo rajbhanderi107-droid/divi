@@ -224,6 +224,38 @@ the gap to its neighbour: at -135px the far cards overlapped the near ones'
 captions. -98px with `z-index` set by proximity keeps any remaining overlap
 reading as depth rather than collision.
 
+## nights.html
+
+The home page's rail is the teaser; `nights.html` is the telling. Ten nights,
+alternating left and right, each with its Gujarati name, its form, its epithet
+and what that night is like on the ground.
+
+It does **not** load `app.js`. That file owns the gallery, the lightbox, the
+hero depth and the scroll-spy, none of which exist here, and most of its
+queries would throw. `page.js` carries only the shell: the booking and terms
+dialogs, and the reading progress bar. `hero3d.js` and `nights3d.js` guard on
+elements this page lacks and return before fetching their libraries.
+
+Anchors in the shared header and footer are rewritten to `index.html#...` when
+the page is generated, since a bare `#plan` here goes nowhere.
+
+Its text is light on the site's terracotta. The first pass used the dark
+palette of a cream ground and the index line and epithet were invisible —
+worth remembering, because `body` is already `#fff0c8` and a new section
+inherits that, not a light ground.
+
+### Upscaling the night art
+
+The panels are 167x70 native. They are resampled to 840x352 in **1.5x steps
+with a light sharpen between**, not in one jump: a single 5x resample turns
+every edge into a soft ramp that no amount of sharpening afterwards recovers.
+Compare the tiger's stripes and the bell's rim to see it.
+
+They come from the native crops rather than the earlier 420px files, so
+artifacts do not compound. Nine frames are 482 KB, up from 152 KB — all lazy,
+and none of them on the critical path. This is still an upscale and cannot
+invent detail: full-resolution originals remain the real fix.
+
 ## The gallery
 
 `app.js` holds the photographs in one array of `[file, title]` pairs, and
