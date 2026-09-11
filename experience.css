@@ -46,3 +46,13 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
 .night-controls button:hover:not(:disabled){background:var(--gold);color:#3d1a0c;border-color:var(--gold)}
 .night-controls button:disabled{opacity:.32;cursor:default}
 .night-rail:focus-visible{outline:3px solid #f0cd89;outline-offset:6px}
+
+/* The turning circle sits on the hero's floor, behind the copy. It fades in
+   under its own steam once the first frame has rendered, so a browser without
+   WebGL — or a visitor who asked for less motion — simply never sees a canvas. */
+.hero{position:relative}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 78% 58% at 34% 104%,#2a1206cc 0%,#421d08a6 34%,#5c290c4d 56%,transparent 74%)}
+.hero-circle{position:absolute;left:0;right:0;bottom:0;height:76%;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.hero-circle.is-live{opacity:1}
+.hero-copy{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.hero-circle{display:none}}

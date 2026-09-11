@@ -3,7 +3,15 @@
 The event site for Divi Garba, organised by Panchatva Events. Ten nights,
 11–20 October 2026, at Master Farm, B/s Sardardham, Vaishnodevi Circle.
 
-Static: plain HTML, CSS and ES modules. No build step, no dependencies.
+Static: plain HTML, CSS and ES modules. No build step.
+
+One external dependency, and only one: `hero3d.js` pulls three.js 0.149.0 from
+cdnjs to draw the garba circle. It is pinned (0.149.0 is the last release
+shipping a working UMD build — `three.min.js` in 0.150+ is a deprecation stub,
+not the library), fetched only after `load`, and never fetched at all under
+`prefers-reduced-motion`, Save-Data or 2G. If it fails to arrive, or the
+browser has no WebGL, no canvas is inserted and the hero is exactly what it
+was. Nothing else on the page depends on it.
 
     python3 -m http.server 8000    # then open http://localhost:8000
 
@@ -52,6 +60,26 @@ Divi runs all ten.
 The length lives in one place — `dates` at the top of `planner.js` — but the
 prose does not: the hero, the event strip, the details section, the FAQ and the
 nights rail all say ten in words, and the terms repeat the dates.
+
+## The garba circle
+
+`hero3d.js` draws the thing the event actually is: five rings of lamps on a
+floor, adjacent rings turning against each other the way the circles on the
+ground do, seen from the edge. It sits behind the hero copy where the page had
+only texture; the photograph, the video and the still mandala are untouched.
+
+Two things were learned making it read at all:
+
+- **Additive blending needs something to add to.** On the hero's bright
+  terracotta the lamps were invisible. The `.hero::before` shadow is not
+  decoration — it is what the light lands on, and it is also true to the
+  subject, since a garba ground at night is dark and lit by its own lamps.
+- **Ring radius is bounded by the field of view.** At 42° and z≈9, anything
+  past a radius of about 3.8 puts the camera inside the rings, and the circle
+  reads as scattered sparks rather than as a circle.
+
+It pauses off-screen and on a hidden tab, caps device pixel ratio at 1.5, and
+fades in on its own first frame so nothing pops.
 
 ## The nine nights
 
