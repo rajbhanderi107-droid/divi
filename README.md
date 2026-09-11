@@ -116,6 +116,36 @@ U+2193 with *emoji* presentation — the Book ticket arrow came out as a blue
 emoji tile rather than a glyph in the type's own colour. Any arrow added later
 needs the same selector.
 
+## Fixing the floor shadow, and the particle boost
+
+The circle's glow was rendering — opacity, z-index, everything checked out —
+and was still nearly invisible on screen. The cause was a CSS collision, not
+a rendering bug: `.hero::before` and `.hero:before` are the *same*
+pseudo-element, and both `experience.css` and `brand.css` declared one on
+`.hero`. `brand.css` loads last, so its rule (the background photo) always
+won, and the dark floor-shadow gradient built specifically so the additive
+lamp glow would have contrast never actually painted. The lamps were glowing
+against whatever the last-loaded background happened to be.
+
+Fixed by giving the floor shadow its own element — `.hero-floor`, a real div,
+impossible to collide with anything reusing `:before`/`:after` on `.hero` in
+any stylesheet — and explicit z-index on every hero decorative layer instead
+of letting several of them share `z-index:0` and rely on DOM insertion order
+(`.hero-circle`'s canvas is prepended by JS at runtime; that ordering was
+never guaranteed).
+
+With real contrast under it, the rings and embers were boosted hard: lamp
+point size 150→235, ring density up ~40%, a wider hot core (the previous
+`pow(core, 9.0)` was needle-thin), embers 260→520 with a wider rise and
+spread. Verified against real WebGL (swiftshader), not just presence checks —
+screenshotted before and after to confirm the difference is visually real,
+not just numbers moving.
+
+Known gap: on a phone the hero stacks copy above the arch photo, and the
+canvas — anchored to the bottom of the whole stacked section — ends up mostly
+behind that now-opaque photo, showing only a sliver of embers at the seam.
+Pre-existing framing constraint, not something this pass fixed.
+
 ## The garba circle
 
 `hero3d.js` draws the thing the event actually is: five rings of lamps on a

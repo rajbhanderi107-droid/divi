@@ -42,8 +42,8 @@
     const rings = [];
     const COLOURS = [0xffe7b3, 0xf0b567, 0xee9d32, 0xfff0c8, 0xe8873a];
     for (let r = 0; r < 5; r++) {
-      const radius = 1.25 + r * 0.63;
-      const count = Math.round(radius * 17);
+      const radius = 1.4 + r * 0.78;
+      const count = Math.round(radius * 24);
       const pos = new Float32Array(count * 3);
       const seed = new Float32Array(count);
       const tint = new Float32Array(count * 3);
@@ -65,7 +65,7 @@
 
       const m = new THREE.ShaderMaterial({
         transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-        uniforms: { uTime: { value: 0 }, uSize: { value: 150 }, uFade: { value: 0 } },
+        uniforms: { uTime: { value: 0 }, uSize: { value: 235 }, uFade: { value: 0 } },
         vertexShader: `
           attribute float seed; attribute vec3 tint;
           uniform float uTime; uniform float uSize;
@@ -86,9 +86,9 @@
             if (r > 0.5) discard;
             float core = smoothstep(0.5, 0.0, r);
             float halo = pow(core, 1.9);          // the lamp's reach
-            float hot  = pow(core, 9.0);          // the flame itself
+            float hot  = pow(core, 6.0);          // the flame itself
             vec3 lit = mix(vTint, vec3(1.0, 0.96, 0.88), hot);
-            gl_FragColor = vec4(lit * (0.9 + hot * 1.6), (halo * 0.5 + hot * 0.95) * vFlicker * uFade);
+            gl_FragColor = vec4(lit * (1.1 + hot * 2.0), (halo * 0.72 + hot * 1.0) * vFlicker * uFade);
           }`
       });
       const points = new THREE.Points(g, m);
@@ -99,12 +99,12 @@
     }
 
     // Embers off the lamps: born low near the rings, rising and fading out.
-    const EMBERS = 260;
+    const EMBERS = 520;
     const ePos = new Float32Array(EMBERS * 3), eSeed = new Float32Array(EMBERS), eLife = new Float32Array(EMBERS);
     for (let i = 0; i < EMBERS; i++) {
-      const a = Math.random() * Math.PI * 2, rad = 1.2 + Math.random() * 2.7;
+      const a = Math.random() * Math.PI * 2, rad = 1.0 + Math.random() * 3.6;
       ePos[i * 3] = Math.cos(a) * rad;
-      ePos[i * 3 + 1] = Math.random() * 3.2;
+      ePos[i * 3 + 1] = Math.random() * 4.4;
       ePos[i * 3 + 2] = Math.sin(a) * rad;
       eSeed[i] = Math.random() * 6.283;
       eLife[i] = Math.random();
@@ -121,12 +121,12 @@
         void main(){
           vec3 p = position;
           float t = fract(uTime * 0.055 + seed * 0.159);
-          p.y = position.y + t * 3.4;                     // rise
+          p.y = position.y + t * 4.6;                     // rise
           p.x += sin(uTime * 0.6 + seed * 5.0) * 0.16;    // and wander
           p.z += cos(uTime * 0.5 + seed * 4.0) * 0.16;
           vA = (1.0 - t) * (1.0 - t) * 0.85;              // fading as they go
           vec4 mv = modelViewMatrix * vec4(p, 1.0);
-          gl_PointSize = (26.0 + 10.0 * sin(seed + uTime * 3.0)) / -mv.z;
+          gl_PointSize = (40.0 + 16.0 * sin(seed + uTime * 3.0)) / -mv.z;
           gl_Position = projectionMatrix * mv;
         }`,
       fragmentShader: `
@@ -135,7 +135,7 @@
           vec2 d = gl_PointCoord - 0.5; float r = length(d);
           if (r > 0.5) discard;
           float core = smoothstep(0.5, 0.0, r);
-          gl_FragColor = vec4(vec3(1.0, 0.72, 0.36) * (0.7 + core), core * core * vA * uFade);
+          gl_FragColor = vec4(vec3(1.0, 0.74, 0.4) * (0.85 + core * 1.2), core * core * vA * uFade * 1.3);
         }`
     });
     const embers3d = new THREE.Points(eg, em);
