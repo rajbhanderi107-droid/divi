@@ -65,6 +65,12 @@ Katyayani sixth. The source artwork numbered those two the other way round;
 the images are paired with the deity each one depicts, not with the number it
 carried in the sheet, because worshippers read the order and would notice.
 
+The rail carries the same controls as the gallery, from one `wireRail` in
+`app.js` rather than a second copy of the stepping and end-disabling logic.
+Its frames are articles, not buttons, so the rail itself takes focus and the
+browser's own arrow keys scroll it — that is what the `tabindex` and group
+role are for, and without them a scrollable region is unreachable by keyboard.
+
 Each frame is a gateway — the hero's arch and its inset keyline at frame scale.
 The keyline cannot take `border-radius: inherit`: a percentage radius
 re-resolves against the smaller inset box and the arc comes out flatter than

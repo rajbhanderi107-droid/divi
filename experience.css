@@ -41,3 +41,8 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
 
 @media(max-width:900px){.nights{padding:70px 6% 62px}.night-frame{flex-basis:228px}.night-art{height:152px}.night-frame h3{font-size:28px}}
 @media(max-width:620px){.nights{padding:56px 6% 50px}.nights .section-heading{display:block}.nights .section-heading>p{margin-top:16px}.night-rail{gap:18px}.night-frame{flex-basis:76vw}.night-art{height:180px}}
+.night-controls{margin-top:20px}
+.night-controls button{border-color:#e7c48166;background:transparent;color:#fff0c8}
+.night-controls button:hover:not(:disabled){background:var(--gold);color:#3d1a0c;border-color:var(--gold)}
+.night-controls button:disabled{opacity:.32;cursor:default}
+.night-rail:focus-visible{outline:3px solid #f0cd89;outline-offset:6px}

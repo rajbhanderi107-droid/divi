@@ -6,7 +6,22 @@ function showPhoto(i){photoIndex=(i+photographs.length)%photographs.length;const
 document.querySelector('.light-prev').onclick=()=>showPhoto(photoIndex-1);document.querySelector('.light-next').onclick=()=>showPhoto(photoIndex+1);
 lightbox.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();showPhoto(photoIndex-1)}if(e.key==='ArrowRight'){e.preventDefault();showPhoto(photoIndex+1)}});
 const motion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth';
-function galleryStep(direction){const card=track.querySelector('.gallery-card');const gap=parseFloat(getComputedStyle(track).gap)||0;track.scrollBy({left:direction*(card.getBoundingClientRect().width+gap),behavior:motion()})}document.querySelector('#gallery-prev').onclick=()=>galleryStep(-1);document.querySelector('#gallery-next').onclick=()=>galleryStep(1);
+/* A horizontal rail: step by one card, disable the arrows at each end, and
+   keep both correct across resizes. Used by the gallery and the nights. */
+function wireRail(rail,prev,next,cardSelector){
+ const step=direction=>{const card=rail.querySelector(cardSelector);if(!card)return;
+  const gap=parseFloat(getComputedStyle(rail).gap)||0;
+  rail.scrollBy({left:direction*(card.getBoundingClientRect().width+gap),behavior:motion()})};
+ const update=()=>{const max=rail.scrollWidth-rail.clientWidth;
+  prev.disabled=rail.scrollLeft<3;next.disabled=rail.scrollLeft>=max-3};
+ prev.onclick=()=>step(-1);next.onclick=()=>step(1);
+ rail.addEventListener('scroll',update,{passive:true});
+ new ResizeObserver(update).observe(rail);
+ window.addEventListener('resize',update);
+ update();
+ return update;
+}
+const updateGalleryControls=wireRail(track,document.querySelector('#gallery-prev'),document.querySelector('#gallery-next'),'.gallery-card');
 document.querySelectorAll('dialog').forEach(dialog=>{dialog.querySelector('.close').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}})});
 const booking=document.querySelector('#booking');const bookingURL='https://sortmyscene.com/widget/embed?eventID=6a981a7a2a894a5381e4911b&dayLabel=General+Admission&festivalLabel=Festival+Pass&hideLogo=false&theme=%23000000';document.querySelector('#booking-external').href=bookingURL;
 document.querySelectorAll('[data-book]').forEach(button=>button.onclick=()=>{document.querySelector('#booking-frame').src=bookingURL+'&parentOrigin='+encodeURIComponent(location.origin);booking.showModal()});booking.addEventListener('close',()=>document.querySelector('#booking-frame').removeAttribute('src'));
@@ -14,7 +29,7 @@ const terms=document.querySelector('#terms');function checkTerms(){if(location.h
 const navTargets=[{element:document.querySelector('.hero'),hash:'#home'},{element:document.querySelector('#plan'),hash:'#plan'},{element:document.querySelector('#gallery'),hash:'#gallery'},{element:document.querySelector('#details'),hash:'#details'}];
 let navFrame=0;function updateNav(){navFrame=0;const range=document.documentElement.scrollHeight-innerHeight;document.querySelector('.reading-progress').style.transform='scaleX('+(range>0?Math.min(1,Math.max(0,scrollY/range)):0)+')';const focusLine=window.innerHeight*.4;let current='#home';for(const item of navTargets){if(item.element.getBoundingClientRect().top<=focusLine)current=item.hash}document.querySelectorAll('nav a').forEach(a=>{const active=a.hash===current;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}window.addEventListener('scroll',()=>{if(!navFrame)navFrame=requestAnimationFrame(updateNav)},{passive:true});updateNav();
 track.setAttribute('aria-label','The nights');
-function updateGalleryControls(){const max=track.scrollWidth-track.clientWidth;document.querySelector('#gallery-prev').disabled=track.scrollLeft<3;document.querySelector('#gallery-next').disabled=track.scrollLeft>=max-3}track.addEventListener('scroll',updateGalleryControls,{passive:true});new ResizeObserver(updateGalleryControls).observe(track);updateGalleryControls();
+
 let touchStart=null;const lightImage=document.querySelector('#light-img');lightImage.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')touchStart={x:event.clientX,y:event.clientY}});lightImage.addEventListener('pointerup',event=>{if(!touchStart)return;const dx=event.clientX-touchStart.x,dy=event.clientY-touchStart.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.4)showPhoto(photoIndex+(dx<0?1:-1));touchStart=null});lightImage.addEventListener('pointercancel',()=>touchStart=null);
 lightbox.addEventListener('keydown',event=>{if(event.key==='Home'){event.preventDefault();showPhoto(0)}if(event.key==='End'){event.preventDefault();showPhoto(photographs.length-1)}});
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
@@ -23,7 +38,7 @@ const depthResets=[];
 document.querySelectorAll('.hero-visual,.story-image,.gallery-card .photo,.feature-image').forEach(surface=>{let frame=0,rect=null;const base=surface.style.transform;function reset(){cancelAnimationFrame(frame);frame=0;rect=null;surface.classList.remove('depth-active');surface.style.transform=base}depthResets.push(reset);surface.addEventListener('pointerenter',()=>{if(!reducedMotion.matches&&finePointer.matches)rect=surface.getBoundingClientRect()});surface.addEventListener('pointermove',event=>{if(reducedMotion.matches||!finePointer.matches)return;if(!rect)rect=surface.getBoundingClientRect();const x=Math.max(-.5,Math.min(.5,(event.clientX-rect.left)/rect.width-.5)),y=Math.max(-.5,Math.min(.5,(event.clientY-rect.top)/rect.height-.5));cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{surface.classList.add('depth-active');surface.style.transform=`perspective(1100px) rotateX(${-y*7}deg) rotateY(${x*9}deg) translateZ(9px)`})});surface.addEventListener('pointerleave',reset);surface.addEventListener('pointercancel',reset)});
 function resetDepth(){depthResets.forEach(reset=>reset())}reducedMotion.addEventListener('change',resetDepth);finePointer.addEventListener('change',resetDepth);window.addEventListener('resize',resetDepth);window.addEventListener('scroll',resetDepth,{passive:true});
 track.addEventListener('keydown',event=>{const cards=[...track.querySelectorAll('.gallery-card')],index=cards.indexOf(document.activeElement);if(index<0)return;let target=index;if(event.key==='ArrowRight')target=Math.min(cards.length-1,index+1);else if(event.key==='ArrowLeft')target=Math.max(0,index-1);else if(event.key==='Home')target=0;else if(event.key==='End')target=cards.length-1;else return;event.preventDefault();cards[target].focus({preventScroll:true});cards[target].scrollIntoView({behavior:motion(),block:'nearest',inline:'nearest'})});
-window.addEventListener('resize',()=>{updateNav();updateGalleryControls()});
+window.addEventListener('resize',updateNav);
 
 /* Start the hero clip after load so it never competes with the LCP image, and
    skip it entirely on reduced motion or a metered connection. */
@@ -32,3 +47,9 @@ const conn=navigator.connection||{};
 if(matchMedia('(prefers-reduced-motion: reduce)').matches||conn.saveData||/2g/.test(conn.effectiveType||''))return;
 const start=()=>{video.addEventListener('playing',()=>video.classList.add('is-live'),{once:true});video.play().catch(()=>{})};
 if(document.readyState==='complete')start();else window.addEventListener('load',start,{once:true})})();
+
+/* The nights rail gets the same controls. Its frames are articles rather than
+   buttons, so the rail itself takes focus and the browser's own arrow-key
+   scrolling applies — that is what tabindex and the group role are for. */
+(()=>{const rail=document.querySelector('#night-rail');if(!rail)return;
+ wireRail(rail,document.querySelector('#nights-prev'),document.querySelector('#nights-next'),'.night-frame');})();
