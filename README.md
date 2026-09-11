@@ -55,6 +55,33 @@ Should it become nine, the length lives in one place — `dates` at the top of
 `planner.js` — but the prose does not: the hero, the event strip, the details
 section and the FAQ all say ten in words, and the terms repeat the dates.
 
+## The nine nights
+
+`#nights` tells the story: Navratri is nine nights, each belonging to a form of
+Durga, and Divi keeps all nine then adds a tenth for Dussehra. That is why the
+site can run ten nights while divigarba.com says nine — nights 1–9 are
+11–19 October, and 20 October is Vijayadashami.
+
+The nine forms run in **traditional order**, which is Skandamata fifth and
+Katyayani sixth. The source artwork numbered those two the other way round;
+the images are paired with the deity each one depicts, not with the number it
+carried in the sheet, because worshippers read the order and would notice.
+
+Each frame is a gateway — the hero's arch and its inset keyline at frame scale.
+The keyline cannot take `border-radius: inherit`: a percentage radius
+re-resolves against the smaller inset box and the arc comes out flatter than
+the frame's, which reads as a line drawn across the art. Its percentages are
+the frame's scaled by the inset, so the two arcs stay concentric at every card
+width.
+
+The tenth frame has no Navadurga and does not borrow one. It is an empty lit
+gateway, which is the honest picture of a night that is not one of the nine.
+
+Source art was supplied as a 512×279 contact sheet, so each panel is 167×70
+native. They are sharpened, veiled 22% toward terracotta and grained to sit
+with the photography, and shown near their native size for that reason. Higher
+resolution originals would drop straight in at the same filenames.
+
 ## The gallery
 
 `app.js` holds the photographs in one array of `[file, title]` pairs, and

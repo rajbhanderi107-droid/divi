@@ -11,3 +11,33 @@ body{overflow-x:clip}header{height:92px;background:#211409f2;backdrop-filter:blu
 @media(max-width:1000px){.hero-copy{padding:40px 9%;}.hero-visual{min-height:640px;margin:32px 8% 32px 0}h1{font-size:46px}.hero-tag{font-size:34px}.hero .description{font-size:14px}.image-caption{left:24px;right:24px}.image-caption span:first-child{font-size:27px}.image-caption span:last-child{font-size:10px}.feature-image{min-height:470px}.feature{min-height:470px}.story-image{height:290px}.stories{gap:22px}.stories h3{font-size:29px}.gallery-card{flex-basis:39%}.location{gap:40px}.event-strip dt{font-size:25px}.event-strip>div{padding-left:20px}}
 @media(max-width:620px){header{height:106px}.hero{min-height:0;display:flex;padding-bottom:15px}.hero-copy{padding:35px 7% 16px}.hero .eyebrow{font-size:12px;letter-spacing:2px}.hero .eyebrow:before{width:26px}h1{font-size:clamp(39px,12.3vw,62px);letter-spacing:-1.6px;margin-top:8px}.hero-tag{font-size:36px;line-height:1.1;margin-bottom:23px}.hero .description{font-size:15px;line-height:1.85;margin-bottom:23px}.hero .intro{font-size:15px}.hero-visual{height:440px;min-height:0;margin:25px 7% 24px;border-radius:47% 47% 3px 3px;transform:perspective(1000px) rotateY(-3deg);width:86%;align-self:center;box-shadow:0 0 0 1px #e3bc7c70,7px 9px 0 -3px #291709,7px 9px 0 -2px #bc925747,0 22px 38px #0004}.hero-visual .depth-border{inset:10px;transform:none}.image-caption{bottom:22px;left:25px;right:25px;transform:none}.image-caption span:first-child{font-size:28px}.image-caption span:last-child{font-size:10px}.event-strip{padding:13px 7%}.event-strip>div{padding:14px 0}.event-strip dt{font-size:24px}.event-strip dd{font-size:12px;letter-spacing:0}.ritual{padding:60px 6%}.section-heading h2{font-size:49px}.section-heading>p{max-width:none}.feature{min-height:0}.feature-image{height:330px;min-height:0;border-radius:3px 3px 0 0}.feature-copy{padding:33px 8%;border-radius:0 0 3px 3px}.feature-copy h2{font-size:49px}.feature-copy p{max-width:80%;font-size:15px}.round-arrow{width:44px;height:44px}.stories{gap:36px;margin-top:38px}.stories article:nth-child(2),.stories article:nth-child(3){padding-top:0}.story-image{height:350px}.stories article:first-child .story-image{border-radius:140px 140px 3px 3px}.stories article:nth-child(3) .story-image{border-radius:3px}.stories h3{font-size:33px}.gallery{padding:60px 6% 40px}.gallery .section-heading>div>p:not(.eyebrow){max-width:185px}.gallery-track{gap:22px;padding-top:18px}.gallery-card{flex-basis:83%}.gallery-card .photo{height:370px;transform:perspective(1100px) rotateY(-3deg)}.gallery-card:nth-child(even){padding-top:24px}.gallery-card h3{font-size:27px}.gallery-controls button{min-width:44px;height:44px}.details{padding:70px 6%}.details h2{font-size:clamp(74px,21vw,112px);letter-spacing:-2px}.details .chakra{font-size:27px!important}.location{padding:60px 6%;gap:30px}.location h2{font-size:52px}.map{height:310px;box-shadow:8px 8px 0 #e9ddca}.footer-top{padding-bottom:30px}.contacts{gap:4px}.footer-bottom{font-size:12px}#lightbox{padding:58px 20px 50px}#lightbox>button:not(.close){top:auto;bottom:0;width:46px;height:46px}.light-prev{left:calc(50% - 60px)}.light-next{right:calc(50% - 60px)}#lightbox figure img{height:63dvh}#lightbox .close{right:8px;width:46px;height:46px}}
 @media(prefers-reduced-motion:reduce){.hero-visual,.hero-visual>img,.image-caption,.depth-border,.gallery-card .photo,.gallery-card:nth-child(even) .photo{transform:none!important}.stories article{animation:none;translate:none;opacity:1}#lightbox figure img.changing{animation:none}}
+
+/* ── The nine nights ───────────────────────────────────────────────────────
+   Each night is a gateway: the hero's arch and its inset keyline, at the
+   scale of a frame rather than a doorway. The rail reads left to right, so
+   the nine forms arrive in the order the nights actually fall. */
+.nights{padding:90px 6% 80px;background:linear-gradient(#5d2609e8,#7b3414f2),url('assets/master-bg-divi.webp') center/cover;color:#fff0c8;overflow:hidden}
+.nights .section-heading{align-items:end;margin-bottom:44px}
+.nights .eyebrow{color:var(--gold)}
+.nights h2{color:var(--cream)}
+.nights h2 i{color:var(--gold)}
+.nights .section-heading>p{color:#efd9b6;font-size:13px;line-height:1.9;max-width:46ch}
+
+.night-rail{display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:26px;scrollbar-width:thin;scrollbar-color:#c79a5e transparent}
+.night-frame{flex:0 0 252px;scroll-snap-align:start;display:flex;flex-direction:column}
+.night-art{position:relative;height:170px;border-radius:46% 46% 3px 3px;overflow:hidden;background:#33190a;box-shadow:0 0 0 1px #eec98c5c,0 18px 34px #2b12055c}
+.night-art img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+/* The hero's carved keyline, inherited so it follows the arch exactly. */
+.night-keyline{position:absolute;inset:9px;border:1px solid #f4dcae66;border-radius:50% 50% 2px 2px/52% 52% 2px 2px;pointer-events:none}
+
+.night-index{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:18px 0 0;font-size:10px;letter-spacing:2.4px;text-transform:uppercase;color:#e9c795;font-weight:700}
+.night-frame h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:31px;line-height:1.1;margin:7px 0 0;color:var(--cream)}
+.night-line{font-size:12.5px;line-height:1.85;color:#e8d2b2;margin:10px 0 0}
+
+/* The tenth has no Navadurga to show, and should not borrow one. */
+.night-art-closing{background:radial-gradient(circle at 50% 58%,#a9571f 0%,#7b3414 42%,#3d1b08 100%)}
+.night-tenth-mark{position:absolute;left:50%;top:52%;width:62px;height:62px;transform:translate(-50%,-50%) rotate(45deg);border:1px solid #f6ddb0aa;border-radius:8px;box-shadow:0 0 0 9px #f6ddb01f}
+.is-tenth h3{color:var(--gold)}
+
+@media(max-width:900px){.nights{padding:70px 6% 62px}.night-frame{flex-basis:228px}.night-art{height:152px}.night-frame h3{font-size:28px}}
+@media(max-width:620px){.nights{padding:56px 6% 50px}.nights .section-heading{display:block}.nights .section-heading>p{margin-top:16px}.night-rail{gap:18px}.night-frame{flex-basis:76vw}.night-art{height:180px}}
