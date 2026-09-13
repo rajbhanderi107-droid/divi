@@ -678,3 +678,15 @@ header>.book{white-space:nowrap}
 
 .hero-composition .mandala-seal{display:none}
 .hero-film{opacity:.32}
+/* Image corridor in the Memories section (stream.js, a port of ImageStreamHero). */
+.image-stream{position:relative;height:clamp(300px,40vw,540px);margin:8px 0 28px;border-radius:14px;overflow:hidden;container-type:inline-size;background:radial-gradient(ellipse 70% 60% at 50% 55%,#3b1c0e 0%,#1b0d08 60%,#110805 100%);box-shadow:inset 0 0 0 1px #d9b27347,0 24px 60px #2a12082e}
+.image-stream-stage,.image-stream-world{position:absolute;inset:0;pointer-events:none}
+.image-stream-world{transform-style:preserve-3d}
+.image-stream-card{position:absolute;left:50%;overflow:hidden;backface-visibility:hidden;box-shadow:0 0 0 1px #f0d49a2e;will-change:transform;animation:var(--stream-name) var(--stream-duration) linear var(--stream-delay) infinite}
+.image-stream-card img{display:block;width:100%;height:100%;object-fit:cover}
+.image-stream:after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 75% at 50% 55%,transparent 40%,#110805c7 100%)}
+.image-stream-copy{position:absolute;z-index:2;left:0;right:0;bottom:22px;margin:0;text-align:center;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#f0d49a;text-shadow:0 1px 12px #000}
+.stream-offscreen .image-stream-card,.motion-paused .image-stream-card{animation-play-state:paused}
+/* The site's reduced-motion rule removes all animations; the corridor instead freezes as a finished still, like the original component. */
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .image-stream .image-stream-card{animation:var(--stream-name) var(--stream-duration) linear var(--stream-delay) infinite paused!important}}
+@media(max-width:700px){.image-stream{height:300px;border-radius:10px;margin-bottom:22px}}
