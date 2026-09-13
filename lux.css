@@ -1,0 +1,94 @@
+/* Premium layer, loaded after refine.css: diya-lighting intro, cinematic hero, embers, painting-to-reality, toran edges, magnetic buttons.
+   Continuous motion uses transform/opacity only. */
+
+/* ---------- Diya-lighting intro ---------- */
+.welcome-loader{display:flex!important;position:fixed;inset:0;z-index:1000;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 52%,#2c1308 0%,#0d0503 68%);color:#f3d38e;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility 0s .9s}
+.is-loading .welcome-loader{opacity:1;visibility:visible;pointer-events:auto;transition:none}
+.welcome-emblem,.welcome-line{display:none!important}
+.intro-flame{position:relative;width:40px;height:70px;margin-bottom:22px}
+.intro-flame i{position:absolute;left:50%;bottom:0;translate:-50% 0;transform-origin:50% 100%}
+.intro-flame i:nth-child(1){width:150px;height:150px;bottom:-40px;border-radius:50%;background:radial-gradient(circle,#ffb34a4d,transparent 64%);animation:intro-halo 2.6s ease-in-out infinite,intro-ignite 1s cubic-bezier(.2,.7,.2,1) both}
+.intro-flame i:nth-child(2){width:28px;height:62px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 82%,#fff6d2 0%,#ffc85e 32%,#ff7a1a 66%,#ff7a1a00 72%);animation:intro-flicker 1.2s ease-in-out infinite,intro-ignite .9s cubic-bezier(.2,.7,.2,1) both}
+.intro-flame i:nth-child(3){width:10px;height:24px;bottom:5px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 78%,#fff 0%,#fff3c4 58%,#fff3c400 62%);animation:intro-flicker .8s ease-in-out infinite reverse,intro-ignite .9s .12s cubic-bezier(.2,.7,.2,1) both}
+.welcome-loader .intro-title{letter-spacing:0;text-transform:none;font-family:'Noto Serif Gujarati',serif;font-size:clamp(42px,7vw,80px);font-weight:500;line-height:1.5;margin:0;color:transparent;background:linear-gradient(100deg,#7a4a1c 0%,#f3d38e 42%,#fff5d8 50%,#f3d38e 58%,#7a4a1c 100%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;animation:intro-title 1.7s .35s cubic-bezier(.2,.7,.2,1) both}
+.welcome-loader .intro-sub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#cfa86a;margin:6px 0 0;animation:intro-rise .9s 1s ease both}
+@keyframes intro-flicker{0%,100%{transform:scale(1,1) rotate(-1.5deg)}50%{transform:scale(.9,1.08) rotate(2deg)}}
+@keyframes intro-ignite{from{opacity:0;scale:.15}to{opacity:1;scale:1}}
+@keyframes intro-halo{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes intro-title{from{opacity:0;background-position:100% 0;translate:0 14px}to{opacity:1;background-position:0 0;translate:0 0}}
+@keyframes intro-rise{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+
+/* Hero entrance after the intro lifts */
+.intro-pending .hero-copy>*,.intro-pending .hero-visual{opacity:0}
+.intro-done .hero-copy>*{animation:hero-rise 1s cubic-bezier(.2,.7,.2,1) both}
+.intro-done .hero-copy>:nth-child(2){animation-delay:.07s}.intro-done .hero-copy>:nth-child(3){animation-delay:.14s}.intro-done .hero-copy>:nth-child(4){animation-delay:.21s}.intro-done .hero-copy>:nth-child(5){animation-delay:.28s}.intro-done .hero-copy>:nth-child(6){animation-delay:.35s}
+.intro-done .hero-visual{animation:hero-arch 1.3s .15s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hero-rise{from{opacity:0;translate:0 26px}to{opacity:1;translate:0 0}}
+@keyframes hero-arch{from{opacity:0;translate:0 44px;scale:.94}to{opacity:1;translate:0 0;scale:1}}
+
+/* ---------- Cinematic hero ---------- */
+.hero{min-height:calc(100svh - 120px)}
+.hero-film{opacity:.5}
+.hero:before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,#3a1609f0 0%,#3a1609bf 36%,#3a160938 68%,#3a160980 100%)}
+
+/* ---------- Embers (canvas injected by embers.js) ---------- */
+.embers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.compact-ritual .embers,.film-closing .embers{z-index:-1}
+.film-closing{position:relative;isolation:isolate;overflow:hidden}
+
+/* ---------- Painting to reality ---------- */
+.real-reveal{position:relative;height:260svh;background:#100806;color:#fff0d4}
+.reveal-stage{position:sticky;top:86px;height:calc(100svh - 86px);min-height:460px;overflow:hidden;isolation:isolate;contain:strict}
+.reveal-under,.reveal-real,.reveal-art{position:absolute;inset:0;width:100%;height:100%}
+.reveal-under{object-fit:cover}
+/* The real photo fades in over an identical copy of the painting, so the window is invisible until the photo appears inside it. */
+.reveal-real{object-fit:cover;opacity:0;transform:scale(1.16);will-change:transform,opacity}
+.real-reveal:not(.reveal-ready) .reveal-real{opacity:1}
+@media(prefers-reduced-motion:reduce){.reveal-real{transition:opacity .8s ease}.real-reveal[data-phase=real] .reveal-real{opacity:1}}
+.reveal-art{transform-origin:50% 46%;will-change:transform,opacity;
+ -webkit-mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");-webkit-mask-position:0 0,50% 46%;-webkit-mask-size:100% 100%,26vmin 26vmin;-webkit-mask-repeat:no-repeat;-webkit-mask-composite:xor;
+ mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");mask-position:0 0,50% 46%;mask-size:100% 100%,26vmin 26vmin;mask-repeat:no-repeat;mask-composite:exclude}
+.reveal-art img{display:block;width:100%;height:100%;object-fit:cover}
+.reveal-stage:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(#100806d9,transparent 28%,transparent 54%,#100806ee 94%)}
+.reveal-copy{position:absolute;z-index:3;left:6%;right:6%;bottom:8%;text-align:center}
+.reveal-copy .eyebrow{justify-content:center;color:#e5bd78;margin-bottom:14px}
+.reveal-lines{position:relative;height:calc(clamp(40px,5.4vw,80px) * 1.15)}
+.reveal-line{position:absolute;inset:0;margin:0;font-size:clamp(40px,5.4vw,80px);font-weight:400;line-height:1.1;color:#fff0d4;text-shadow:0 2px 26px #000d;transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal-line i{color:#e8c27a}
+.reveal-b{opacity:0;transform:translate3d(0,26px,0)}
+.real-reveal[data-phase=real] .reveal-a{opacity:0;transform:translate3d(0,-22px,0)}
+.real-reveal[data-phase=real] .reveal-b{opacity:1;transform:none}
+.real-reveal:not(.reveal-ready){height:auto}.real-reveal:not(.reveal-ready) .reveal-stage{position:relative;top:0;height:80svh}
+
+/* ---------- Toran edges: scalloped transitions instead of hard colour cuts ---------- */
+.event-strip{border-top:0;background:radial-gradient(circle at 50% 0,#49210f 9px,#49210f00 10px) 0 -1px/24px 12px repeat-x,#efe0c4}
+.gallery{background:radial-gradient(circle at 50% 0,#100806 10px,#10080600 11px) 0 -1px/26px 14px repeat-x,#f0e3ca}
+.visit-planner{background:radial-gradient(circle at 50% 0,#241109 10px,#24110900 11px) 0 -1px/26px 14px repeat-x,var(--cream)}
+footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f0e100 11px) 0 -1px/26px 14px repeat-x,var(--deep)}
+
+/* ---------- Magnetic buttons and light sweep ---------- */
+@media (hover:hover) and (pointer:fine){
+ .book,.outline-button{translate:var(--mx,0px) var(--my,0px);transition:translate .35s cubic-bezier(.2,.7,.2,1),background .2s,transform .2s}
+ .book{position:relative;overflow:hidden;isolation:isolate}
+ .book:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(100deg,#fff0 30%,#fff8 50%,#fff0 70%);transform:translateX(-120%);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+ .book:hover:after{transform:translateX(120%)}
+ .gallery-track{cursor:grab}
+ .gallery-track.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+ .gallery-track img{-webkit-user-drag:none;user-select:none}
+}
+
+@media(max-width:700px){
+ .hero:before{background:linear-gradient(#3a1609e8,#3a160999 48%,#3a1609e8)}
+ .real-reveal{height:220svh}
+ .reveal-stage{top:76px;height:calc(100svh - 76px)}
+ .reveal-copy{bottom:12%}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .intro-flame i,.intro-title,.intro-sub,.intro-done .hero-copy>*,.intro-done .hero-visual{animation:none!important}
+ .intro-pending .hero-copy>*,.intro-pending .hero-visual{opacity:1}
+ .welcome-loader{transition:opacity .3s,visibility 0s .3s}
+ .reveal-art{transition:opacity .8s ease}
+ .real-reveal[data-phase=real] .reveal-art{opacity:0}
+ .reveal-line{transform:none!important}
+}
