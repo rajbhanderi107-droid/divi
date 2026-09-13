@@ -122,7 +122,7 @@ function init(T){
  function draw(now){raf=0;if(!visible||document.hidden)return;const still=paused();if(!still){const dt=Math.min((now-last)/1000,.05);time+=dt;smoothed+=(target-smoothed)*(1-Math.exp(-dt*4));
   group.rotation.y=smoothed*.45;
   const flicker=Math.sin(time*7)*.5+Math.sin(time*13.3)*.3+Math.sin(time*23.7)*.2;
-  flame.scale.set(.72*(1+flicker*.06),.72*(1+Math.sin(time*9)*.08),.72);flame.rotation.z=Math.sin(time*4)*.055;core.rotation.z=flame.rotation.z;core.scale.y=flame.scale.y;
+  flame.scale.set(.72*(1+flicker*.13),.72*(1+Math.sin(time*9)*.19),.72);flame.rotation.z=Math.sin(time*4)*.12;core.rotation.z=flame.rotation.z;core.scale.y=flame.scale.y;
   inner.intensity=9+flicker*.65;glow.intensity=.5+flicker*.05;halo.material.opacity=.08+flicker*.01;
   wall.rotation.z=0;
   bells.forEach((b,i)=>b.rotation.z=Math.sin(time*.65+i)*.022);

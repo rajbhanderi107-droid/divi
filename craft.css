@@ -194,3 +194,43 @@ header>.book{white-space:nowrap}
 #divi-sculpture.sculpture-ready canvas{opacity:1}
 #divi-sculpture img{transition:opacity .5s ease}
 #divi-sculpture.sculpture-ready img{display:block;opacity:0;transition-delay:.7s}
+/* Square dance film on wide screens: a framed square on a warm backdrop instead of blurred copies at the sides. */
+@media(min-width:701px){
+ .film-scenes .film-scene:has(>.divi-film.is-square):before{background:radial-gradient(ellipse 60% 70% at 50% 45%,#5b2b15 0%,#2b140b 58%,#160a07 100%);opacity:1}
+ .film-scenes .film-scene>.divi-film.is-square{position:absolute;inset:0;margin:auto;width:auto;height:calc(100% - 150px);aspect-ratio:1/1;object-fit:cover;box-shadow:0 0 0 1px #d9b27366,0 0 0 9px #1d0e08,0 0 0 10px #d9b2732e,0 40px 90px #000c}
+}
+
+/* Open artwork presentation and a livelier oil-fed flame. */
+.hero-visual{border-radius:12px!important;outline-offset:8px;aspect-ratio:3/4;transform:none!important}
+.hero-visual>img{object-fit:cover;object-position:center}
+.intro-done .hero-visual{animation:hero-open 1.15s .12s var(--ease-out) both}
+@keyframes hero-open{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+.film-arch{display:none!important}
+.intro-flame i:nth-child(2){animation:living-flame 1.35s ease-in-out infinite;transform-origin:50% 100%}
+.intro-flame i:nth-child(3){animation:living-core .85s ease-in-out infinite alternate}
+.intro-flame i:nth-child(1){animation:living-halo 1.9s ease-in-out infinite alternate}
+@keyframes living-flame{0%,100%{transform:rotate(-7deg) scale(.95,1.06) skewX(-3deg)}18%{transform:rotate(5deg) scale(1.08,.94) skewX(3deg)}39%{transform:rotate(-3deg) scale(.87,1.17)}62%{transform:rotate(8deg) scale(.98,1.08) skewX(4deg)}82%{transform:rotate(-5deg) scale(1.04,.97)}}
+@keyframes living-core{from{transform:rotate(-3deg) scale(.92,.92)}to{transform:rotate(4deg) scale(1.06,1.13)}}
+@keyframes living-halo{from{opacity:.65;transform:scale(.9)}to{opacity:1;transform:scale(1.16)}}
+.hero-explore span{display:inline-block;animation:discover-nudge 2.4s ease-in-out infinite}
+@keyframes discover-nudge{0%,65%,100%{transform:translateY(0)}35%{transform:translateY(5px)}}
+.motion-paused .intro-flame i,.motion-paused .hero-explore span,.page-hidden .hero-explore span,.motion-offscreen .hero-explore span{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .intro-flame i,html:not(.motion-enabled) .hero-explore span,html:not(.motion-enabled) .hero-visual{animation:none!important}}
+/* No page-induced scale or counter-motion on any film. */
+.divi-film{transform:none!important;animation:none!important;transition:opacity .55s ease!important}
+.film-scenes .film-scene>.divi-film.is-square{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;box-shadow:none}
+
+/* Keep film pixels at their native resolution on large / 4K displays. */
+@media(min-width:2000px){
+ .hero{padding-inline:max(8%,calc((100vw - 1700px)/2))}
+ .film-scene>.divi-film{position:absolute;inset:0;margin:auto;max-width:1920px;max-height:1080px;object-fit:contain}
+ .hero-visual{max-height:650px}
+}
+
+.hero-visual .image-caption{left:20px;right:20px;bottom:22px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.hero-visual .image-caption span:first-child{font-size:23px;line-height:1.5;white-space:nowrap;font-style:normal}
+.hero-visual .image-caption span:last-child{font-size:11px;letter-spacing:1px}
+@media(max-width:700px){.hero-visual .image-caption span:first-child{font-size:18px}.hero-visual .image-caption{left:16px;bottom:18px}.hero-composition .mandala-seal{bottom:100px}}
+
+.hero-composition .mandala-seal{display:none}
+.hero-film{opacity:.32}

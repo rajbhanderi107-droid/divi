@@ -4,8 +4,8 @@
  const paused=()=>{return root.classList.contains('motion-paused')||(reduced.matches&&!root.classList.contains('motion-enabled'))};
 
  const scrubbing=()=>false;
- // Cropped, stabilised, seam-blended web encodes (scripts/encode-web-films.sh): 1440px on desktop, 960px on phones and Save-Data.
- const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913l':'-web.mp4?v=20260913l');
+ // Original-frame encodes: no optical stabilisation, frame interpolation or mid-loop dissolves.
+ const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-clean-sm.mp4?v=20260913m':'-clean.mp4?v=20260913m');
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';
