@@ -75,6 +75,12 @@ function init(T){
  pot.position.y=.62;pot.scale.setScalar(.95);group.add(pot);
  const mouth=new T.Mesh(new T.TorusGeometry(.326,.026,16,96),clay);mouth.rotation.x=Math.PI/2;mouth.position.y=.62+1.5*.95;group.add(mouth);
  const inner=new T.PointLight(0xff9a3c,12,7);inner.position.y=1.23;inner.castShadow=true;inner.shadow.mapSize.set(512,512);inner.shadow.bias=-.0003;inner.shadow.normalBias=.008;group.add(inner);
+ // Lamplight filling the vessel, seen through the apertures. Unlit, so shadows cannot darken it; hottest near the diya, flickering with the flame.
+ const hearth=new T.Mesh(new T.SphereGeometry(1,48,32),new T.ShaderMaterial({side:T.BackSide,toneMapped:false,uniforms:{uFlicker:{value:0}},
+  vertexShader:'varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform float uFlicker;varying vec3 vPos;void main(){float heat=clamp(1.-distance(vPos,vec3(0.,-.6,0.))/2.3,0.,1.);vec3 col=mix(vec3(.78,.3,.07),vec3(1.,.66,.26),heat)+vec3(1.,.88,.6)*pow(heat,4.)*.5;gl_FragColor=vec4(col*(.92+uFlicker*.08),1.);}'}));
+ hearth.position.y=1.2;hearth.scale.set(.72,.6,.72);group.add(hearth);
+ hearth.onBeforeRender=()=>{const t=performance.now()/1000;hearth.material.uniforms.uFlicker.value=Math.sin(t*7)*.5+Math.sin(t*13.3)*.3+Math.sin(t*23.7)*.2;};
 
  const flameY=1.03;
  const flame=lathe([[0,0],[.07,.04],[.13,.14],[.11,.27],[.055,.42],[0,.65]],new T.MeshBasicMaterial({color:0xffbd45}));flame.position.y=flameY-.05;flame.scale.setScalar(.72);group.add(flame);
