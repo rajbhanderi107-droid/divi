@@ -95,8 +95,15 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
 .lineup-card p{margin:4px 0 0;font-size:13px;color:#cdb18a}
 .lineup-nights{color:#e4bc6a!important;letter-spacing:1px}
 .whatsapp{position:fixed;right:20px;bottom:96px;z-index:25;display:flex;align-items:center;height:44px;padding:0 18px;border-radius:22px;background:#1f7a4d;color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px;box-shadow:0 6px 20px #0006;transition:transform .2s}
+.whatsapp[hidden]{display:none}
 .whatsapp:hover{transform:translateY(-2px)}
 .whatsapp:focus-visible{outline:2px solid #f0cc7c;outline-offset:3px}
+
+/* Nightly pass names inside the visit planner */
+.night-option .night-name{display:block;margin-top:8px;padding-top:7px;border-top:1px solid currentColor;border-top-color:#b8924c40;font-style:normal;font-size:10.5px;line-height:1.35;letter-spacing:.2px;color:var(--muted)}
+.night-option .night-name b{display:block;font-family:'Noto Serif Gujarati',serif;font-weight:500;font-size:12px;line-height:1.5;color:#8a4a1c}
+.night-option[aria-pressed="true"] .night-name,.night-option[aria-pressed="true"] .night-name b{color:inherit}
+@media(max-width:700px){.night-option .night-name{font-size:0;border:0;margin:2px 0 0;padding:0}.night-option .night-name b{font-size:9px;line-height:1.35}}
 
 /* Gallery card zooms into the lightbox (View Transitions where supported) */
 ::view-transition-group(divi-photo){animation-duration:.55s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
