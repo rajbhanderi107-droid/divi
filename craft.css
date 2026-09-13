@@ -178,3 +178,19 @@ header>.book{white-space:nowrap}
 /* Caption clearance from the marker row (audit round 2) */
 @media(max-width:700px){ .film-scenes .film-scene .film-caption{bottom:152px} }
 @media(max-height:500px) and (orientation:landscape){ .film-scenes .film-scene .film-caption{bottom:78px} .film-scenes .film-scene .film-caption p{max-width:52ch;line-height:1.45} }
+
+/* Recording review fixes (13 Sep 2026) */
+/* Scene change: keep the outgoing scene fully visible underneath while the new one fades in on top (no dark dip). */
+.film-ready .film-scenes .film-scene.was-current{opacity:1;visibility:visible;z-index:2;transition:none}
+.film-ready .film-scenes .film-scene.is-current{z-index:3}
+/* As a film stage scrolls away, its frame, heading and counter fade instead of hanging over the next section. */
+.film-stage:before,.film-stage .film-heading,.film-stage .film-bottom{opacity:calc(1 - var(--exit,0))}
+/* Painting-to-real reveal: a clean crossfade without the mandala mask; the old heading leaves before the new one arrives. */
+.reveal-art{-webkit-mask-image:none;mask-image:none}
+.reveal-line{transition:opacity .4s ease,transform .7s var(--ease-out)}
+.real-reveal[data-phase=real] .reveal-b,.real-reveal:not([data-phase=real]) .reveal-a{transition-delay:.35s}
+/* The 3D Garbo fades in over the painted lotus once its first frame is drawn (the panel is never empty while three.js loads). */
+#divi-sculpture canvas{position:relative;opacity:0;transition:opacity .8s ease}
+#divi-sculpture.sculpture-ready canvas{opacity:1}
+#divi-sculpture img{transition:opacity .5s ease}
+#divi-sculpture.sculpture-ready img{display:block;opacity:0;transition-delay:.7s}

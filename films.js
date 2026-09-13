@@ -5,7 +5,7 @@
 
  const scrubbing=()=>false;
  // Cropped, stabilised, seam-blended web encodes (scripts/encode-web-films.sh): 1440px on desktop, 960px on phones and Save-Data.
- const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913k':'-web.mp4?v=20260913k');
+ const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913l':'-web.mp4?v=20260913l');
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';
@@ -59,6 +59,9 @@
    const scrub=j.scenes[j.index]?.querySelector('video.is-square');   if(scrub&&scrubbing(scrub)&&scrub.readyState>=1&&scrub.duration){const t=Math.min(scrub.duration-.05,within*scrub.duration);if(Math.abs(scrub.currentTime-t)>1/30)scrub.currentTime=t;}
    const enter=reduced.matches?1:Math.round(Math.max(0,Math.min(1,1-(sectionTop-header)/(viewport*.9)))*200)/200;
    if(enter!==j.enter){j.enter=enter;j.arch.style.transform=`scale(${1+enter*enter*3.2})`;j.arch.style.visibility=enter>=1?'hidden':'visible';}
+   // As the stage scrolls away, fade its frame, heading and counter so they don't hang over the next section.
+   const exit=Math.round(Math.max(0,Math.min(1,(scrollY-j.top-j.distance)/(viewport*.3)))*20)/20;
+   if(exit!==j.exit){j.exit=exit;j.stage.style.setProperty('--exit',exit);}
   }
  }
  function measure(){

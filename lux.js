@@ -10,12 +10,13 @@
   let top=0,distance=1,frame=0,last=-1,timer=0;
   const update=()=>{
    frame=0;const p=Math.round(Math.max(0,Math.min(1,(scrollY-top)/distance))*500)/500;if(p===last)return;last=p;
-   reveal.dataset.phase=p<.45?'art':'real';
+   reveal.dataset.phase=p<.5?'art':'real';
    if(reduced.matches||paused())return;
-   art.style.transform=`scale(${(1+8*p*p).toFixed(3)})`;
-   art.style.opacity=p<.35?'1':Math.max(0,1-(p-.35)/.45).toFixed(3);
-   real.style.transform=`scale(${(1.16-.16*p).toFixed(4)})`;
-   real.style.opacity=Math.min(1,p/.22).toFixed(3);
+   // Crossfade the painting into the real night with a gentle push-in (no mask cut-out).
+   art.style.transform=`scale(${(1.04+.1*p).toFixed(4)})`;
+   art.style.opacity=Math.max(0,Math.min(1,1-(p-.3)/.35)).toFixed(3);
+   real.style.transform=`scale(${(1.1-.1*p).toFixed(4)})`;
+   real.style.opacity=Math.max(0,Math.min(1,(p-.25)/.35)).toFixed(3);
   };
   const measure=()=>{const stick=parseFloat(getComputedStyle(stage).top)||0;top=reveal.getBoundingClientRect().top+scrollY-stick;distance=Math.max(1,reveal.offsetHeight-stage.offsetHeight);last=-1;update();};
   const later=()=>{clearTimeout(timer);timer=setTimeout(measure,120);};

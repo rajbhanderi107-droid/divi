@@ -3,7 +3,7 @@ if(host){
  let started=false;
  const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting)||started)return;started=true;
  try{const T=await import('./vendor/three.module.min.js');init(T);}catch{host.classList.add('sculpture-fallback');}
- },{rootMargin:'300px'});observer.observe(host);
+ },{rootMargin:'1200px 0px'});observer.observe(host);
 }
 // The garbo: a perforated clay pot with a lamp inside, the vessel Garba is named after. Light escapes through its holes onto the wall behind.
 function paintPot(T){
@@ -31,7 +31,7 @@ function paintWall(T){
 function init(T){
  const renderer=new T.WebGLRenderer({alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
- renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','Three-dimensional garbo: a painted clay pot with a glowing lamp inside, its light shining through the holes, on a brass lotus beneath temple bells');host.append(renderer.domElement);host.classList.add('sculpture-ready');
+ renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','Three-dimensional garbo: a painted clay pot with a glowing lamp inside, its light shining through the holes, on a brass lotus beneath temple bells');host.append(renderer.domElement);
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(36,1,.1,100);camera.position.set(0,2.8,7.8);camera.lookAt(0,1.35,0);
  // A small studio environment gives the brass broad, coherent reflections.
  const studio=new T.Scene();studio.background=new T.Color(0x24160e);
@@ -127,7 +127,9 @@ function init(T){
   wall.rotation.z=0;
   bells.forEach((b,i)=>b.rotation.z=Math.sin(time*.65+i)*.022);
   dust.rotation.y=time*.035;for(let i=0;i<48;i++)dustPositions[i*3+1]=((i*.137+time*.045)%3.4);dustGeometry.attributes.position.needsUpdate=true;}
-  last=now;renderer.render(scene,camera);if(!still)raf=requestAnimationFrame(draw);}
+  last=now;renderer.render(scene,camera);
+  // Keep the painted lotus in place until the first 3D frame has actually been drawn, then crossfade to the canvas.
+  if(!host.classList.contains('sculpture-ready'))requestAnimationFrame(()=>host.classList.add('sculpture-ready'));if(!still)raf=requestAnimationFrame(draw);}
  function resume(){if(raf)cancelAnimationFrame(raf);raf=0;last=performance.now();draw(last);}
  new IntersectionObserver(e=>{visible=e[0].isIntersecting;resume();},{threshold:.05}).observe(host);
  new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();resume();}).observe(host);
