@@ -2,15 +2,15 @@
    Continuous motion uses transform/opacity only. */
 
 /* ---------- Diya-lighting intro ---------- */
-.welcome-loader{display:flex!important;position:fixed;inset:0;z-index:1000;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 52%,#2c1308 0%,#0d0503 68%);color:#f3d38e;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility 0s .9s}
+.welcome-loader{display:flex!important;position:fixed;inset:0;z-index:1000;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 52%,#2c1308 0%,#0d0503 68%);color:#f3d38e;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .9s var(--ease-soft),visibility 0s .9s}
 .is-loading .welcome-loader{opacity:1;visibility:visible;pointer-events:auto;transition:none}
 .welcome-emblem,.welcome-line{display:none!important}
 .intro-flame{position:relative;width:40px;height:70px;margin-bottom:22px}
 .intro-flame i{position:absolute;left:50%;bottom:0;translate:-50% 0;transform-origin:50% 100%}
-.intro-flame i:nth-child(1){width:150px;height:150px;bottom:-40px;border-radius:50%;background:radial-gradient(circle,#ffb34a4d,transparent 64%);animation:intro-halo 2.6s ease-in-out infinite,intro-ignite 1s cubic-bezier(.2,.7,.2,1) both}
-.intro-flame i:nth-child(2){width:28px;height:62px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 82%,#fff6d2 0%,#ffc85e 32%,#ff7a1a 66%,#ff7a1a00 72%);animation:intro-flicker 1.2s ease-in-out infinite,intro-ignite .9s cubic-bezier(.2,.7,.2,1) both}
-.intro-flame i:nth-child(3){width:10px;height:24px;bottom:5px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 78%,#fff 0%,#fff3c4 58%,#fff3c400 62%);animation:intro-flicker .8s ease-in-out infinite reverse,intro-ignite .9s .12s cubic-bezier(.2,.7,.2,1) both}
-.welcome-loader .intro-title{letter-spacing:0;text-transform:none;font-family:'Noto Serif Gujarati',serif;font-size:clamp(42px,7vw,80px);font-weight:500;line-height:1.5;margin:0;color:transparent;background:linear-gradient(100deg,#7a4a1c 0%,#f3d38e 42%,#fff5d8 50%,#f3d38e 58%,#7a4a1c 100%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;animation:intro-title 1.7s .35s cubic-bezier(.2,.7,.2,1) both}
+.intro-flame i:nth-child(1){width:150px;height:150px;bottom:-40px;border-radius:50%;background:radial-gradient(circle,#ffb34a4d,transparent 64%);animation:intro-halo 2.6s ease-in-out infinite,intro-ignite 1s var(--ease-out) both}
+.intro-flame i:nth-child(2){width:28px;height:62px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 82%,#fff6d2 0%,#ffc85e 32%,#ff7a1a 66%,#ff7a1a00 72%);animation:intro-flicker 1.2s ease-in-out infinite,intro-ignite .9s var(--ease-out) both}
+.intro-flame i:nth-child(3){width:10px;height:24px;bottom:5px;border-radius:50% 50% 46% 46%/64% 64% 36% 36%;background:radial-gradient(ellipse at 50% 78%,#fff 0%,#fff3c4 58%,#fff3c400 62%);animation:intro-flicker .8s ease-in-out infinite reverse,intro-ignite .9s .12s var(--ease-out) both}
+.welcome-loader .intro-title{letter-spacing:0;text-transform:none;font-family:'Noto Serif Gujarati',serif;font-size:clamp(42px,7vw,80px);font-weight:500;line-height:1.5;margin:0;color:transparent;background:linear-gradient(100deg,#7a4a1c 0%,#f3d38e 42%,#fff5d8 50%,#f3d38e 58%,#7a4a1c 100%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;animation:intro-title 1.7s .35s var(--ease-out) both}
 .welcome-loader .intro-sub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#cfa86a;margin:6px 0 0;animation:intro-rise .9s 1s ease both}
 @keyframes intro-flicker{0%,100%{transform:scale(1,1) rotate(-1.5deg)}50%{transform:scale(.9,1.08) rotate(2deg)}}
 @keyframes intro-ignite{from{opacity:0;scale:.15}to{opacity:1;scale:1}}
@@ -20,9 +20,9 @@
 
 /* Hero entrance after the intro lifts */
 .intro-pending .hero-copy>*,.intro-pending .hero-visual{opacity:0}
-.intro-done .hero-copy>*{animation:hero-rise 1s cubic-bezier(.2,.7,.2,1) both}
+.intro-done .hero-copy>*{animation:hero-rise 1s var(--ease-out) both}
 .intro-done .hero-copy>:nth-child(2){animation-delay:.07s}.intro-done .hero-copy>:nth-child(3){animation-delay:.14s}.intro-done .hero-copy>:nth-child(4){animation-delay:.21s}.intro-done .hero-copy>:nth-child(5){animation-delay:.28s}.intro-done .hero-copy>:nth-child(6){animation-delay:.35s}
-.intro-done .hero-visual{animation:hero-arch 1.3s .15s cubic-bezier(.2,.7,.2,1) both}
+.intro-done .hero-visual{animation:hero-arch 1.3s .15s var(--ease-out) both}
 @keyframes hero-rise{from{opacity:0;translate:0 26px}to{opacity:1;translate:0 0}}
 @keyframes hero-arch{from{opacity:0;translate:0 44px;scale:.94}to{opacity:1;translate:0 0;scale:1}}
 
@@ -53,7 +53,7 @@
 .reveal-copy{position:absolute;z-index:3;left:6%;right:6%;bottom:8%;text-align:center}
 .reveal-copy .eyebrow{justify-content:center;color:#e5bd78;margin-bottom:14px}
 .reveal-lines{position:relative;height:calc(clamp(40px,5.4vw,80px) * 1.15)}
-.reveal-line{position:absolute;inset:0;margin:0;font-size:clamp(40px,5.4vw,80px);font-weight:400;line-height:1.1;color:#fff0d4;text-shadow:0 2px 26px #000d;transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal-line{position:absolute;inset:0;margin:0;font-size:clamp(40px,5.4vw,80px);font-weight:400;line-height:1.1;color:#fff0d4;text-shadow:0 2px 26px #000d;transition:opacity .7s ease,transform .9s var(--ease-out)}
 .reveal-line i{color:#e8c27a}
 .reveal-b{opacity:0;transform:translate3d(0,26px,0)}
 .real-reveal[data-phase=real] .reveal-a{opacity:0;transform:translate3d(0,-22px,0)}
@@ -68,9 +68,9 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
 
 /* ---------- Magnetic buttons and light sweep ---------- */
 @media (hover:hover) and (pointer:fine){
- .book,.outline-button{translate:var(--mx,0px) var(--my,0px);transition:translate .35s cubic-bezier(.2,.7,.2,1),background .2s,transform .2s}
+ .book,.outline-button{translate:var(--mx,0px) var(--my,0px);transition:translate .35s var(--ease-out),background .2s,transform .2s}
  .book{position:relative;overflow:hidden;isolation:isolate}
- .book:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(100deg,#fff0 30%,#fff8 50%,#fff0 70%);transform:translateX(-120%);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+ .book:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(100deg,#fff0 30%,#fff8 50%,#fff0 70%);transform:translateX(-120%);transition:transform .8s var(--ease-out)}
  .book:hover:after{transform:translateX(120%)}
  .gallery-track{cursor:grab}
  .gallery-track.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
@@ -106,7 +106,7 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
 @media(max-width:700px){.night-option .night-name{font-size:0;border:0;margin:2px 0 0;padding:0}.night-option .night-name b{font-size:9px;line-height:1.35}}
 
 /* Gallery card zooms into the lightbox (View Transitions where supported) */
-::view-transition-group(divi-photo){animation-duration:.55s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+::view-transition-group(divi-photo){animation-duration:.55s;animation-timing-function:var(--ease-out)}
 
 @media(max-width:700px){
  .passes,.lineup{padding:48px 24px}

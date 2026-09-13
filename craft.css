@@ -1,0 +1,101 @@
+/* Phases A–C, last in the bundle.
+   A · the night's journey (dusk → night → dawn) and one entry choreography
+   B · code-drawn ornaments (toran, lotus rosette, jaali, bandhani, paisley) — markup comes from ornaments.js
+   C · effects (canopy light rays, celebration sparks); the flame shader lives in sculpture.js */
+
+/* ---------- A · સાંજથી પરોઢ: dusk at the top, night in the middle, dawn at the end ---------- */
+.reading-progress{background:linear-gradient(90deg,#e07b39 0%,#a8452a 22%,#3a1d44 48%,#6b3a2a 70%,#e9b765 86%,#f3d9a4 100%)}
+.hero:before{background:radial-gradient(ellipse at 84% -8%,#e07b395c 0%,#e07b3900 52%),linear-gradient(90deg,#3a1609f0 0%,#3a1609bf 36%,#3a160938 68%,#3a160980 100%)}
+.event-strip{background:radial-gradient(circle at 50% 0,#49210f 9px,#49210f00 10px) 0 -1px/24px 12px repeat-x,radial-gradient(circle,#a8742f30 1.2px,#a8742f00 1.8px) 0 0/16px 16px,radial-gradient(circle,#a8742f30 1.2px,#a8742f00 1.8px) 5px 5px/16px 16px,#efe0c4}
+.compact-ritual{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23e4bc6a' stroke-opacity='.08' stroke-width='1'%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3C/g%3E%3C/svg%3E") center/44px 44px,linear-gradient(#170d1c 0%,#170d1c00 42%),radial-gradient(ellipse at 25% 50%,#6a3a22,#1d1011 70%)!important}
+.film-closing{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23e4bc6a' stroke-opacity='.07' stroke-width='1'%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3C/g%3E%3C/svg%3E") center/44px 44px,radial-gradient(ellipse at 50% 125%,#f3d9a433 0%,#f3d9a400 62%),linear-gradient(#1b0f0c,var(--dawn-deep))}
+.passes,.lineup{background:var(--dawn-deep)}
+.visit-planner{background:radial-gradient(circle at 50% 0,#2c170b 10px,#2c170b00 11px) 0 -1px/26px 14px repeat-x,radial-gradient(ellipse at 50% -25%,#f3d9a4 0%,#f3d9a400 58%),var(--cream)}
+footer{background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f0e100 11px) 0 -1px/26px 14px repeat-x,linear-gradient(#381b1000 50%,#e4bc6a1a 100%),var(--deep)}
+
+/* ---------- A · Entry choreography: heading → text → art → action, once ---------- */
+.rv>*{opacity:0;translate:0 24px;transition:opacity var(--dur-med) var(--ease-out),translate var(--dur-cine) var(--ease-out)}
+.rv.rv-in>*{opacity:1;translate:0 0}
+.rv.rv-in>:nth-child(2){transition-delay:calc(var(--stagger) * 1)}
+.rv.rv-in>:nth-child(3){transition-delay:calc(var(--stagger) * 2)}
+.rv.rv-in>:nth-child(4){transition-delay:calc(var(--stagger) * 3)}
+.rv.rv-in>:nth-child(5){transition-delay:calc(var(--stagger) * 4)}
+.rv.rv-in>:nth-child(n+6){transition-delay:calc(var(--stagger) * 5)}
+.rv.rv-in>.book,.rv.rv-in>.outline-button{translate:var(--mx,0px) var(--my,0px)}
+
+/* ---------- B · Toran hanging from the event strip ---------- */
+.orn-toran{position:relative;z-index:8;height:0;pointer-events:none}
+.orn-toran svg{position:absolute;top:0;left:0;width:100%;height:auto;overflow:visible}
+.t-rope{fill:none;stroke:#d9a441;stroke-width:1.6}
+.t-string{stroke:#d9a441;stroke-width:1}
+.t-knot{fill:#e4bc6a}
+.t-leaf{fill:#4d7436;stroke:#2f4d22;stroke-width:.6}
+.t-rib{fill:none;stroke:#9bbf6a;stroke-width:.6}
+.t-flower{fill:#e8952d;stroke:#b8641a;stroke-width:.8}
+.t-heart{fill:#f6d27a}
+.t-bead{fill:#e4bc6a}
+.t-sway{transform-box:fill-box;transform-origin:50% 0;animation:t-sway 4.6s var(--ease-soft) var(--d,0s) infinite alternate}
+.orn-idle .t-sway,.motion-paused .t-sway{animation-play-state:paused}
+@keyframes t-sway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+
+/* ---------- B · Lotus rosette dividers and paisley corners, drawn in by stroke ---------- */
+.orn-divider{display:flex;justify-content:center;height:34px;margin:0 0 22px;pointer-events:none;overflow:visible}
+.orn-divider svg{width:68px;height:34px;overflow:visible}
+.orn-divider path,.orn-divider circle{fill:none;stroke:#b8924c;stroke-width:1.4;stroke-linecap:round}
+.orn-divider.on-dark path,.orn-divider.on-dark circle{stroke:#e4bc6a}
+footer{position:relative;overflow:hidden}
+.orn-paisley{position:absolute;bottom:14px;width:78px;height:96px;pointer-events:none;opacity:.55}
+.orn-paisley.l{left:14px}
+.orn-paisley.r{right:14px;scale:-1 1}
+.orn-paisley path,.orn-paisley circle{fill:none;stroke:#e4bc6a;stroke-width:1.3;stroke-linecap:round}
+.orn-draw path,.orn-draw circle{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s var(--ease-out)}
+.orn-draw.orn-in path,.orn-draw.orn-in circle{stroke-dashoffset:0}
+.orn-draw.orn-in path:nth-of-type(n+3){transition-delay:.3s}
+
+/* ---------- B · Rosette ring drawn around the intro flame ---------- */
+.intro-ring{position:absolute;left:50%;top:50%;width:200px;height:200px;translate:-50% -50%;pointer-events:none;overflow:visible}
+.intro-ring path,.intro-ring circle{fill:none;stroke:#e4bc6a;stroke-width:.7;stroke-opacity:.8;stroke-dasharray:1;stroke-dashoffset:1;animation:intro-draw 2s .25s var(--ease-out) forwards}
+.intro-ring path{animation-delay:.7s}
+@keyframes intro-draw{to{stroke-dashoffset:0}}
+
+/* ---------- C · Canopy light rays over the real photograph ---------- */
+.reveal-art{z-index:1}
+.reveal-rays{position:absolute;inset:-10% -25% 25%;z-index:1;pointer-events:none;opacity:0;background:repeating-conic-gradient(from 180deg at 50% 0%,#ffe2a800 0deg,#ffe2a82b 2.2deg,#ffe2a800 5.5deg,#ffe2a800 10deg);-webkit-mask-image:linear-gradient(#000 0%,#0000 78%);mask-image:linear-gradient(#000 0%,#0000 78%);transform-origin:50% 0;transition:opacity 1.4s var(--ease-soft);animation:rays-drift 16s var(--ease-soft) infinite alternate;will-change:transform}
+.real-reveal[data-phase=real] .reveal-rays{opacity:.85}
+.reveal-idle .reveal-rays,.motion-paused .reveal-rays{animation-play-state:paused}
+@keyframes rays-drift{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+
+/* ---------- C · Celebration sparks canvas (created on first use by sparks.js) ---------- */
+.sparks{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:120}
+
+@media(max-width:700px){
+ .hero:before{background:radial-gradient(ellipse at 90% 0%,#e07b394d 0%,#e07b3900 50%),linear-gradient(#3a1609e8,#3a160999 48%,#3a1609e8)}
+ .orn-paisley{width:52px;height:64px}
+ .intro-ring{width:170px;height:170px}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .rv>*{opacity:1;translate:none;transition:none}
+ .t-sway,.reveal-rays{animation:none}
+ .orn-draw path,.orn-draw circle,.intro-ring path,.intro-ring circle{stroke-dashoffset:0;transition:none;animation:none}
+}
+
+/* Keep full-resolution paintings stationary; only scene opacity changes. */
+.film-ready .film-scene,.film-ready .film-scene:before,.film-ready .film-scene>.divi-film{transform:none!important;animation:none!important}
+.film-ready .film-scene{opacity:0;visibility:hidden;transition:opacity .65s ease,visibility 0s .65s}
+.film-ready .film-scene.is-current{opacity:1;visibility:visible;transition:opacity .65s ease}
+.film-ready .film-scene.was-current{opacity:0;visibility:visible}
+.film-scene>.divi-film{object-fit:contain}
+.motion-paused .film-ready .film-scene{transition:none}
+
+/* An oil-fed flame seated in a clay diya, with a steady luminous core. */
+.intro-flame{width:100px;height:110px;margin-bottom:32px}
+.intro-flame:before{content:'';position:absolute;bottom:-12px;left:10px;width:80px;height:28px;border-radius:12% 12% 50% 50% / 15% 15% 90% 90%;background:linear-gradient(165deg,#db9656 0%,#a64a24 36%,#53220f 90%);box-shadow:inset 0 3px 0 #e7ae71,inset 0 6px 5px #351607,0 12px 24px #0005}
+.intro-flame:after{content:'';position:absolute;left:48px;bottom:9px;width:5px;height:15px;border-radius:60%;background:linear-gradient(#fff6bb,#d97827 40%,#342419);transform:rotate(-9deg)}
+.intro-flame i:nth-child(1){width:220px;height:220px;bottom:-65px;background:radial-gradient(ellipse,#ffbe5733 0%,#ec812417 32%,transparent 67%);animation:intro-halo 3s ease-in-out infinite}
+.intro-flame i:nth-child(2){width:29px;height:76px;bottom:16px;border-radius:70% 30% 48% 52% / 76% 60% 40% 24%;background:radial-gradient(ellipse at 50% 84%,#fffbe5 0%,#ffe79b 23%,#ffc052 44%,#ec7026 73%,#db461a00 95%);box-shadow:0 0 20px #ffb24a26;animation:oil-flame 1.9s ease-in-out infinite}
+.intro-flame i:nth-child(3){width:12px;height:38px;bottom:16px;background:linear-gradient(0deg,#b7b8ea 0%,#fff8df 24%,#fffde7 75%,#fff8cc00);border-radius:55% 45% 42% 58% / 80% 78% 22% 20%;animation:oil-core 2.7s ease-in-out infinite}
+@keyframes oil-flame{0%,100%{transform:rotate(-3deg) scale(1,1)}24%{transform:rotate(2deg) scale(.97,1.04)}48%{transform:rotate(-1deg) scale(1.02,.98)}76%{transform:rotate(3deg) scale(.98,1.02)}}
+@keyframes oil-core{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.94)}}
+.motion-paused .intro-flame i{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.intro-flame i{animation:none!important}}

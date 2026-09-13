@@ -1,7 +1,7 @@
 (() => {
  const root=document.documentElement,toggle=document.querySelector('.motion-toggle'),preference=matchMedia('(prefers-reduced-motion: reduce)');
  let stored=null;try{stored=localStorage.getItem('divi-motion')}catch{}
- let paused=stored==='paused';const videos=[...document.querySelectorAll('.ambient-video')],visible=new Set();
+ let paused=stored?stored==='paused':preference.matches;const videos=[...document.querySelectorAll('.ambient-video')],visible=new Set();
  const ornamentSections=document.querySelectorAll('.story-intro,.gallery,.visit-planner,.np-hero,footer');
  ornamentSections.forEach(section=>section.classList.add('decorative-field'));
  const ornamentObserver=new IntersectionObserver(entries=>entries.forEach(entry=>entry.target.classList.toggle('motion-offscreen',!entry.isIntersecting)),{rootMargin:'100px'});

@@ -1,0 +1,17 @@
+/* Design tokens, first in the bundle: one motion language and the સાંજથી પરોઢ (dusk → night → dawn) palette. */
+:root{
+ --ease-out:cubic-bezier(.2,.7,.2,1);
+ --ease-in-out:cubic-bezier(.77,0,.18,1);
+ --ease-soft:cubic-bezier(.4,0,.2,1);
+ --dur-fast:.25s;
+ --dur-med:.7s;
+ --dur-cine:1.1s;
+ --stagger:.08s;
+ --dusk-sky:#e07b39;
+ --dusk-deep:#3a1609;
+ --night-sky:#150b14;
+ --night-glow:#e9b765;
+ --dawn-sky:#f3d9a4;
+ --dawn-deep:#2c170b;
+ --gold-leaf:#e4bc6a;
+}

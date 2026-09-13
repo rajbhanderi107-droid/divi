@@ -11,7 +11,7 @@
   const update=()=>{
    frame=0;const p=Math.round(Math.max(0,Math.min(1,(scrollY-top)/distance))*500)/500;if(p===last)return;last=p;
    reveal.dataset.phase=p<.45?'art':'real';
-   if(reduced.matches)return;
+   if(reduced.matches||paused())return;
    art.style.transform=`scale(${(1+8*p*p).toFixed(3)})`;
    art.style.opacity=p<.35?'1':Math.max(0,1-(p-.35)/.45).toFixed(3);
    real.style.transform=`scale(${(1.16-.16*p).toFixed(4)})`;

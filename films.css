@@ -6,16 +6,16 @@ header{backdrop-filter:none;background:#4b230f}.mobile-booking{backdrop-filter:n
 
 .film-heading{position:absolute;z-index:5;top:34px;left:6%;right:6%;pointer-events:none;transition:opacity .6s ease}
 .film-heading .eyebrow{font-size:10px;color:#e5bd78;letter-spacing:2px;margin:0}
-.film-heading h2{font-size:clamp(24px,2.6vw,38px);font-weight:400;letter-spacing:-.5px;margin:8px 0 0;text-shadow:0 2px 18px #000b;transition:opacity .6s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.film-heading h2{font-size:clamp(24px,2.6vw,38px);font-weight:400;letter-spacing:-.5px;margin:8px 0 0;text-shadow:0 2px 18px #000b;transition:opacity .6s ease,transform .8s var(--ease-out)}
 .film-stage[data-index]:not([data-index="0"]) .film-heading h2{opacity:0;transform:translate3d(0,-10px,0)}
 .film-skip{position:absolute;right:0;top:0;pointer-events:auto;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#edd0a1;border-bottom:1px solid #b4956455;padding-bottom:5px}
 
 .film-scenes,.film-scene{position:absolute;inset:0}
-.film-scene{overflow:hidden;visibility:hidden;pointer-events:none;transform:translate3d(0,100%,0);transition:transform 1.1s cubic-bezier(.77,0,.18,1),visibility 0s 1.1s}
-.film-scene:before,.film-scene>.divi-film{transform:translate3d(0,-100%,0) scale(1.1);transition:transform 1.1s cubic-bezier(.77,0,.18,1)}
+.film-scene{overflow:hidden;visibility:hidden;pointer-events:none;transform:translate3d(0,100%,0);transition:transform 1.1s var(--ease-in-out),visibility 0s 1.1s}
+.film-scene:before,.film-scene>.divi-film{transform:translate3d(0,-100%,0) scale(1.1);transition:transform 1.1s var(--ease-in-out)}
 .film-stage[data-dir=up] .film-scene{transform:translate3d(0,-100%,0)}
 .film-stage[data-dir=up] .film-scene:before,.film-stage[data-dir=up] .film-scene>.divi-film{transform:translate3d(0,100%,0) scale(1.1)}
-.film-scenes .film-scene.is-current{visibility:visible;transform:none;z-index:3;will-change:transform;transition:transform 1.1s cubic-bezier(.77,0,.18,1),visibility 0s}
+.film-scenes .film-scene.is-current{visibility:visible;transform:none;z-index:3;will-change:transform;transition:transform 1.1s var(--ease-in-out),visibility 0s}
 .film-scenes .film-scene.is-current:before,.film-scenes .film-scene.is-current>.divi-film{transform:none}
 .film-scenes .film-scene.was-current{visibility:visible;transform:none;z-index:2;transition:none}
 .film-scenes .film-scene.was-current:before,.film-scenes .film-scene.was-current>.divi-film{transform:scale(1.05);transition:transform 1.1s ease}
@@ -28,7 +28,7 @@ header{backdrop-filter:none;background:#4b230f}.mobile-booking{backdrop-filter:n
 .film-caption{position:absolute;z-index:3;bottom:88px;left:6%;right:6%;text-align:center}
 .film-caption h3{font-size:clamp(36px,5vw,74px);font-weight:400;line-height:1.05;letter-spacing:-1.2px;margin:0 0 14px;color:#fff0d4;text-shadow:0 2px 26px #000d}
 .film-caption p{font-size:16px;color:#ead3ae;margin:0 auto;max-width:44ch;line-height:1.7;text-shadow:0 1px 14px #000}
-.film-caption h3,.film-caption p{opacity:0;transform:translate3d(0,28px,0);transition:opacity .6s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.film-caption h3,.film-caption p{opacity:0;transform:translate3d(0,28px,0);transition:opacity .6s ease,transform .9s var(--ease-out)}
 .film-scene.is-current .film-caption h3{opacity:1;transform:none;transition-delay:.5s}
 .film-scene.is-current .film-caption p{opacity:1;transform:none;transition-delay:.68s}
 

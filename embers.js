@@ -15,8 +15,8 @@
   gl_PointSize=(1.4+seed.w*3.6)*dpr;
  }`;
  const FS=`#version 300 es
- precision mediump float;in float alpha;out vec4 o;
- void main(){float g=smoothstep(.5,0.,length(gl_PointCoord-.5));g*=g;o=vec4(vec3(1.,.76,.4)*g*alpha,g*alpha);}`;
+ precision mediump float;in float alpha;uniform vec3 tint;out vec4 o;
+ void main(){float g=smoothstep(.5,0.,length(gl_PointCoord-.5));g*=g;o=vec4(tint*g*alpha,g*alpha);}`;
  hosts.forEach(host=>{
   const canvas=document.createElement('canvas');canvas.className='embers';canvas.setAttribute('aria-hidden','true');
   const gl=canvas.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false,powerPreference:'low-power'});
@@ -30,6 +30,8 @@
   const loc=gl.getAttribLocation(program,'seed');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,4,gl.FLOAT,false,0,0);
   gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);gl.clearColor(0,0,0,0);
   const uT=gl.getUniformLocation(program,'t'),uDpr=gl.getUniformLocation(program,'dpr');
+  // Ember colour follows the night: dusk orange in the hero, warm gold at the centre, pale dawn gold at the close.
+  gl.uniform3fv(gl.getUniformLocation(program,'tint'),host.classList.contains('hero')?[1,.6,.28]:host.classList.contains('film-closing')?[1,.9,.66]:[1,.79,.45]);
   let visible=false,raf=0,count=0;const start=performance.now()-Math.random()*40000;
   const size=()=>{const dpr=Math.min(devicePixelRatio,1.5),w=host.clientWidth,h=host.clientHeight;canvas.width=Math.max(1,Math.round(w*dpr));canvas.height=Math.max(1,Math.round(h*dpr));gl.viewport(0,0,canvas.width,canvas.height);gl.uniform1f(uDpr,dpr);count=Math.min(MAX,Math.round(w*h/(innerWidth<700?9000:4800)));};
   const frame=now=>{raf=0;if(!visible||document.hidden)return;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform1f(uT,(now-start)/1000);gl.drawArrays(gl.POINTS,0,count);if(!paused()&&!reduced.matches)raf=requestAnimationFrame(frame);};

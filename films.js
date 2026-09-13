@@ -1,10 +1,10 @@
 (() => {
  const root=document.documentElement,videos=[...document.querySelectorAll('[data-film]')],ratios=new Map();
  const compact=matchMedia('(max-width: 900px)'),saveData=navigator.connection?.saveData,reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
- const paused=()=>{try{return localStorage.getItem('divi-motion')==='paused'}catch{return root.classList.contains('motion-paused')}};
- // On desktop the square dancers clip follows the scroll instead of looping; it uses an encode with a keyframe every two frames so seeking stays smooth.
- const scrubbing=video=>video.classList.contains('is-square')&&!!video.closest('.film-scene')&&fine.matches&&!compact.matches&&!saveData&&!reduced.matches;
- const source=video=>scrubbing(video)?video.dataset.film.replace('.mp4','-scrub.mp4'):(compact.matches||saveData)?video.dataset.film.replace('.mp4','-sm.mp4'):video.dataset.film;
+ const paused=()=>{return root.classList.contains('motion-paused')||(reduced.matches&&!root.classList.contains('motion-enabled'))};
+
+ const scrubbing=()=>false;
+ const source=video=>video.dataset.film.replace('.mp4',(saveData?'-mobile.mp4':'-hq.mp4'));
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';
