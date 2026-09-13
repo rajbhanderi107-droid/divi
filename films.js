@@ -1,8 +1,10 @@
 (() => {
  const root=document.documentElement,videos=[...document.querySelectorAll('[data-film]')],ratios=new Map();
- const compact=matchMedia('(max-width: 900px)'),saveData=navigator.connection?.saveData,reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const compact=matchMedia('(max-width: 900px)'),saveData=navigator.connection?.saveData,reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
  const paused=()=>{try{return localStorage.getItem('divi-motion')==='paused'}catch{return root.classList.contains('motion-paused')}};
- const source=video=>(compact.matches||saveData)?video.dataset.film.replace('.mp4','-sm.mp4'):video.dataset.film;
+ // On desktop the square dancers clip follows the scroll instead of looping; it uses an encode with a keyframe every two frames so seeking stays smooth.
+ const scrubbing=video=>video.classList.contains('is-square')&&!!video.closest('.film-scene')&&fine.matches&&!compact.matches&&!saveData&&!reduced.matches;
+ const source=video=>scrubbing(video)?video.dataset.film.replace('.mp4','-scrub.mp4'):(compact.matches||saveData)?video.dataset.film.replace('.mp4','-sm.mp4'):video.dataset.film;
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';
@@ -17,7 +19,11 @@
  let frame=0,header=86,viewport=innerHeight;
  function playback(){
   const eligible=videos.filter(video=>ratios.get(video)>0&&(!video.closest('.film-scene')||video.closest('.film-scene').classList.contains('is-current'))).sort((a,b)=>(ratios.get(b)||0)-(ratios.get(a)||0)).slice(0,1);
-  videos.forEach(video=>{if(paused()||document.hidden||!eligible.includes(video)){if(!video.paused)video.pause();return;}prime(video);if(video.paused)video.play().catch(()=>{});});
+  videos.forEach(video=>{
+   if(scrubbing(video)){if(eligible.includes(video)||ratios.get(video)>0)prime(video);if(!video.paused)video.pause();return;}
+   if(paused()||document.hidden||!eligible.includes(video)){if(!video.paused)video.pause();return;}
+   prime(video);if(video.paused)video.play().catch(()=>{});
+  });
  }
  function show(j,index){
   if(j.index===index)return;
@@ -36,8 +42,9 @@
    if(sectionTop>viewport||sectionTop+j.height<0)continue;
    const raw=(scrollY-j.top)/j.distance,p=Math.max(0,Math.min(.99999,raw)),n=j.scenes.length;
    show(j,Math.min(n-1,Math.floor(p*n)));
-   const local=Math.round(((p*n)%1)*100)/100;
+   const within=(p*n)%1,local=Math.round(within*100)/100;
    if(local!==j.progress){j.progress=local;j.buttons[j.index]?.style.setProperty('--p',local);}
+   const scrub=j.scenes[j.index]?.querySelector('video.is-square');   if(scrub&&scrubbing(scrub)&&scrub.readyState>=1&&scrub.duration){const t=Math.min(scrub.duration-.05,within*scrub.duration);if(Math.abs(scrub.currentTime-t)>1/30)scrub.currentTime=t;}
    const enter=reduced.matches?1:Math.round(Math.max(0,Math.min(1,1-(sectionTop-header)/(viewport*.9)))*200)/200;
    if(enter!==j.enter){j.enter=enter;j.arch.style.transform=`scale(${1+enter*enter*3.2})`;j.arch.style.visibility=enter>=1?'hidden':'visible';}
   }
@@ -49,6 +56,8 @@
  }
  function jump(j,i){window.scrollTo({top:j.top+((i+.12)/j.scenes.length)*j.distance,behavior:reduced.matches?'instant':'smooth'});}
  journeys.forEach(j=>{j.el.classList.add('film-ready');j.buttons.forEach((button,i)=>button.addEventListener('click',()=>jump(j,i)));j.el.querySelector('.film-markers').addEventListener('keydown',e=>{const i=j.buttons.indexOf(document.activeElement);if(i<0)return;const targets={ArrowRight:Math.min(i+1,j.buttons.length-1),ArrowLeft:Math.max(i-1,0),Home:0,End:j.buttons.length-1};if(!(e.key in targets))return;e.preventDefault();j.buttons[targets[e.key]].focus({preventScroll:true});jump(j,targets[e.key]);});});
+ // Re-sync a scrubbed clip once it can seek, so it matches the scroll position without waiting for the next scroll.
+ videos.filter(video=>video.classList.contains('is-square')).forEach(video=>video.addEventListener('loadedmetadata',()=>{journeys.forEach(j=>j.progress=-1);if(!frame)frame=requestAnimationFrame(update);}));
  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>ratios.set(e.target,e.isIntersecting?e.intersectionRatio:0));playback();},{threshold:[0,.25,.5,.75]});videos.forEach(video=>observer.observe(video));
  window.addEventListener('scroll',()=>{if(!frame)frame=requestAnimationFrame(update);},{passive:true});
  let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(measure,120);});

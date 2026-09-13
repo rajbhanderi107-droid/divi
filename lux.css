@@ -77,7 +77,33 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
  .gallery-track img{-webkit-user-drag:none;user-select:none}
 }
 
+/* ---------- Passes, lineup, WhatsApp (rendered from site-config.js; hidden while empty) ---------- */
+.passes,.lineup{background:#241109;color:#f6e7ca;padding:72px var(--space)}
+.passes h2,.lineup h2{color:#f6e7ca}.passes h2 i,.lineup h2 i{color:#e4bc6a}
+.passes .eyebrow,.lineup .eyebrow{color:#d1ad70}
+.passes .section-heading>p{color:#cdb18a}
+.pass-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.pass-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:30px 26px 26px;text-align:center;border:1px solid #e4bc6a55;border-radius:140px 140px 4px 4px;background:linear-gradient(#3a1a0c,#2a130a)}
+.pass-card h3{font-size:28px;margin:42px 0 0;color:#f7de9f}
+.pass-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:46px;line-height:1.1;margin:4px 0;color:#fff0d4}
+.pass-note{font-size:13px;line-height:1.6;color:#cdb18a;margin:0 0 16px}
+.pass-card .book{margin-top:auto}
+.lineup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px}
+.lineup-card{border-top:1px solid #e4bc6a55;padding-top:16px}
+.lineup-card img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:120px 120px 2px 2px;margin-bottom:14px}
+.lineup-card h3{font-size:26px;margin:0;color:#f7de9f}
+.lineup-card p{margin:4px 0 0;font-size:13px;color:#cdb18a}
+.lineup-nights{color:#e4bc6a!important;letter-spacing:1px}
+.whatsapp{position:fixed;right:20px;bottom:96px;z-index:25;display:flex;align-items:center;height:44px;padding:0 18px;border-radius:22px;background:#1f7a4d;color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px;box-shadow:0 6px 20px #0006;transition:transform .2s}
+.whatsapp:hover{transform:translateY(-2px)}
+.whatsapp:focus-visible{outline:2px solid #f0cc7c;outline-offset:3px}
+
+/* Gallery card zooms into the lightbox (View Transitions where supported) */
+::view-transition-group(divi-photo){animation-duration:.55s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+
 @media(max-width:700px){
+ .passes,.lineup{padding:48px 24px}
+ .whatsapp{right:12px;bottom:128px;height:40px;padding:0 14px}
  .hero:before{background:linear-gradient(#3a1609e8,#3a160999 48%,#3a1609e8)}
  .real-reveal{height:220svh}
  .reveal-stage{top:76px;height:calc(100svh - 76px)}
