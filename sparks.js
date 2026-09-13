@@ -1,6 +1,6 @@
 // Celebration sparks (Phase C): a short gold burst from primary actions, on one shared canvas that sleeps between bursts.
 (() => {
- const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const reduced={get matches(){return document.documentElement.classList.contains('motion-paused')},addEventListener(){}};
  const paused=()=>{try{return localStorage.getItem('divi-motion')==='paused'}catch{return document.documentElement.classList.contains('motion-paused')}};
  const sparks=[];let canvas=null,ctx=null,raf=0,last=0;
  const size=()=>{const dpr=Math.min(devicePixelRatio,2);canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);};

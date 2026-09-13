@@ -1,7 +1,7 @@
 // Code-drawn ornament library (Phase B): toran, lotus rosette dividers, paisley corners and the intro rosette ring.
 // Vector, so crisp at any size; strokes draw in once as they scroll into view.
 (() => {
- const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const reduced={get matches(){return document.documentElement.classList.contains('motion-paused')},addEventListener(){}};
  const r2=n=>Math.round(n*100)/100;
  const fromMarkup=markup=>{const t=document.createElement('template');t.innerHTML=markup.trim();return t.content.firstChild;};
 

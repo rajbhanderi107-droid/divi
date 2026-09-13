@@ -161,7 +161,7 @@ body{font-size:16px}.hero{min-height:500px;padding-block:40px}.hero-visual{max-h
 .compact-ritual{grid-template-columns:43% 57%;gap:0;padding:30px 20px}.compact-ritual>div{padding-left:18px}.compact-ritual>img{height:240px}.compact-ritual .eyebrow{font-size:12px;line-height:1.6;letter-spacing:0}.compact-ritual .eyebrow:before{display:none}.compact-ritual h2{font-size:31px;letter-spacing:-.6px}.compact-ritual p:last-child{font-size:14px;line-height:1.7;margin-top:14px}.gallery{padding:28px 20px 20px}.gallery .section-heading h2{font-size:36px}.gallery-card{flex-basis:62%}.gallery-card .photo{height:205px}.gallery-card .caption h3{font-size:23px}.gallery .section-heading{gap:12px}.gallery .section-heading>div>p:not(.eyebrow){font-size:14px}.visit-planner{padding:27px 20px}.visit-planner h2{font-size:36px}.visit-planner .section-heading{margin-bottom:20px}.planner-drawer>summary{font-size:24px}footer{padding:24px 20px 90px}.footer-top{align-items:center;gap:20px}.footer-top .contacts{gap:10px}.footer-bottom{gap:12px}.motion-toggle{bottom:80px}.nights-page .motion-toggle{bottom:18px}.nights-page .story-browser .scene-frame{min-height:510px}
 }
 @media(max-width:540px){.hero{min-height:0;padding:28px 20px 32px;gap:14px}.hero-visual{min-height:240px;max-height:340px;outline-offset:4px}.hero .description{display:none}.hero-tag{margin-bottom:20px}.hero-actions{gap:12px}.hero-bottom{margin-top:16px}.hero .eyebrow{margin-bottom:12px}.hero h1{font-size:clamp(24px,6.2vw,32px)}.image-caption{bottom:85px}.hero .book{font-size:12px}.event-strip{padding:14px 18px;gap:12px 0}.event-strip dt{font-size:22px}.event-strip dd{font-size:12px}.event-strip>div:last-child{padding-top:10px}}
-@media(prefers-reduced-motion:reduce){.story-browser-controls button{transition:none}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .story-browser-controls button{transition:none}}
 
 /* ---- sculpture.css ---- */
 .compact-ritual{background:radial-gradient(ellipse at 25% 50%,#754325,#29160f 70%)!important;color:#f6e7c9!important}
@@ -181,7 +181,7 @@ body{font-size:16px}.hero{min-height:500px;padding-block:40px}.hero-visual{max-h
 .hero-tag{letter-spacing:-1.5px}.hero .eyebrow{letter-spacing:2px}.book{transition:background .25s,box-shadow .25s}.book:hover{box-shadow:0 6px 25px #140a0822}
 .gallery-card .photo{overflow:hidden}.gallery-card .photo img{transition:transform .8s cubic-bezier(.22,1,.36,1)}.gallery-card:hover .photo img{transform:scale(1.035)}
 @media(max-width:700px){.compact-ritual{grid-template-columns:1fr;padding:25px 24px 40px;gap:0}.compact-ritual>div{padding-left:0}.compact-ritual>div:last-child{text-align:center;max-width:380px;margin:auto}.compact-ritual h2{max-width:none;font-size:37px}.compact-ritual p:last-child{margin:16px auto 0}#divi-sculpture{height:340px}.compact-ritual:before{inset:12px}}
-@media(prefers-reduced-motion:reduce){.gallery-card .photo img,.book{transition:none}.gallery-card:hover .photo img{transform:none}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .gallery-card .photo img,html:not(.motion-enabled) .book{transition:none}html:not(.motion-enabled) .gallery-card:hover .photo img{transform:none}}
 
 /* ---- films.css ---- */
 /* Scroll film journeys. All per-frame motion is transform/opacity only, so the compositor can run it without repainting video. */
@@ -261,11 +261,11 @@ header{backdrop-filter:none;background:#4b230f}.mobile-booking{backdrop-filter:n
 
 .motion-paused .film-scene,.motion-paused .film-scene:before,.motion-paused .film-scene>.divi-film{transition:none}
 @media(prefers-reduced-motion:reduce){
- .film-scene,.film-scene:before,.film-scene>.divi-film,.film-stage[data-dir=up] .film-scene,.film-stage[data-dir=up] .film-scene:before,.film-stage[data-dir=up] .film-scene>.divi-film{transform:none!important}
- .film-scene{opacity:0;transition:opacity .5s,visibility 0s .5s}
- .film-scenes .film-scene.is-current,.film-scenes .film-scene.was-current{opacity:1;transition:opacity .5s}
- .film-arch{display:none}
- .film-caption h3,.film-caption p{transform:none}
+ html:not(.motion-enabled) .film-scene,html:not(.motion-enabled) .film-scene:before,html:not(.motion-enabled) .film-scene>.divi-film,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene:before,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene>.divi-film{transform:none!important}
+ html:not(.motion-enabled) .film-scene{opacity:0;transition:opacity .5s,visibility 0s .5s}
+ html:not(.motion-enabled) .film-scenes .film-scene.is-current,html:not(.motion-enabled) .film-scenes .film-scene.was-current{opacity:1;transition:opacity .5s}
+ html:not(.motion-enabled) .film-arch{display:none}
+ html:not(.motion-enabled) .film-caption h3,html:not(.motion-enabled) .film-caption p{transform:none}
 }
 
 /* ---- refine.css ---- */
@@ -359,7 +359,7 @@ header{backdrop-filter:none;background:#4b230f}.mobile-booking{backdrop-filter:n
 /* The real photo fades in over an identical copy of the painting, so the window is invisible until the photo appears inside it. */
 .reveal-real{object-fit:cover;opacity:0;transform:scale(1.16);will-change:transform,opacity}
 .real-reveal:not(.reveal-ready) .reveal-real{opacity:1}
-@media(prefers-reduced-motion:reduce){.reveal-real{transition:opacity .8s ease}.real-reveal[data-phase=real] .reveal-real{opacity:1}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .reveal-real{transition:opacity .8s ease}html:not(.motion-enabled) .real-reveal[data-phase=real] .reveal-real{opacity:1}}
 .reveal-art{transform-origin:50% 46%;will-change:transform,opacity;
  -webkit-mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");-webkit-mask-position:0 0,50% 46%;-webkit-mask-size:100% 100%,26vmin 26vmin;-webkit-mask-repeat:no-repeat;-webkit-mask-composite:xor;
  mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");mask-position:0 0,50% 46%;mask-size:100% 100%,26vmin 26vmin;mask-repeat:no-repeat;mask-composite:exclude}
@@ -433,12 +433,12 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
 }
 
 @media(prefers-reduced-motion:reduce){
- .intro-flame i,.intro-title,.intro-sub,.intro-done .hero-copy>*,.intro-done .hero-visual{animation:none!important}
- .intro-pending .hero-copy>*,.intro-pending .hero-visual{opacity:1}
- .welcome-loader{transition:opacity .3s,visibility 0s .3s}
- .reveal-art{transition:opacity .8s ease}
- .real-reveal[data-phase=real] .reveal-art{opacity:0}
- .reveal-line{transform:none!important}
+ html:not(.motion-enabled) .intro-flame i,html:not(.motion-enabled) .intro-title,html:not(.motion-enabled) .intro-sub,html:not(.motion-enabled) .intro-done .hero-copy>*,html:not(.motion-enabled) .intro-done .hero-visual{animation:none!important}
+ html:not(.motion-enabled) .intro-pending .hero-copy>*,html:not(.motion-enabled) .intro-pending .hero-visual{opacity:1}
+ html:not(.motion-enabled) .welcome-loader{transition:opacity .3s,visibility 0s .3s}
+ html:not(.motion-enabled) .reveal-art{transition:opacity .8s ease}
+ html:not(.motion-enabled) .real-reveal[data-phase=real] .reveal-art{opacity:0}
+ html:not(.motion-enabled) .reveal-line{transform:none!important}
 }
 
 /* ---- craft.css ---- */
@@ -519,9 +519,9 @@ footer{position:relative;overflow:hidden}
 }
 
 @media(prefers-reduced-motion:reduce){
- .rv>*{opacity:1;translate:none;transition:none}
- .t-sway,.reveal-rays{animation:none}
- .orn-draw path,.orn-draw circle,.intro-ring path,.intro-ring circle{stroke-dashoffset:0;transition:none;animation:none}
+ html:not(.motion-enabled) .rv>*{opacity:1;translate:none;transition:none}
+ html:not(.motion-enabled) .t-sway,html:not(.motion-enabled) .reveal-rays{animation:none}
+ html:not(.motion-enabled) .orn-draw path,html:not(.motion-enabled) .orn-draw circle,html:not(.motion-enabled) .intro-ring path,html:not(.motion-enabled) .intro-ring circle{stroke-dashoffset:0;transition:none;animation:none}
 }
 
 /* Keep full-resolution paintings stationary; only scene opacity changes. */
@@ -563,7 +563,7 @@ nav a{font-size:12px}
  .compact-ritual p:last-child,.film-closing div>p:not(.eyebrow),.section-heading>div>p:not(.eyebrow),.visit-faq p,.planner-help,.planner-note,#night-summary{font-size:16px}
  .film-caption p{font-size:15px}
 }
-@media(prefers-reduced-motion:reduce){.hero-countdown:before{box-shadow:none}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .hero-countdown:before{box-shadow:none}}
 
 /* An oil-fed flame seated in a clay diya, with a steady luminous core. */
 .intro-flame{width:100px;height:110px;margin-bottom:32px}
@@ -575,7 +575,7 @@ nav a{font-size:12px}
 @keyframes oil-flame{0%,100%{transform:rotate(-3deg) scale(1,1)}24%{transform:rotate(2deg) scale(.97,1.04)}48%{transform:rotate(-1deg) scale(1.02,.98)}76%{transform:rotate(3deg) scale(.98,1.02)}}
 @keyframes oil-core{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.94)}}
 .motion-paused .intro-flame i{animation-play-state:paused}
-@media(prefers-reduced-motion:reduce){.intro-flame i{animation:none!important}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .intro-flame i{animation:none!important}}
 
 /* UX pass, specificity follow-up */
 .hero .eyebrow,.film-heading .eyebrow,.film-closing .eyebrow,.reveal-copy .eyebrow,.film-interlude .eyebrow,.compact-ritual .eyebrow{font-size:11px}

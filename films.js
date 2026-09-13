@@ -1,11 +1,11 @@
 (() => {
  const root=document.documentElement,videos=[...document.querySelectorAll('[data-film]')],ratios=new Map();
- const compact=matchMedia('(max-width: 900px)'),saveData=navigator.connection?.saveData,reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
+ const compact=matchMedia('(max-width: 900px)'),saveData=navigator.connection?.saveData,reduced={get matches(){return document.documentElement.classList.contains('motion-paused')},addEventListener(){}},fine=matchMedia('(hover: hover) and (pointer: fine)');
  const paused=()=>{return root.classList.contains('motion-paused')||(reduced.matches&&!root.classList.contains('motion-enabled'))};
 
  const scrubbing=()=>false;
  // Cropped, stabilised, seam-blended web encodes (scripts/encode-web-films.sh): 1440px on desktop, 960px on phones and Save-Data.
- const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913i':'-web.mp4?v=20260913i');
+ const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913j':'-web.mp4?v=20260913j');
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';

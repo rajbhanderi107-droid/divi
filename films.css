@@ -75,9 +75,9 @@ header{backdrop-filter:none;background:#4b230f}.mobile-booking{backdrop-filter:n
 
 .motion-paused .film-scene,.motion-paused .film-scene:before,.motion-paused .film-scene>.divi-film{transition:none}
 @media(prefers-reduced-motion:reduce){
- .film-scene,.film-scene:before,.film-scene>.divi-film,.film-stage[data-dir=up] .film-scene,.film-stage[data-dir=up] .film-scene:before,.film-stage[data-dir=up] .film-scene>.divi-film{transform:none!important}
- .film-scene{opacity:0;transition:opacity .5s,visibility 0s .5s}
- .film-scenes .film-scene.is-current,.film-scenes .film-scene.was-current{opacity:1;transition:opacity .5s}
- .film-arch{display:none}
- .film-caption h3,.film-caption p{transform:none}
+ html:not(.motion-enabled) .film-scene,html:not(.motion-enabled) .film-scene:before,html:not(.motion-enabled) .film-scene>.divi-film,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene:before,html:not(.motion-enabled) .film-stage[data-dir=up] .film-scene>.divi-film{transform:none!important}
+ html:not(.motion-enabled) .film-scene{opacity:0;transition:opacity .5s,visibility 0s .5s}
+ html:not(.motion-enabled) .film-scenes .film-scene.is-current,html:not(.motion-enabled) .film-scenes .film-scene.was-current{opacity:1;transition:opacity .5s}
+ html:not(.motion-enabled) .film-arch{display:none}
+ html:not(.motion-enabled) .film-caption h3,html:not(.motion-enabled) .film-caption p{transform:none}
 }

@@ -44,7 +44,7 @@
 /* The real photo fades in over an identical copy of the painting, so the window is invisible until the photo appears inside it. */
 .reveal-real{object-fit:cover;opacity:0;transform:scale(1.16);will-change:transform,opacity}
 .real-reveal:not(.reveal-ready) .reveal-real{opacity:1}
-@media(prefers-reduced-motion:reduce){.reveal-real{transition:opacity .8s ease}.real-reveal[data-phase=real] .reveal-real{opacity:1}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .reveal-real{transition:opacity .8s ease}html:not(.motion-enabled) .real-reveal[data-phase=real] .reveal-real{opacity:1}}
 .reveal-art{transform-origin:50% 46%;will-change:transform,opacity;
  -webkit-mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");-webkit-mask-position:0 0,50% 46%;-webkit-mask-size:100% 100%,26vmin 26vmin;-webkit-mask-repeat:no-repeat;-webkit-mask-composite:xor;
  mask-image:linear-gradient(#000,#000),url("assets/mandala-window.svg");mask-position:0 0,50% 46%;mask-size:100% 100%,26vmin 26vmin;mask-repeat:no-repeat;mask-composite:exclude}
@@ -118,10 +118,10 @@ footer{border-top:0;background:radial-gradient(circle at 50% 0,#f8f0e1 10px,#f8f
 }
 
 @media(prefers-reduced-motion:reduce){
- .intro-flame i,.intro-title,.intro-sub,.intro-done .hero-copy>*,.intro-done .hero-visual{animation:none!important}
- .intro-pending .hero-copy>*,.intro-pending .hero-visual{opacity:1}
- .welcome-loader{transition:opacity .3s,visibility 0s .3s}
- .reveal-art{transition:opacity .8s ease}
- .real-reveal[data-phase=real] .reveal-art{opacity:0}
- .reveal-line{transform:none!important}
+ html:not(.motion-enabled) .intro-flame i,html:not(.motion-enabled) .intro-title,html:not(.motion-enabled) .intro-sub,html:not(.motion-enabled) .intro-done .hero-copy>*,html:not(.motion-enabled) .intro-done .hero-visual{animation:none!important}
+ html:not(.motion-enabled) .intro-pending .hero-copy>*,html:not(.motion-enabled) .intro-pending .hero-visual{opacity:1}
+ html:not(.motion-enabled) .welcome-loader{transition:opacity .3s,visibility 0s .3s}
+ html:not(.motion-enabled) .reveal-art{transition:opacity .8s ease}
+ html:not(.motion-enabled) .real-reveal[data-phase=real] .reveal-art{opacity:0}
+ html:not(.motion-enabled) .reveal-line{transform:none!important}
 }

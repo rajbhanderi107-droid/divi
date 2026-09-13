@@ -1,6 +1,6 @@
 // Premium interactions: painting-to-reality reveal, magnetic buttons, gallery drag with glide.
 (() => {
- const root=document.documentElement,reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
+ const root=document.documentElement,reduced={get matches(){return document.documentElement.classList.contains('motion-paused')},addEventListener(){}},fine=matchMedia('(hover: hover) and (pointer: fine)');
  const paused=()=>{try{return localStorage.getItem('divi-motion')==='paused'}catch{return root.classList.contains('motion-paused')}};
 
  // The illustration layer carries a static mandala-shaped window; scaling that layer (transform only) grows the window until the real photograph fills the stage.

@@ -2,7 +2,7 @@
 (() => {
  const hosts=[...document.querySelectorAll('.hero,.compact-ritual,.film-closing')];
  if(!hosts.length)return;
- const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const reduced={get matches(){return document.documentElement.classList.contains('motion-paused')},addEventListener(){}};
  const paused=()=>{try{return localStorage.getItem('divi-motion')==='paused'}catch{return document.documentElement.classList.contains('motion-paused')}};
  const MAX=260;
  const VS=`#version 300 es

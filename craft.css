@@ -75,9 +75,9 @@ footer{position:relative;overflow:hidden}
 }
 
 @media(prefers-reduced-motion:reduce){
- .rv>*{opacity:1;translate:none;transition:none}
- .t-sway,.reveal-rays{animation:none}
- .orn-draw path,.orn-draw circle,.intro-ring path,.intro-ring circle{stroke-dashoffset:0;transition:none;animation:none}
+ html:not(.motion-enabled) .rv>*{opacity:1;translate:none;transition:none}
+ html:not(.motion-enabled) .t-sway,html:not(.motion-enabled) .reveal-rays{animation:none}
+ html:not(.motion-enabled) .orn-draw path,html:not(.motion-enabled) .orn-draw circle,html:not(.motion-enabled) .intro-ring path,html:not(.motion-enabled) .intro-ring circle{stroke-dashoffset:0;transition:none;animation:none}
 }
 
 /* Keep full-resolution paintings stationary; only scene opacity changes. */
@@ -119,7 +119,7 @@ nav a{font-size:12px}
  .compact-ritual p:last-child,.film-closing div>p:not(.eyebrow),.section-heading>div>p:not(.eyebrow),.visit-faq p,.planner-help,.planner-note,#night-summary{font-size:16px}
  .film-caption p{font-size:15px}
 }
-@media(prefers-reduced-motion:reduce){.hero-countdown:before{box-shadow:none}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .hero-countdown:before{box-shadow:none}}
 
 /* An oil-fed flame seated in a clay diya, with a steady luminous core. */
 .intro-flame{width:100px;height:110px;margin-bottom:32px}
@@ -131,7 +131,7 @@ nav a{font-size:12px}
 @keyframes oil-flame{0%,100%{transform:rotate(-3deg) scale(1,1)}24%{transform:rotate(2deg) scale(.97,1.04)}48%{transform:rotate(-1deg) scale(1.02,.98)}76%{transform:rotate(3deg) scale(.98,1.02)}}
 @keyframes oil-core{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.94)}}
 .motion-paused .intro-flame i{animation-play-state:paused}
-@media(prefers-reduced-motion:reduce){.intro-flame i{animation:none!important}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-enabled) .intro-flame i{animation:none!important}}
 
 /* UX pass, specificity follow-up */
 .hero .eyebrow,.film-heading .eyebrow,.film-closing .eyebrow,.reveal-copy .eyebrow,.film-interlude .eyebrow,.compact-ritual .eyebrow{font-size:11px}
