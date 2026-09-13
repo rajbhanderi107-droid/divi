@@ -1,0 +1,24 @@
+DIVI GARBA ANIMATION PACK
+
+Upload all 14 reference images into the existing Flow project. Generation is not required for uploading.
+
+Video settings: Veo 3.1 Lite; 8 seconds; 16:9; 1 output. Existing approved budget covers 10 story videos only (100 credits). The 4 extra artwork videos are optional and outside that budget.
+
+COMMON PROMPT
+Animate this exact illustration as an 8-second seamless loop. Preserve its composition, sharp miniature-painting detail and rust, ivory and antique gold colours. Locked camera: animate subjects rather than using a zoom or pan. Every visible flame flickers independently; reflected light and water shimmer; flowers and leaves sway. Animate visible animals with natural breathing, blinking and gentle ear movement; visible birds with subtle head, feather and wing movement. Dancers take small graceful rhythmic steps. Only animate subjects actually present in the image. Preserve anatomy and sacred symbols; no distortion, no new subjects, no cuts, no text or logos. Aim to return to the starting pose for a smooth loop. No speech or music.
+
+FILES
+chapter-01.webp — Night 1 — Shailaputri
+chapter-02.webp — Night 2 — Brahmacharini
+chapter-03.webp — Night 3 — Chandraghanta
+chapter-04.webp — Night 4 — Kushmanda
+chapter-05.webp — Night 5 — Skandamata
+chapter-06.webp — Night 6 — Katyayani
+chapter-07.webp — Night 7 — Kalaratri
+chapter-08.webp — Night 8 — Mahagauri
+chapter-09.webp — Night 9 — Siddhidatri
+chapter-10.webp — Night 10 — Vijayadashami
+divi-courtyard.webp — Courtyard and peacocks
+divi-lotus-diya.webp — Lotus and diya
+divi-heritage-frame.webp — Heritage border
+divi-garba-art.webp — Garba folk artwork
