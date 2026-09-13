@@ -5,7 +5,7 @@
 
  const scrubbing=()=>false;
  // Cropped, stabilised, seam-blended web encodes (scripts/encode-web-films.sh): 1440px on desktop, 960px on phones and Save-Data.
- const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913j':'-web.mp4?v=20260913j');
+ const source=video=>video.dataset.film.replace('.mp4',(compact.matches||saveData)?'-web-sm.mp4?v=20260913k':'-web.mp4?v=20260913k');
  const prime=(video,preload='auto')=>{if(!video||video.hasAttribute('src'))return;video.preload=preload;video.src=source(video);video.load();};
  const pad=n=>String(n).padStart(2,'0');
  const archSvg='<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#190c09" fill-rule="evenodd" d="M-1-1H101V101H-1Z M24 101V44 C24 18 76 18 76 44 V101Z"/><path fill="none" stroke="#d9b273" stroke-opacity=".55" stroke-width=".25" vector-effect="non-scaling-stroke" d="M24 101V44 C24 18 76 18 76 44 V101"/></svg>';
@@ -18,8 +18,8 @@
   return {el,stage,scenes,arch,count:count.querySelector('b'),buttons:[...el.querySelectorAll('[data-scene]')],index:-1,absTop:0,top:0,distance:1,enter:-1,progress:-1};
  });
  let frame=0,header=86,viewport=innerHeight;
- // Starting a clip (network, decoder set-up, first frames) is the main scroll cost, so new clips wait until scrolling
- // settles and show their poster meanwhile; a clip that is already playing keeps playing.
+ // Starting a clip (network, decoder set-up, first frames) is the main scroll cost, so clips that still need loading start once
+ // their scene has been on screen briefly or scrolling settles; buffered clips start at once and playing clips keep playing.
  let scrolling=false,settleTimer=0;
  addEventListener('scroll',()=>{scrolling=true;clearTimeout(settleTimer);settleTimer=setTimeout(()=>{scrolling=false;playback();warmNeighbours();},160);},{passive:true});
  const idle=window.requestIdleCallback?fn=>requestIdleCallback(fn,{timeout:1200}):fn=>setTimeout(fn,250);
@@ -29,7 +29,9 @@
   videos.forEach(video=>{
    if(scrubbing(video)){if(eligible.includes(video)||ratios.get(video)>0)prime(video);if(!video.paused)video.pause();return;}
    if(paused()||document.hidden||!eligible.includes(video)){if(!video.paused)video.pause();return;}
-   if(scrolling&&video.paused)return;
+   // While scrolling, a buffered clip starts at once; one that still has to load waits until its scene has been current for 250 ms,
+   // so scenes flicked past don't trigger network and decoder work.
+   if(scrolling&&video.paused&&video.readyState<3&&performance.now()-(+video.closest('.film-scene')?.dataset.since||0)<250)return;
    prime(video);if(video.paused)video.play().catch(()=>{});
   });
  }
@@ -40,6 +42,9 @@
   clearTimeout(j.settle);j.settle=setTimeout(()=>j.scenes[previous]?.classList.remove('was-current'),1150);
   j.buttons.forEach((button,i)=>{button.classList.toggle('is-done',i<index);if(i===index)button.setAttribute('aria-current','step');else{button.removeAttribute('aria-current');button.style.removeProperty('--p');}});
   j.count.textContent=pad(index+1);j.progress=-1;
+  j.scenes[index].dataset.since=performance.now();clearTimeout(j.dwell);j.dwell=setTimeout(playback,260);
+  // Buffer the next scene in idle time so it can start the moment it arrives.
+  idle(()=>prime(j.scenes[index+1]?.querySelector('video')));
   playback();
  }
  function update(){
