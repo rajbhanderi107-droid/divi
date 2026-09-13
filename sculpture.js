@@ -51,7 +51,7 @@ function init(T){
  for(let row=0;row<=20;row++){const u=row/20;for(let col=0;col<=12;col++){const v=col/6-1;vertices.push(v*.32*Math.sin(Math.PI*u),.35*u*u+.13*v*v*Math.sin(Math.PI*u),u*1.25);if(row<20&&col<12){const a=row*13+col;indices.push(a,a+13,a+1,a+1,a+13,a+14);}}}
  petalGeometry.setAttribute('position',new T.Float32BufferAttribute(vertices,3));petalGeometry.setIndex(indices);petalGeometry.computeVertexNormals();
  const petals=[];for(let layer=0;layer<2;layer++)for(let i=0;i<12;i++){const angle=i*Math.PI/6+layer*.26;const pivot=new T.Group();pivot.rotation.y=angle;pivot.position.y=.25+layer*.15;const petal=new T.Mesh(petalGeometry,layer?pale:gold);petal.scale.setScalar(layer?.82:1);petal.rotation.x=layer?-.2:.04;pivot.add(petal);group.add(pivot);petals.push({mesh:petal,base:petal.rotation.x,phase:i*.25+layer});}
- for(const [radius,y] of [[.78,.12],[.39,.58]]){const ring=new T.Mesh(new T.TorusGeometry(radius,.018,8,80),pale);ring.rotation.x=Math.PI/2;ring.position.y=y;group.add(ring);}
+ for(const [radius,y] of [[.78,.12],[.39,.58]]){const ring=new T.Mesh(new T.TorusGeometry(radius,.018,8,80),pale);ring.rotation.x=Math.PI/2;ring.position.y=y;ring.userData.lotus=true;group.add(ring);}
 
  // The garbo itself.
  const {map,emissiveMap}=paintPot(T);
@@ -97,7 +97,25 @@ function init(T){
  // Original Blender models, loaded only when the sculpture enters the viewport.
  import('./vendor/GLTFLoader.js').then(({GLTFLoader})=>{
   const loader=new GLTFLoader();
-  for(const [name,x,y,z,scale,angle] of [['dhol',1.5,.18,.3,.48,-.3],['dandiya',-1.5,.34,.3,.48,.2]])loader.load(new URL('./assets/models/divi-'+name+'.glb',import.meta.url).href,gltf=>{const model=gltf.scene;model.scale.setScalar(scale);model.position.set(x,y,z);model.rotation.y=angle;model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});scene.add(model);resume();},undefined,()=>{});
+  // Blender models (scripts/build-divi-models.py). Each replaces its simple lathe stand-in once loaded; clay, wood and skin get a fine
+  // object-space grain (colour and roughness) so they read as real material instead of smooth plastic.
+  const grain=(material,scale,amount)=>{material.onBeforeCompile=s=>{
+   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vGrain;').replace('#include <begin_vertex>','#include <begin_vertex>\nvGrain=position;');
+   s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vGrain;float gHash(vec3 p){p=fract(p*.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}float gNoise(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(gHash(i),gHash(i+vec3(1,0,0)),f.x),mix(gHash(i+vec3(0,1,0)),gHash(i+vec3(1,1,0)),f.x),f.y),mix(mix(gHash(i+vec3(0,0,1)),gHash(i+vec3(1,0,1)),f.x),mix(gHash(i+vec3(0,1,1)),gHash(i+vec3(1,1,1)),f.x),f.y),f.z);}')
+    .replace('#include <color_fragment>','#include <color_fragment>\nfloat gn=gNoise(vGrain*'+scale.toFixed(1)+')*.55+gNoise(vGrain*'+(scale*5).toFixed(1)+')*.45;diffuseColor.rgb*='+(1-amount).toFixed(3)+'+gn*'+(amount*2).toFixed(3)+';')
+    .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+(gn-.5)*'+amount.toFixed(3)+',0.,1.);');
+  };material.needsUpdate=true;};
+  const [garboModel,lotusModel,dholModel,dandiyaModel,bellModel,diyaModel]=['garbo','lotus','dhol-2','dandiya-2','bell','diya'].map(name=>new URL('./assets/models/divi-'+name+'.glb',import.meta.url).href);
+  // Scale a prop to a target size and stand it on the floor.
+  const fit=(model,size,x,z,angle)=>{model.rotation.y=angle;const box=new T.Box3().setFromObject(model),dim=box.getSize(new T.Vector3());model.scale.setScalar(size/Math.max(dim.x,dim.y,dim.z));model.position.set(x,0,z);box.setFromObject(model);model.position.y-=box.min.y;};
+  const load=(src,done)=>loader.load(src,gltf=>{gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});done(gltf.scene);resume();},undefined,()=>{});
+  const named=(model,pattern,scale,amount)=>model.traverse(o=>{if(o.isMesh&&pattern.test(o.material?.name||''))grain(o.material,scale,amount);});
+  load(garboModel,model=>{named(model,/terracotta/i,9,.16);model.position.y=.62;model.scale.setScalar(.95);pot.visible=mouth.visible=mirrors.visible=false;group.add(model);});
+  load(lotusModel,model=>{model.traverse(o=>{if(o.isMesh)o.material.envMapIntensity=1.35;});base.visible=false;petals.forEach(p=>p.mesh.parent.visible=false);group.children.forEach(c=>{if(c.userData.lotus)c.visible=false;});group.add(model);});
+  load(dholModel,model=>{named(model,/wood|skin/i,14,.12);fit(model,.92,1.6,.35,-.35);scene.add(model);});
+  load(dandiyaModel,model=>{named(model,/lacquer/i,20,.06);fit(model,1.05,-1.55,.45,.25);scene.add(model);});
+  load(bellModel,model=>{bells.forEach(b=>{b.children.forEach(c=>c.visible=false);const copy=model.clone();copy.scale.setScalar(.92);b.add(copy);});});
+  load(diyaModel,model=>{model.scale.setScalar(.6);model.position.set(-.276,.86,0);lamp.visible=false;group.add(model);});
  }).catch(()=>{});
  const paused=()=>{return document.documentElement.classList.contains('motion-paused')||(matchMedia('(prefers-reduced-motion: reduce)').matches&&!document.documentElement.classList.contains('motion-enabled'))};
  let visible=false,raf=0,time=0,last=0,target=0,smoothed=0;

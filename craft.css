@@ -148,3 +148,33 @@ header>.book{white-space:nowrap}
 /* Cropped web films fill the stage again (no letterbox bands); the square dancers clip stays whole. Transitions remain opacity-only. */
 .film-scenes .film-scene>.divi-film:not(.is-square){object-fit:cover}
 @media(max-width:700px){header>.book{font-size:11px}.film-scenes .film-scene>.divi-film.is-square{object-fit:cover}}
+
+/* Layout fixes from the multi-size audit */
+/* The section label never runs under the Continue link. */
+.film-heading{padding-right:150px}
+/* Phones: captions sit clear of the counter row; the motion button docks inside the booking bar instead of floating over text. */
+@media(max-width:700px){
+ .film-caption{bottom:136px}
+ .film-caption h3{font-size:34px}
+ .film-heading{padding-right:110px}
+ .motion-toggle{left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:45}
+ .mobile-booking{padding-left:70px}
+}
+/* Short landscape screens: slimmer chrome so the films and copy have room. */
+@media(max-height:500px) and (orientation:landscape){
+ .announcement{display:none}
+ header{height:58px;padding-block:4px}
+ .brand img{width:40px;height:44px}
+ .organiser{height:28px}
+ header>.book{padding:8px 14px;min-height:44px}
+ .film-heading h2{display:none}
+ .film-caption{bottom:64px}
+ .film-caption h3{font-size:30px;margin-bottom:6px}
+ .film-caption p{font-size:13px}
+ .film-bottom{bottom:12px}
+ .motion-toggle{bottom:12px;width:40px;height:40px}
+}
+
+/* Caption clearance from the marker row (audit round 2) */
+@media(max-width:700px){ .film-scenes .film-scene .film-caption{bottom:152px} }
+@media(max-height:500px) and (orientation:landscape){ .film-scenes .film-scene .film-caption{bottom:78px} .film-scenes .film-scene .film-caption p{max-width:52ch;line-height:1.45} }
