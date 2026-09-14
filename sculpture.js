@@ -91,7 +91,7 @@ function init(T){
 
  const orbit=new T.Group();orbit.position.y=-.04;group.add(orbit);for(const radius of [1.45,1.58]){const ring=new T.Mesh(new T.TorusGeometry(radius,.006,6,96),gold);ring.rotation.x=Math.PI/2;orbit.add(ring);}
  const dustGeometry=new T.BufferGeometry(),dustPositions=new Float32Array(48*3);for(let i=0;i<48;i++){dustPositions[i*3]=Math.sin(i*2.4)*(1.1+i%4*.28);dustPositions[i*3+1]=(i*.137)%3.4;dustPositions[i*3+2]=Math.cos(i*2.4)*1.4;}dustGeometry.setAttribute('position',new T.BufferAttribute(dustPositions,3));const dust=new T.Points(dustGeometry,new T.PointsMaterial({color:0xffd793,size:.028,transparent:true,opacity:.6,depthWrite:false}));scene.add(dust);
- const bells=[];for(const x of [-2.15,2.15]){const bellGroup=new T.Group();bellGroup.position.set(x,3.05,0);const bell=lathe([[0,-.55],[.12,-.55],[.17,-.42],[.19,-.2],[.3,-.02],[.31,.03],[.26,.07],[.13,-.09],[.08,-.3],[0,-.35]]);bell.rotation.z=Math.PI;bellGroup.add(bell);const chain=new T.Mesh(new T.CylinderGeometry(.014,.014,1.1,8),gold);chain.position.y=.52;bellGroup.add(chain);const clapper=new T.Mesh(new T.SphereGeometry(.06,12,8),gold);clapper.position.y=-.02;bellGroup.add(clapper);scene.add(bellGroup);bells.push(bellGroup);}
+ const bells=[];for(const x of [-2.15,2.15]){const bellGroup=new T.Group();bellGroup.position.set(x,2.5,0);const bell=lathe([[0,-.55],[.12,-.55],[.17,-.42],[.19,-.2],[.3,-.02],[.31,.03],[.26,.07],[.13,-.09],[.08,-.3],[0,-.35]]);bell.rotation.z=Math.PI;bellGroup.add(bell);const chain=new T.Mesh(new T.CylinderGeometry(.014,.014,1.1,8),gold);chain.scale.y=2.4;chain.position.y=1.28;bellGroup.add(chain);const clapper=new T.Mesh(new T.SphereGeometry(.06,12,8),gold);clapper.position.y=-.02;bellGroup.add(clapper);scene.add(bellGroup);bells.push(bellGroup);}
  for(const bell of bells){for(let i=0;i<12;i++){const link=new T.Mesh(new T.TorusGeometry(.025,.007,6,12),pale);link.position.y=.55+i*.05;link.rotation.y=i%2*Math.PI/2;bell.add(link);}const lip=new T.Mesh(new T.TorusGeometry(.29,.013,8,40),pale);lip.rotation.x=Math.PI/2;lip.position.y=-.015;bell.add(lip);}
 
  // Original Blender models, loaded only when the sculpture enters the viewport.
@@ -114,7 +114,7 @@ function init(T){
   load(lotusModel,model=>{model.traverse(o=>{if(o.isMesh)o.material.envMapIntensity=1.35;});base.visible=false;petals.forEach(p=>p.mesh.parent.visible=false);group.children.forEach(c=>{if(c.userData.lotus)c.visible=false;});group.add(model);});
   load(dholModel,model=>{named(model,/wood|skin/i,14,.12);fit(model,.92,1.6,.35,-.35);scene.add(model);});
   load(dandiyaModel,model=>{named(model,/lacquer/i,20,.06);fit(model,1.05,-1.55,.45,.25);scene.add(model);});
-  load(bellModel,model=>{bells.forEach(b=>{b.children.forEach(c=>c.visible=false);const copy=model.clone();copy.scale.setScalar(.92);b.add(copy);});});
+  load(bellModel,model=>{bells.forEach(b=>{b.children.forEach((c,i)=>{if(i===0||i===2||i===b.children.length-1)c.visible=false;});const copy=model.clone();copy.scale.setScalar(.92);b.add(copy);});});
   load(diyaModel,model=>{model.scale.setScalar(.6);model.position.set(-.276,.86,0);lamp.visible=false;group.add(model);});
  }).catch(()=>{});
  const paused=()=>{return document.documentElement.classList.contains('motion-paused')||(matchMedia('(prefers-reduced-motion: reduce)').matches&&!document.documentElement.classList.contains('motion-enabled'))};
@@ -132,7 +132,9 @@ function init(T){
   if(!host.classList.contains('sculpture-ready'))requestAnimationFrame(()=>host.classList.add('sculpture-ready'));if(!still)raf=requestAnimationFrame(draw);}
  function resume(){if(raf)cancelAnimationFrame(raf);raf=0;last=performance.now();draw(last);}
  new IntersectionObserver(e=>{visible=e[0].isIntersecting;resume();},{threshold:.05}).observe(host);
- new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();resume();}).observe(host);
+ new ResizeObserver(()=>{const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
+  // Keep both bells inside narrow (phone) frames: the visible half-width at the bells is about 2.53 x aspect.
+  const bellX=Math.min(2.15,2.53*camera.aspect-.5);bells.forEach((b,i)=>b.position.x=i?bellX:-bellX);resume();}).observe(host);
  host.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!paused()){target=(e.clientX-host.getBoundingClientRect().left)/host.clientWidth*.5-.25;}});host.addEventListener('pointerleave',()=>{target=0;});
  window.addEventListener('divi:motion',resume);document.addEventListener('visibilitychange',resume);renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();if(raf)cancelAnimationFrame(raf);host.classList.remove('sculpture-ready');});
 }
