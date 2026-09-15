@@ -1,0 +1,1 @@
+Read AGENTS.md and README.md. This is the shared source for Claude Code and Codex. The website is the React + Vite app in web/; edit it there and build with `npm --prefix web run build`. Hosted Claude artifacts do not automatically sync to this repository.

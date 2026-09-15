@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* Divi Garba — design from divigarba.vercel.app: obsidian and maroon grounds, mukut and antique gold, Sregs Serif display,
+   Anek Gujarati text (digits fall back to Poppins, as on the original). */
+@font-face {
+  font-family: "Sregs Serif";
+  src: url("/v/fonts/SregsSerif-Heavy.woff2") format("woff2"), url("/v/fonts/SregsSerif-Heavy.otf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+20-2F, U+3A-7E, U+A0-FF, U+2010-2027;
+}
+@font-face {
+  font-family: "Anek Gujarati";
+  src: url("/v/fonts/AnekGujarati-Regular.woff2") format("woff2"), url("/v/fonts/AnekGujarati-Regular.ttf") format("truetype");
+  font-weight: 100 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+20-2F, U+3A-7E, U+A0-FF, U+A80-AFF, U+2010-2027, U+20B9;
+}
+@font-face {
+  font-family: "Anek Gujarati";
+  src: url("/v/fonts/AnekGujarati-Bold.woff2") format("woff2"), url("/v/fonts/AnekGujarati-Bold.ttf") format("truetype");
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+20-2F, U+3A-7E, U+A0-FF, U+A80-AFF, U+2010-2027, U+20B9;
+}
+
+@theme {
+  --color-obsidian: #070504;
+  --color-maroon: #180807;
+  --color-temple: #350a08;
+  --color-sindoor: #8f1712;
+  --color-mukut: #f0c14b;
+  --color-antique: #c9a24a;
+  --color-gold: #edc766;
+  --color-ivory: #f4e8d0;
+  --font-display: "Sregs Serif", "Poppins", "Anek Gujarati", sans-serif;
+  --font-ui: "Anek Gujarati", "Poppins", sans-serif;
+  --text-label: 0.68rem;
+
+  /* Tokens used by the 3D venue map controls. */
+  --color-ink: #1b0d08;
+  --color-night: #120806;
+  --color-rust-900: #3b1c0e;
+  --color-rust-950: #2a130b;
+  --color-gold-300: #f3dfb8;
+  --color-gold-400: #f0d49a;
+  --color-gold-500: #e4bc6a;
+  --color-gold-600: #d9b273;
+}
+
+:root {
+  --z-background: 0;
+  --z-atmosphere: 10;
+  --z-geometry: 20;
+  --z-content: 50;
+  --z-foreground: 60;
+  --z-nav: 70;
+  --z-cursor: 90;
+  --z-loader: 100;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-obsidian);
+    color: var(--color-ivory);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--color-sindoor);
+    color: var(--color-ivory);
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  button {
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+}
+
+.cta-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-label);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-label);
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.display-type {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  line-height: 0.92;
+}
+
+@keyframes marquee-left {
+  to {
+    transform: translate(-50%);
+  }
+}
+@keyframes mandala-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+.mandala-spin {
+  animation: mandala-spin 160s linear infinite;
+  will-change: rotate;
+}
+
+
+body.lightbox-open #buy-btn {
+  display: none;
+}
+
+.frame-ancient {
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+  border: 1px solid #c9a24a6b;
+  position: relative;
+}
+.frame-ancient:before {
+  content: "";
+  pointer-events: none;
+  z-index: 2;
+  clip-path: inherit;
+  border: 1px solid #c9a24a38;
+  position: absolute;
+  inset: 5px;
+}
+.frame-pips:after {
+  content: "";
+  pointer-events: none;
+  z-index: 2;
+  background-image: radial-gradient(circle, var(--color-mukut) 45%, transparent 46%), radial-gradient(circle, var(--color-mukut) 45%, transparent 46%), radial-gradient(circle, var(--color-mukut) 45%, transparent 46%), radial-gradient(circle, var(--color-mukut) 45%, transparent 46%);
+  opacity: 0.65;
+  background-position: 0 0, 100% 0, 0 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 5px 5px;
+  position: absolute;
+  inset: 11px;
+}
+.divider-carved {
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  display: flex;
+}
+.divider-carved:before,
+.divider-carved:after {
+  content: "";
+  background: linear-gradient(90deg, #0000, #c9a24a80, #0000);
+  flex: 1;
+  height: 1px;
+}
+
+/* 3D venue map markers (components/venue-map.tsx) */
+.venue-map .maplibregl-ctrl-attrib, .venue-map .maplibregl-ctrl-attrib.maplibregl-compact-show { background: rgb(7 5 4 / 0.85) !important; color: #c9a24a; font-size: 11px; }
+.venue-map .maplibregl-ctrl-attrib a { color: #f0c14b; }
+.venue-map .maplibregl-ctrl-attrib-button { background-color: #f0c14b !important; border-radius: 999px; width: 44px !important; height: 44px !important; background-position: center !important; }
+.venue-map .maplibregl-cooperative-gesture-screen { background: rgb(7 5 4 / 0.7); color: #f4e8d0; font-size: 15px; }
+.venue-pin { position: relative; display: grid; justify-items: center; pointer-events: none; }
+.venue-pin__dot { width: 22px; height: 22px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: radial-gradient(circle at 35% 35%, #fff3d6, #f0c14b 45%, #8f1712); box-shadow: 0 0 22px 6px rgb(240 193 75 / 0.55); }
+.venue-pin__pulse { position: absolute; bottom: -10px; width: 64px; height: 22px; border-radius: 50%; border: 2px solid rgb(240 193 75 / 0.8); animation: venue-pulse 2.4s ease-out infinite; }
+.venue-pin__label { order: -1; margin-bottom: 10px; padding: 6px 12px; border-radius: 3px; background: rgb(7 5 4 / 0.9); border: 1px solid rgb(201 162 74 / 0.5); color: #f4e8d0; font: 600 13px/1.15 var(--font-ui); text-align: center; white-space: nowrap; box-shadow: 0 8px 24px rgb(0 0 0 / 0.45); }
+.venue-pin__label small { display: block; font-weight: 400; font-size: 11px; color: #f0c14b; }
+.landmark-pin { display: flex; align-items: center; gap: 6px; pointer-events: none; }
+.landmark-pin__dot { width: 12px; height: 12px; border-radius: 50%; background: #070504; border: 3px solid #f0c14b; }
+.landmark-pin__label { padding: 3px 9px; border-radius: 3px; background: rgb(7 5 4 / 0.85); color: #f0c14b; font: 500 12px/1.2 var(--font-ui); white-space: nowrap; }
+.user-pin__dot { display: block; width: 16px; height: 16px; border-radius: 50%; background: #4aa3ff; border: 3px solid #fff; box-shadow: 0 0 0 6px rgb(74 163 255 / 0.3); }
+@keyframes venue-pulse { from { transform: scale(0.4); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+
+/* Jaali: a lattice of small four-petal rosettes in antique gold, used very faintly behind sections and inside cards. */
+.bg-jaali {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-width='.8'%3E%3Cpath d='M36 20Q43 29 36 36Q29 29 36 20ZM52 36Q43 43 36 36Q43 29 52 36ZM36 52Q29 43 36 36Q43 43 36 52ZM20 36Q29 29 36 36Q29 43 20 36Z'/%3E%3Ccircle cx='36' cy='36' r='2.6'/%3E%3Cpath d='M0 36h9M63 36h9M36 0v9M36 63v9'/%3E%3Ccircle cx='0' cy='0' r='2.2'/%3E%3Ccircle cx='72' cy='0' r='2.2'/%3E%3Ccircle cx='0' cy='72' r='2.2'/%3E%3Ccircle cx='72' cy='72' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 72px 72px;
+}
+.bg-jaali-soft {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23c9a24a' stroke-opacity='.16' stroke-width='.9'%3E%3Cpath d='M36 20Q43 29 36 36Q29 29 36 20ZM52 36Q43 43 36 36Q43 29 52 36ZM36 52Q29 43 36 36Q43 43 36 52ZM20 36Q29 29 36 36Q29 43 20 36Z'/%3E%3Ccircle cx='36' cy='36' r='2.6'/%3E%3Ccircle cx='0' cy='0' r='2.2'/%3E%3Ccircle cx='72' cy='0' r='2.2'/%3E%3Ccircle cx='0' cy='72' r='2.2'/%3E%3Ccircle cx='72' cy='72' r='2.2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 56px 56px;
+}
+.jaali-fade {
+  mask-image: radial-gradient(75% 65% at 50% 50%, #000 15%, transparent 80%);
+}
+
+/* Hero book: gold ink text, self-drawing gold line art, bound-book shadows and gilded page edges. */
+.gold-ink {
+  background: linear-gradient(100deg, #9a7430 0%, #e2bc62 30%, #fbe7a6 50%, #d6ad55 70%, #8d6a2b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0.35cqw 0.5cqw rgb(0 0 0 / 0.55));
+}
+/* The hero book: covers sit on a page block (stacked paper edges below and beside them), inner pages get a soft fold
+   shadow at the gutter and a faint highlight on their outer edge. */
+.book-shell .stf__item {
+  box-shadow: 0 1.6rem 2.8rem -1.2rem rgb(0 0 0 / 0.65);
+}
+.book-shell .stf__item.--hard {
+  border-radius: 0.2rem;
+}
+.book-shell .stf__item.--hard.--right {
+  border-radius: 0 0.35rem 0.35rem 0;
+  box-shadow: 0 1.6rem 2.8rem -1.2rem rgb(0 0 0 / 0.65), -2px 0 0 #2a0d07, -4px 1px 0 #1a0704, 1px 1px 0 #f3e8cf, 3px 2px 0 #e2d2ad, 4px 3px 0 #cdb98d, 6px 4px 0 #b39c6c, 7px 5px 0 #8a7249;
+}
+.book-shell .stf__item.--hard.--left {
+  border-radius: 0.35rem 0 0 0.35rem;
+  box-shadow: 0 1.6rem 2.8rem -1.2rem rgb(0 0 0 / 0.65), 2px 0 0 #2a0d07, 4px 1px 0 #1a0704, -1px 1px 0 #f3e8cf, -3px 2px 0 #e2d2ad, -4px 3px 0 #cdb98d, -6px 4px 0 #b39c6c, -7px 5px 0 #8a7249;
+}
+/* Open pages show the stack of paper along their outer edges. */
+.book-shell .stf__item:not(.--hard).--right {
+  box-shadow: 0 1.6rem 2.8rem -1.2rem rgb(0 0 0 / 0.65), 1px 0 0 #eadfc6, 2px 1px 0 #d9c9a5, 3px 1px 0 #c8b489, 4px 2px 0 #a88f63;
+}
+.book-shell .stf__item:not(.--hard).--left {
+  box-shadow: 0 1.6rem 2.8rem -1.2rem rgb(0 0 0 / 0.65), -1px 0 0 #eadfc6, -2px 1px 0 #d9c9a5, -3px 1px 0 #c8b489, -4px 2px 0 #a88f63;
+}
+.book-shell .stf__item:not(.--hard).--right::after,
+.book-shell .stf__item:not(.--hard).--left::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.book-shell .stf__item:not(.--hard).--right::after {
+  background:
+    linear-gradient(90deg, rgb(40 20 6 / 0.5), rgb(40 20 6 / 0.18) 3.5%, rgb(40 20 6 / 0.05) 9%, transparent 16%),
+    linear-gradient(270deg, rgb(255 250 236 / 0.22), transparent 3%);
+}
+.book-shell .stf__item:not(.--hard).--left::after {
+  background:
+    linear-gradient(270deg, rgb(40 20 6 / 0.5), rgb(40 20 6 / 0.18) 3.5%, rgb(40 20 6 / 0.05) 9%, transparent 16%),
+    linear-gradient(90deg, rgb(255 250 236 / 0.22), transparent 3%);
+}

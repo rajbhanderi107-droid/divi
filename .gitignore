@@ -1,0 +1,11 @@
+.reference/
+node_modules/
+.env
+.env.*
+!.env.example
+*.tar.gz
+*.zip
+.DS_Store
+.openai/.execution-profile*
+.claude/
+__pycache__/
