@@ -4,7 +4,8 @@ import { nights, site, type Shot } from "./content";
 import { gsap, useGSAP, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
-import { Backdrop, lockScroll } from "./shell";
+import { Backdrop } from "./shell";
+import { lockScroll } from "@/lib/scroll";
 import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { loops, media, site } from "./content";
+import { cover, loops, media, site } from "./content";
 import { gsap, useGSAP } from "./hooks";
 import { MandalaArt, Rosette } from "./mandala-art";
 
@@ -14,20 +14,32 @@ export function Darshan({ start = true }: { start?: boolean }) {
   const root = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
 
-  // The niche film is decorative; it only runs while the head page is on screen.
+  // The niche film is decorative; it only runs while the head page is on screen. If a browser refuses to start
+  // it without a gesture, the poster still holds Her face and the first tap or key starts the loop.
   useEffect(() => {
     const el = root.current;
     const video = film.current;
     if (!el || !video || typeof IntersectionObserver === "undefined") return;
+    let onScreen = false;
+    const tryPlay = () => {
+      if (onScreen) video.play().catch(() => {});
+    };
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
+        onScreen = entry.isIntersecting;
+        if (onScreen) tryPlay();
         else video.pause();
       },
       { rootMargin: "20%" },
     );
     io.observe(el);
-    return () => io.disconnect();
+    document.addEventListener("pointerdown", tryPlay);
+    document.addEventListener("keydown", tryPlay);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("pointerdown", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
+    };
   }, []);
 
   useGSAP(
@@ -101,6 +113,7 @@ export function Darshan({ start = true }: { start?: boolean }) {
               <video
                 ref={film}
                 src={loops.matajiMukut}
+                poster={cover.matajiMukut.webp}
                 muted
                 loop
                 playsInline

@@ -9,3 +9,4 @@ node_modules/
 .openai/.execution-profile*
 .claude/
 __pycache__/
+skills-lock.json
