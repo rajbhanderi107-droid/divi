@@ -57,29 +57,30 @@ export const installations: Media[] = [
   { file: a("/assets/installations/moment-circle-aerial.jpg"), alt: "The Divi Garba ground from above, red fabric strips radiating from the centre of the circle" },
 ];
 
-export type Scene = {
-  id: string;
-  from: number;
-  to: number;
-  side: "left" | "right";
-  align: "start" | "center" | "end";
-  eyebrow: string;
-  heading: string;
-  body: string;
-  image: { file: string; fileMobile: string; alt: string; focal: string };
+// ---------------------------------------------------------------- the opening page
+// The head page, in Gujarati. Copy is the organiser's and is reproduced verbatim.
+
+export const opening = {
+  backdrop: a("/assets/scenes/lighting.webp"),
+  /** object-position for the backdrop, keeping the lit canopy out from under the type. */
+  focal: "72% 55%",
+  eyebrow: "નવરાત્રિ ૨૦૨૬ · અમદાવાદ",
+  /** The title, split into grapheme clusters so each can rise on its own. */
+  title: ["સાં", "જ", "થી", " ", "પ", "રો", "ઢ"],
+  titlePlain: "સાંજથી પરોઢ",
+  line: "માસ્ટર ફાર્મ ખાતે દસ રાતનો ગરબો — સાંજથી પરોઢ સુધી ફરતું એક વર્તુળ.",
+  book: "ટિકિટ બુક કરો",
+  enter: "વર્તુળમાં પ્રવેશો",
+  facts: [
+    { head: "૧૧ — ૨૦ ઓક્ટોબર ૨૦૨૬", sub: "દસ રાત" },
+    { head: "માસ્ટર ફાર્મ", sub: "વૈષ્ણોદેવી સર્કલ" },
+    { head: "રાત્રે ૮:૦૦ થી", sub: "છેલ્લો પ્રવેશ ૨:૦૦" },
+  ],
 };
 
-export const scenes: Scene[] = [
-  { id: "opening", from: 0.02, to: 0.19, side: "left", align: "start", eyebrow: "Divi Garba 2026", heading: "Our Divi Glows", body: "Where tradition comes alive.", image: { file: a("/assets/img-1.jpg"), fileMobile: a("/assets/img1-mobile.jpg"), alt: "A flower-ringed altar beneath a canopy of fabric petals, lit at dusk", focal: "center 40%" } },
-  { id: "dhol", from: 0.22, to: 0.39, side: "right", align: "center", eyebrow: "The Invitation", heading: "First beat of dhol", body: "Beats invite and feet follow the rhythm.", image: { file: a("/assets/scene-invitation.jpg"), fileMobile: a("/assets/scene-invitation.jpg"), alt: "The dhol and shehnai band playing in a ring around the shrine as the ground fills behind them", focal: "center 46%" } },
-  { id: "circle", from: 0.41, to: 0.58, side: "left", align: "end", eyebrow: "The Circle", heading: "One step. One circle. One energy.", body: "", image: { file: a("/assets/scene-circle.jpg"), fileMobile: a("/assets/scene-circle.jpg"), alt: "The flower-ringed altar at the centre of the ground, under a canopy of fabric petals", focal: "center 45%" } },
-  { id: "ground", from: 0.61, to: 0.78, side: "right", align: "center", eyebrow: "One Direction", heading: "Rhythm", body: "Driving thousands of people together.", image: { file: a("/assets/img-4.jpg"), fileMobile: a("/assets/img4-mobile.jpg"), alt: "Young dhol players leading a procession through a packed night crowd", focal: "center 48%" } },
-  { id: "everyone", from: 0.8, to: 0.97, side: "left", align: "end", eyebrow: "The Ground", heading: "Everyone you know is here", body: "Old friends, new memories and a circle that keeps growing.", image: { file: a("/assets/scene-everyone.jpg"), fileMobile: a("/assets/scene-everyone.jpg"), alt: "A group of friends in festive attire arm in arm on the ground, under the string lights", focal: "center 30%" } },
-];
-
 // ---------------------------------------------------------------- the five chapters
-// Recovered from the deployed build. Each chapter is a full-bleed film that plays while
-// its 230svh section is pinned; the Gujarati numeral, title and line sit over it.
+// Each chapter is a full-bleed film that plays while its section is pinned. The heading is split so the
+// gold word can fall at the start or the end of the line, which it does in both places.
 
 export const loops = {
   headCircle: a("/assets/loops/head-circle.mp4"),
@@ -103,24 +104,55 @@ export const cover = {
 
 export type Chapter = {
   id: string;
-  /** Gujarati numeral shown before the eyebrow. */
+  /** Gujarati numeral. */
   n: string;
-  /** Eyebrow, in Gujarati. */
   eyebrow: string;
-  /** Heading, in Gujarati. The word in `accent` is lifted into gold. */
-  heading: string;
-  accent?: string;
+  /** Heading, in three parts: the gold word sits between `before` and `after`. Either may be empty. */
+  before: string;
+  accent: string;
+  after: string;
   video: string;
   poster: string;
   side: "left" | "center" | "right";
-  /** object-position for the film, so the subject stays out from under the type. */
+  /** object-position for the film, so the subject stays clear of the type. */
   focal: string;
+  /** The line held on its own after this chapter. The last chapter has none. */
+  interlude?: { before: string; accent: string; after: string };
 };
 
 export const chapters: Chapter[] = [
-  { id: "circle", n: "૦૧", eyebrow: "મેદાન ફરે છે", heading: "દસ રાત. એક", accent: "વર્તુળ", video: a("/assets/scenes/circle.mp4"), poster: a("/assets/scenes/circle.webp"), side: "center", focal: "50% 50%" },
-  { id: "dhol", n: "૦૨", eyebrow: "પહેલાં ઢોલ", heading: "ઢોલનો પહેલો", accent: "તાલ", video: a("/assets/scenes/dhol.mp4"), poster: a("/assets/scenes/dhol.webp"), side: "left", focal: "58% 46%" },
-  { id: "rangoli", n: "૦૩", eyebrow: "દરરોજ નવી રંગોળી", heading: "હાથે", accent: "દોરેલી", video: a("/assets/scenes/rangoli.mp4"), poster: a("/assets/scenes/rangoli.webp"), side: "right", focal: "40% 56%" },
-  { id: "aarti", n: "૦૪", eyebrow: "મધ્યમાં આરતી", heading: "આરતીની", accent: "ક્ષણ", video: a("/assets/scenes/aarti.mp4"), poster: a("/assets/scenes/aarti.webp"), side: "left", focal: "50% 40%" },
-  { id: "dawn", n: "૦૫", eyebrow: "પરોઢ", heading: "સૂરજ પાછો આવે ત્યાં", accent: "સુધી", video: a("/assets/scenes/dawn.mp4"), poster: a("/assets/scenes/dawn.webp"), side: "right", focal: "42% 58%" },
+  {
+    id: "circle", n: "૦૧", eyebrow: "મેદાન ફરે છે",
+    before: "દસ રાત. એક ", accent: "વર્તુળ", after: ".",
+    video: a("/assets/scenes/circle.mp4"), poster: a("/assets/scenes/circle.webp"),
+    side: "center", focal: "50% 50%",
+    interlude: { before: "એક વર્તુળ, દસ રાત સુધી ", accent: "ફરતું", after: "." },
+  },
+  {
+    id: "dhol", n: "૦૨", eyebrow: "પહેલાં ઢોલ",
+    before: "ઢોલનો પહેલો ", accent: "તાલ", after: ".",
+    video: a("/assets/scenes/dhol.mp4"), poster: a("/assets/scenes/dhol.webp"),
+    side: "left", focal: "58% 46%",
+    interlude: { before: "સાંભળતાં પહેલાં ", accent: "અનુભવાય", after: " છે." },
+  },
+  {
+    id: "rangoli", n: "૦૩", eyebrow: "દરરોજ નવી રંગોળી",
+    before: "", accent: "હાથે", after: " દોરેલી.",
+    video: a("/assets/scenes/rangoli.mp4"), poster: a("/assets/scenes/rangoli.webp"),
+    side: "right", focal: "40% 56%",
+    interlude: { before: "સૌ આવે તે પહેલાં હાથે દોરાય ", accent: "છે", after: "." },
+  },
+  {
+    id: "aarti", n: "૦૪", eyebrow: "મધ્યમાં આરતી",
+    before: "", accent: "આરતીની", after: " ક્ષણ.",
+    video: a("/assets/scenes/aarti.mp4"), poster: a("/assets/scenes/aarti.webp"),
+    side: "left", focal: "50% 40%",
+    interlude: { before: "આખું મેદાન ", accent: "સ્થિર", after: " થઈ જાય છે." },
+  },
+  {
+    id: "dawn", n: "૦૫", eyebrow: "પરોઢ",
+    before: "", accent: "સૂરજ", after: " પાછો આવે ત્યાં સુધી.",
+    video: a("/assets/scenes/dawn.mp4"), poster: a("/assets/scenes/dawn.webp"),
+    side: "right", focal: "42% 58%",
+  },
 ];

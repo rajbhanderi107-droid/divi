@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 import { chapters, type Chapter } from "./content";
 import { gsap, useGSAP } from "./hooks";
 
-// The five chapters. Each is a 230svh scroll that pins one full-bleed film: the film fades up, drifts
-// and settles while the Gujarati numeral, eyebrow and heading rise over it, then the whole frame fades
-// out as the next chapter takes the pin. Only the film on screen is decoded and playing.
+// The five chapters. Each is a 230svh scroll that pins one full-bleed film: the film fades up, drifts and
+// settles while the Gujarati numeral, eyebrow and heading rise over it, then the frame fades out as the next
+// chapter takes the pin. Four of them are followed by a single line held alone on the dark, which gives the
+// eye somewhere to rest between films. Only the chapter on screen is decoded and playing.
 
 const align = {
   left: "items-start text-left mr-auto",
@@ -17,30 +18,69 @@ const VIGNETTE =
   "radial-gradient(64% 52% at 50% 74%, rgba(7,5,4,0.86) 0%, rgba(7,5,4,0.48) 52%, rgba(7,5,4,0.22) 100%)";
 const FOOT = "linear-gradient(180deg, rgba(7,5,4,0) 0%, rgba(7,5,4,0.85) 100%)";
 
+/** The gold word falls at the start of the line as often as the end, so all three parts are rendered. */
+function Split({ before, accent, after }: { before: string; accent: string; after: string }) {
+  return (
+    <>
+      {before}
+      <em className="font-normal text-mukut not-italic">{accent}</em>
+      {after}
+    </>
+  );
+}
+
+function Interlude({ line }: { line: NonNullable<Chapter["interlude"]> }) {
+  const root = useRef<HTMLDivElement>(null);
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        root.current!.querySelector("p"),
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: root.current, start: "top 78%" } },
+      );
+    },
+    { scope: root },
+  );
+  return (
+    <div ref={root} className="relative flex min-h-[52svh] items-center justify-center px-6 py-24 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
+      <p lang="gu" className="display-gu max-w-3xl text-center text-[clamp(1.2rem,2.6vw,2.1rem)] font-medium text-ivory/75">
+        <Split {...line} />
+      </p>
+    </div>
+  );
+}
+
 function ChapterScene({ chapter }: { chapter: Chapter }) {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
   // Decode and play only while the chapter is on screen. Five films left running at once is what makes a
-  // phone drop frames, so everything off screen is paused and rewound.
+  // phone drop frames, so everything off screen is paused. If a browser refuses to start a muted film
+  // without a gesture, the poster holds the frame and the first tap or key starts it.
   useEffect(() => {
     const el = root.current;
     const film = video.current;
     if (!el || !film || typeof IntersectionObserver === "undefined") return;
+    let onScreen = false;
+    const tryPlay = () => {
+      if (onScreen) film.play().catch(() => {});
+    };
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          film.play().catch(() => {
-            /* autoplay refused: the poster carries the frame */
-          });
-        } else {
-          film.pause();
-        }
+        onScreen = entry.isIntersecting;
+        if (onScreen) tryPlay();
+        else film.pause();
       },
       { rootMargin: "25%" },
     );
     io.observe(el);
-    return () => io.disconnect();
+    document.addEventListener("pointerdown", tryPlay);
+    document.addEventListener("keydown", tryPlay);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("pointerdown", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
+    };
   }, []);
 
   useGSAP(
@@ -53,25 +93,20 @@ function ChapterScene({ chapter }: { chapter: Chapter }) {
       gsap.set(frame, { opacity: 0 });
       gsap.set(lines, { opacity: 0, yPercent: 55 });
 
-      // Fade the frame up as the chapter takes the pin and back out as it leaves, so two films never
-      // sit on top of each other at full strength.
+      // Fade the frame up as the chapter takes the pin and back out as it leaves, so two films never sit on
+      // top of each other at full strength. One timeline owns the property across the whole pin — two
+      // scrubbed tweens on the same property fight over who captured the start value.
       gsap
-        .timeline({ scrollTrigger: { trigger: root.current, start: "top bottom", end: "top top", scrub: true } })
-        .to(frame, { opacity: 1, ease: "none" });
-      gsap
-        .timeline({ scrollTrigger: { trigger: root.current, start: "bottom bottom", end: "bottom top", scrub: true } })
-        .to(frame, { opacity: 0, ease: "none" });
+        .timeline({ scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true } })
+        .fromTo(frame, { opacity: 0 }, { opacity: 1, duration: 1, ease: "none" })
+        .to(frame, { opacity: 1, duration: 2, ease: "none" })
+        .to(frame, { opacity: 0, duration: 1, ease: "none" });
 
       // A slow drift across the whole pin: the film eases from slightly over-scaled and high to settled.
       gsap.fromTo(
         plate,
         { yPercent: -5, scale: 1.1 },
-        {
-          yPercent: 4,
-          scale: 1.02,
-          ease: "none",
-          scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true },
-        },
+        { yPercent: 4, scale: 1.02, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true } },
       );
 
       // The type arrives once the chapter is actually held, not while it is still sliding in.
@@ -88,7 +123,7 @@ function ChapterScene({ chapter }: { chapter: Chapter }) {
   );
 
   return (
-    <section ref={root} id={chapter.id} className="relative h-[230svh]" style={{ zIndex: "var(--z-content)" }} aria-label={`${chapter.eyebrow} — ${chapter.heading} ${chapter.accent ?? ""}`.trim()}>
+    <section ref={root} id={chapter.id} className="relative h-[230svh]" style={{ zIndex: "var(--z-content)" }} aria-label={`${chapter.eyebrow} — ${chapter.before}${chapter.accent}${chapter.after}`}>
       <div className="sticky top-0 h-svh w-full overflow-hidden bg-obsidian">
         <div data-frame className="absolute inset-0">
           <div data-plate className="absolute inset-[-7%] will-change-transform">
@@ -118,8 +153,7 @@ function ChapterScene({ chapter }: { chapter: Chapter }) {
               {chapter.eyebrow}
             </span>
             <h2 data-line lang="gu" className="display-gu text-[clamp(2rem,5.4vw,4.6rem)] text-ivory [text-shadow:0_12px_50px_rgba(0,0,0,0.7)]">
-              {chapter.heading}{" "}
-              {chapter.accent && <em className="font-normal text-mukut not-italic">{chapter.accent}</em>}
+              <Split before={chapter.before} accent={chapter.accent} after={chapter.after} />
             </h2>
           </div>
         </div>
@@ -132,7 +166,10 @@ export function Chapters() {
   return (
     <>
       {chapters.map((chapter) => (
-        <ChapterScene key={chapter.id} chapter={chapter} />
+        <div key={chapter.id}>
+          <ChapterScene chapter={chapter} />
+          {chapter.interlude && <Interlude line={chapter.interlude} />}
+        </div>
       ))}
     </>
   );

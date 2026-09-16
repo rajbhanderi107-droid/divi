@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { nights, site, type Shot } from "./content";
+import { figures, nights, site, type Shot } from "./content";
 import { gsap, useGSAP, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
-import { Backdrop } from "./shell";
+import { Backdrop, Figure } from "./shell";
 import { lockScroll } from "@/lib/scroll";
 import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
@@ -220,8 +220,9 @@ function FadeUp({ children, className }: { children: React.ReactNode; className?
 
 export function Details() {
   return (
-    <section id="details" className="relative overflow-hidden px-5 py-20 sm:px-10 sm:py-24" aria-label="The details">
+    <section id="details" className="relative overflow-hidden px-5 py-28 sm:px-10 sm:py-36" aria-label="The details">
       <Backdrop />
+      <Figure src={figures.diyaLotus} at="top-[6%] right-[2%] h-[min(58vw,380px)] w-[min(58vw,380px)] opacity-75" glow={0.24} />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="top-1/2 left-1/2 w-[min(120vw,860px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" seconds={180} reverse />
       </div>
@@ -253,8 +254,9 @@ export function Details() {
 
 export function Venue() {
   return (
-    <section id="venue" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-16 lg:py-14" aria-label="Location">
+    <section id="venue" className="relative overflow-hidden px-5 py-24 sm:px-10 sm:py-28" aria-label="Location">
       <Backdrop />
+      <Figure src={figures.dholToran} at="-bottom-[6%] left-[1%] h-[min(62vw,420px)] w-[min(62vw,420px)] opacity-70" glow={0.153} />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="-top-[18%] -left-[12%] w-[min(70vw,520px)] opacity-[0.16]" seconds={200} />
       </div>

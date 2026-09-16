@@ -189,6 +189,35 @@ export function Backdrop({ scrim = "rgba(7,5,4,0.55)" }: { scrim?: string }) {
   );
 }
 
+/**
+ * A painted figure — the garbo, the diya lotus, the dhol toran — set into a section's geometry layer with
+ * its own warm bloom behind it. Decorative only, so it is hidden from assistive tech and never hit-tested.
+ */
+export function Figure({ src, at, glow = 0.19, className = "" }: { src: string; at: string; glow?: number; className?: string }) {
+  const root = useRef<HTMLDivElement>(null);
+  useGSAP(
+    () => {
+      // The figure drifts against the scroll, a little slower than the page, so it sits behind the content
+      // rather than travelling with it.
+      gsap.fromTo(
+        root.current,
+        { yPercent: 20 },
+        { yPercent: -12, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: 1 } },
+      );
+    },
+    { scope: root },
+  );
+  return (
+    <div ref={root} aria-hidden className={`pointer-events-none absolute will-change-transform ${at} ${className}`} style={{ zIndex: "var(--z-geometry)" }}>
+      <div
+        className="absolute inset-[-14%] rounded-full will-change-transform"
+        style={{ background: `radial-gradient(circle, rgba(240,193,75,${glow}) 0%, rgba(143,23,18,${(glow * 0.58).toFixed(3)}) 45%, transparent 70%)` }}
+      />
+      <img src={src} alt="" loading="lazy" decoding="async" className="relative h-full w-full object-contain" />
+    </div>
+  );
+}
+
 function Instagram({ size = 24, strokeWidth = 2, ...rest }: React.SVGProps<SVGSVGElement> & { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...rest}>
