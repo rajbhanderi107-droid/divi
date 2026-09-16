@@ -1,114 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { nights, scenes, site, type Shot } from "./content";
-import { gsap, useGSAP, useIsMobile, useReducedMotion } from "./hooks";
+import { nights, site, type Shot } from "./content";
+import { gsap, useGSAP, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
-import { Backdrop } from "./shell";
+import { Backdrop, lockScroll } from "./shell";
 import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
 
 const cx = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(" ");
-
-// ---------------------------------------------------------------- the ritual: five photographs that cross-fade on scroll
-
-const sideClass = { left: "left-[6vw] sm:left-[8vw] items-start text-left", right: "right-[6vw] sm:right-[8vw] items-end text-right" };
-const alignClass = { start: "top-[22%]", center: "top-1/2 -translate-y-1/2", end: "bottom-[22%]" };
-
-export function Ritual() {
-  const root = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const mobile = useIsMobile();
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      scenes.forEach((scene, i) => {
-        const copy = q(`[data-scene="${scene.id}"]`);
-        const photo = q(`[data-photo="${scene.id}"]`);
-        const first = i === 0;
-        if (first) gsap.set(photo, { opacity: 1 });
-        if (reduced) {
-          gsap.set(copy, { opacity: 1, y: 0 });
-          gsap.set(photo, { opacity: 1 });
-          return;
-        }
-        gsap
-          .timeline({ scrollTrigger: { trigger: root.current, start: `${scene.from * 100}% top`, end: `${scene.to * 100}% top`, scrub: 1 } })
-          .fromTo(copy, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-          .to(copy, { duration: 1.4 })
-          .to(copy, { opacity: 0, y: -34, duration: 1, ease: "power2.in" });
-        gsap
-          .timeline({ scrollTrigger: { trigger: root.current, start: `${Math.max(0, scene.from - 0.05) * 100}% top`, end: `${Math.min(1, scene.to + 0.05) * 100}% top`, scrub: 1 } })
-          .fromTo(photo, { opacity: first ? 1 : 0, scale: 1.06 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
-          .to(photo, { scale: 1, duration: 3.4, ease: "none" }, 0)
-          .to(photo, { opacity: 0, duration: 0.5, ease: "power2.in" }, 2.9);
-      });
-      if (!reduced) gsap.fromTo(q("[data-outro]"), { opacity: 0 }, { opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "88% top", end: "bottom bottom", scrub: true } });
-    },
-    { scope: root, dependencies: [reduced] },
-  );
-
-  // Decode the five photographs ahead of time (off the main thread) as the section approaches, so the cross-fades never
-  // wait on a large image decode mid-scroll.
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        el.querySelectorAll("img").forEach((img) => void img.decode?.().catch(() => {}));
-      },
-      { rootMargin: "150% 0px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [mobile]);
-
-  // Reduced motion: no pinned cross-fade (the stacked captions would overlap), just the five photographs in sequence.
-  if (reduced)
-    return (
-      <section ref={root} id="film" className="relative bg-obsidian" aria-label="Divi Garba — the ritual">
-        {scenes.map((s) => (
-          <div key={s.id} className="relative flex min-h-[80svh] w-full overflow-hidden">
-            <picture className="contents">
-              <source srcSet={(mobile ? s.image.fileMobile : s.image.file).replace(/\.jpg$/, ".webp")} type="image/webp" />
-              <img src={mobile ? s.image.fileMobile : s.image.file} alt={s.image.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.image.focal }} />
-            </picture>
-            <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(7,5,4,0.72) 0%, rgba(7,5,4,0.30) 40%, rgba(7,5,4,0.86) 100%)" }} />
-            <div className={cx("relative mx-auto flex w-full max-w-6xl flex-col justify-end px-[6vw] py-20", s.side === "right" ? "items-end text-right" : "items-start text-left")}>
-              <span className="text-[clamp(0.8rem,1.25vw,1.05rem)] tracking-[0.34em] text-antique uppercase">{s.eyebrow}</span>
-              <h2 className="display-type mt-5 max-w-[min(86vw,38rem)] text-[clamp(2.3rem,5.6vw,4.6rem)] leading-[1.03] text-ivory">{s.heading}</h2>
-              {s.body && <p className="mt-4 max-w-[40ch] text-base leading-relaxed text-ivory/75 sm:text-lg">{s.body}</p>}
-            </div>
-          </div>
-        ))}
-      </section>
-    );
-
-  return (
-    <section ref={root} id="film" className="relative" style={{ height: "520vh" }} aria-label="Divi Garba — the ritual">
-      <div className="sticky top-0 h-svh w-full overflow-hidden bg-obsidian">
-        {scenes.map((s) => (
-          <picture key={s.id} className="contents">
-            <source srcSet={(mobile ? s.image.fileMobile : s.image.file).replace(/\.jpg$/, ".webp")} type="image/webp" />
-            <img data-photo={s.id} src={mobile ? s.image.fileMobile : s.image.file} alt={s.image.alt} decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-0 will-change-[transform,opacity]" style={{ objectPosition: s.image.focal, zIndex: "var(--z-background)" }} />
-          </picture>
-        ))}
-        <div aria-hidden className="absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: "linear-gradient(180deg, rgba(7,5,4,0.78) 0%, rgba(7,5,4,0.30) 34%, rgba(7,5,4,0.86) 100%), radial-gradient(70% 55% at 50% 48%, rgba(216,100,30,0.16), transparent 72%)" }} />
-        {scenes.map((s) => (
-          <div key={s.id} data-scene={s.id} className={cx("absolute flex max-w-[min(86vw,38rem)] flex-col opacity-0", sideClass[s.side], alignClass[s.align])} style={{ zIndex: "var(--z-content)" }}>
-            <span className="text-[clamp(0.8rem,1.25vw,1.05rem)] tracking-[0.34em] text-antique uppercase">{s.eyebrow}</span>
-            <h2 className="display-type mt-5 text-[clamp(2.3rem,5.6vw,4.6rem)] leading-[1.03] text-ivory">{s.heading}</h2>
-            <p className="mt-4 max-w-[40ch] text-base leading-relaxed text-ivory/70 sm:text-lg">{s.body}</p>
-          </div>
-        ))}
-        <div data-outro aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-foreground)", background: "linear-gradient(180deg, rgba(26,11,13,0.6), var(--color-obsidian) 78%)" }} />
-      </div>
-    </section>
-  );
-}
 
 // ---------------------------------------------------------------- the nights: a slow marquee of photographs with a lightbox
 
@@ -133,12 +33,11 @@ function Lightbox({ shot, onClose }: { shot: Shot; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close.current();
     document.addEventListener("keydown", onKey);
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    lockScroll(true);
     document.body.classList.add("lightbox-open");
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = previous;
+      lockScroll(false);
       document.body.classList.remove("lightbox-open");
     };
   }, []);
@@ -179,56 +78,93 @@ function Lightbox({ shot, onClose }: { shot: Shot; onClose: () => void }) {
 
 export function Gallery() {
   const root = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const card = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState<Shot | null>(null);
+  const [radius, setRadius] = useState(260);
   const reduced = useReducedMotion();
+  const step = 360 / nights.length;
+
+  // The ring is a cylinder: each night sits at its own angle, pushed out by a radius derived from the real
+  // card width, so the faces meet edge to edge at any viewport without a gap or an overlap.
+  useEffect(() => {
+    const el = card.current;
+    if (!el) return;
+    const measure = () => {
+      const width = el.getBoundingClientRect().width;
+      if (width > 0) setRadius(Math.round(width / 2 / Math.tan(Math.PI / nights.length)));
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   useGSAP(
     () => {
-      if (reduced || !root.current) return;
-      gsap.from(root.current.querySelector("[data-row]"), { opacity: 0, y: 40, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: root.current, start: "top 74%" } });
-      gsap.from(root.current.querySelectorAll("[data-head] > *"), { opacity: 0, y: 22, duration: 0.9, stagger: 0.12, ease: "power3.out", scrollTrigger: { trigger: root.current, start: "top 82%" } });
-      gsap.to(root.current.querySelector("[data-ground]"), { opacity: 0.16, duration: 2, ease: "power2.out", scrollTrigger: { trigger: root.current, start: "top 80%" } });
+      const q = gsap.utils.selector(root);
+      gsap.fromTo(q("[data-head] > *"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: "power3.out", scrollTrigger: { trigger: root.current, start: "top 78%" } });
+      if (reduced) return;
+      // Scrolling the pinned section turns the ring one full revolution, so every night passes the front.
+      gsap.fromTo(
+        q("[data-ring]"),
+        { rotateY: 0 },
+        { rotateY: -360, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom bottom", scrub: 1 } },
+      );
     },
     { scope: root, dependencies: [reduced] },
   );
+
   return (
-    <section ref={root} id="gallery" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-20" aria-label="The nights">
-      {/* A large mandala turns slowly behind the nights (it fades in with the section). */}
-      <div data-ground aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-background)" }}>
-        <Mandala className="top-1/2 left-1/2 w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" seconds={220} />
-      </div>
-      <div aria-hidden className="bg-jaali jaali-fade pointer-events-none absolute inset-0 opacity-[0.08]" style={{ zIndex: "var(--z-background)" }} />
-      <MandalaArt className="top-1/2 -left-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.32] sm:-left-[16vw] sm:h-[36vw] sm:w-[36vw]" turn={140} strokeWidth={0.5} />
-      <MandalaArt variant="chakra" className="top-1/2 -right-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.32] sm:-right-[16vw] sm:h-[36vw] sm:w-[36vw]" turn={-140} reverse strokeWidth={0.5} />
-      <div className="relative mx-auto max-w-[1600px]" style={{ zIndex: "var(--z-content)" }}>
-        <div data-head className="mb-9 text-center">
+    <section ref={root} id="gallery" className="relative" style={{ height: "320vh" }} aria-label="The nights">
+      <div className="sticky top-0 flex h-svh w-full flex-col items-center justify-center overflow-hidden px-5">
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.16]" style={{ zIndex: "var(--z-background)" }}>
+          <Mandala className="top-1/2 left-1/2 w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" seconds={220} />
+        </div>
+        <MandalaArt className="top-1/2 -left-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.3] sm:-left-[16vw] sm:h-[36vw] sm:w-[36vw]" turn={140} strokeWidth={0.5} />
+        <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: "radial-gradient(75% 60% at 50% 50%, rgba(7,5,4,0.62) 0%, rgba(7,5,4,0.88) 100%)" }} />
+
+        <div data-head className="relative mb-6 text-center sm:mb-10" style={{ zIndex: "var(--z-content)" }}>
           <span className="label text-antique">The nights</span>
-          <h2 className="display-type mt-2 text-[clamp(1.6rem,3.4vw,2.4rem)] text-ivory">Ten nights, as they happen.</h2>
-          <div className="divider-carved mt-4">
+          <h2 className="display-type mt-2 text-[clamp(1.8rem,4vw,3rem)] text-ivory [text-shadow:0_6px_30px_rgba(0,0,0,0.6)]">Ten nights, as they happen.</h2>
+          <div className="divider-carved mx-auto mt-4 w-[min(80vw,420px)]">
             <Rosette />
           </div>
         </div>
-        <div data-row className="overflow-hidden">
-          <div className="flex w-max gap-4 will-change-transform sm:gap-6" style={reduced ? undefined : { animation: "marquee-left 91s linear infinite" }}>
-            {[...nights, ...nights].map((shot, i) => (
-              <button
-                key={`${shot.file}-${i}`}
-                type="button"
-                aria-label={`View ${shot.title}`}
-                tabIndex={i < nights.length ? undefined : -1}
-                onClick={() => setOpen(shot)}
-                className="frame-ancient frame-pips group relative h-[46svh] w-[70vw] shrink-0 overflow-hidden bg-maroon text-left sm:h-[58svh] sm:w-[30vw] md:w-[24vw]"
-              >
-                <Picture image={shot} className="scale-[1.08] transition-transform duration-700 ease-out group-hover:scale-100" />
-                <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(53,10,8,0.30), transparent 34%, rgba(7,5,4,0.90))" }} />
-                <span className="display-type absolute top-3 left-4 text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-mukut">{shot.n}</span>
-                <div className="absolute inset-x-4 bottom-4">
-                  <h3 className="display-type text-2xl text-ivory">{shot.title}</h3>
-                </div>
-              </button>
-            ))}
+
+        <div ref={stage} className="relative h-[50svh] w-full sm:h-[56svh]" style={{ zIndex: "var(--z-content)", perspective: "2200px" }}>
+          {/* Pull the cylinder back by its own radius so the front card sits on the screen plane. */}
+          <div className="absolute inset-0" style={{ transformStyle: "preserve-3d", transform: `translateZ(-${radius}px) rotateX(-6deg)` }}>
+            {/* A slow idle turn underneath the scroll-driven one, so the ring is never completely still. */}
+            <div className={cx("absolute inset-0", !reduced && "ring-drift")}>
+              <div data-ring className="absolute inset-0 will-change-transform" style={{ transformStyle: "preserve-3d" }}>
+                {nights.map((shot, i) => (
+                  <button
+                    key={shot.file}
+                    ref={i === 0 ? card : undefined}
+                    type="button"
+                    aria-label={`View ${shot.title}`}
+                    onClick={() => setOpen(shot)}
+                    className="frame-ancient frame-pips group absolute top-1/2 left-1/2 h-[42svh] w-[min(52vw,270px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-maroon text-left sm:h-[46svh] sm:w-[min(24vw,270px)]"
+                    style={{ transform: `rotateY(${i * step}deg) translateZ(${radius}px)`, backfaceVisibility: "hidden" }}
+                  >
+                    <Picture image={shot} className="scale-[1.08] transition-transform duration-700 ease-out group-hover:scale-100" />
+                    <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(53,10,8,0.30), transparent 34%, rgba(7,5,4,0.90))" }} />
+                    <span className="display-type absolute top-3 left-4 text-[clamp(1.5rem,2.6vw,2.2rem)] leading-none text-mukut">{shot.n}</span>
+                    <div className="absolute inset-x-4 bottom-4">
+                      <h3 className="display-type text-xl text-ivory">{shot.title}</h3>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        <p className="mt-4 text-center text-xs text-ivory/55">Click a night to view it full screen.</p>
+
+        <p className="relative mt-6 text-center text-xs text-ivory/60" style={{ zIndex: "var(--z-content)" }}>
+          Scroll to turn the circle · tap a night to view it full screen
+        </p>
       </div>
       {open && <Lightbox shot={open} onClose={() => setOpen(null)} />}
     </section>

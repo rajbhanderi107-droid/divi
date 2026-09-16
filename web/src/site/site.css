@@ -259,3 +259,65 @@ body.lightbox-open #buy-btn {
     linear-gradient(270deg, rgb(40 20 6 / 0.5), rgb(40 20 6 / 0.18) 3.5%, rgb(40 20 6 / 0.05) 9%, transparent 16%),
     linear-gradient(90deg, rgb(255 250 236 / 0.22), transparent 3%);
 }
+
+/* Gujarati display and label type. Anek Gujarati carries the whole string, so these do not inherit
+   display-type's Latin-only Sregs stack or its tight tracking — Gujarati matras need the line height. */
+.display-gu {
+  font-family: "Anek Gujarati", sans-serif;
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: 0;
+}
+.label-gu {
+  font-family: "Anek Gujarati", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+/* Chapter and closing-page motion. The gallery ring turns on its own axis; the rest are slow idles
+   layered under the GSAP work so nothing reads as a single looping tick. */
+@keyframes chakra-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ring-drift {
+  to {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes flame-sway {
+  0%, 100% {
+    transform: rotate(-3deg) scaleY(1);
+  }
+  30% {
+    transform: rotate(2.5deg) scaleY(1.06);
+  }
+  60% {
+    transform: rotate(-1.5deg) scaleY(0.96);
+  }
+}
+@keyframes toran-swing {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+.chakra-turn {
+  animation: chakra-turn 46s linear infinite;
+}
+.ring-drift {
+  transform-style: preserve-3d;
+  animation: ring-drift 150s linear infinite;
+}
+.flame-sway {
+  animation: flame-sway 2.3s ease-in-out infinite;
+}
+.toran-swing {
+  animation: toran-swing 3.4s ease-in-out infinite;
+}

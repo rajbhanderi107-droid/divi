@@ -3,16 +3,54 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { brand, media, site } from "./content";
 import { gsap, ScrollTrigger, useCoarsePointer, useGSAP, useIsMobile, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
-import { MandalaArt, Rosette } from "./mandala-art";
+import { MandalaArt } from "./mandala-art";
+import Lenis from "lenis";
 
-// Native scrolling, as on apple.com: no scroll hijacking or inertia layer, so the page follows the trackpad and finger
-// exactly and ScrollTrigger reads the real position. Triggers re-measure once fonts and images have loaded.
+// Smooth scrolling, carried back across from divigarba.vercel.app: Lenis eases the wheel so the page has
+// weight, which is what the pinned chapters and the turning ring are choreographed against. Touch is left
+// native — syncing it costs a frame on mid-range Android and gains nothing a finger can feel.
+//
+// Lenis drives ScrollTrigger rather than the other way round: GSAP's ticker steps Lenis, Lenis reports its
+// eased position to ScrollTrigger, so pins and scrubs read the same number the page is actually drawn at.
+let lenis: Lenis | null = null;
+
+/**
+ * Hold the page still while a full-screen layer is open (the loader, the lightbox). Locking `body` alone is
+ * not enough once Lenis owns the scroll — it keeps running against a frozen document and the page jumps back
+ * when the layer closes, so the instance has to be stopped too.
+ */
+export function lockScroll(locked: boolean) {
+  if (locked) lenis?.stop();
+  else lenis?.start();
+  document.body.style.overflow = locked ? "hidden" : "";
+}
+
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    const instance = new Lenis({ duration: 1.05, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.6 });
+    lenis = instance;
+
+    const onScroll = () => ScrollTrigger.update();
+    instance.on("scroll", onScroll);
+
+    const step = (time: number) => instance.raf(time * 1000);
+    gsap.ticker.add(step);
+    // ScrollTrigger and Lenis both want to own the frame; letting GSAP drop frames it thinks are late makes
+    // the eased position stutter, so lag smoothing goes off.
+    gsap.ticker.lagSmoothing(0);
+
     const refresh = () => ScrollTrigger.refresh();
     document.fonts?.ready.then(refresh);
     window.addEventListener("load", refresh);
-    return () => window.removeEventListener("load", refresh);
+
+    return () => {
+      window.removeEventListener("load", refresh);
+      gsap.ticker.remove(step);
+      gsap.ticker.lagSmoothing(500, 33);
+      instance.off("scroll", onScroll);
+      instance.destroy();
+      if (lenis === instance) lenis = null;
+    };
   }, []);
   return <>{children}</>;
 }
@@ -25,11 +63,8 @@ export function Loader({ onDone }: { onDone?: () => void }) {
 
   useEffect(() => {
     if (done) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
+    lockScroll(true);
+    return () => lockScroll(false);
   }, [done]);
 
   useGSAP(
@@ -208,7 +243,14 @@ function Instagram({ size = 24, strokeWidth = 2, ...rest }: React.SVGProps<SVGSV
   );
 }
 
+// The closing page. The ground opens into a mandala laid flat in perspective and lit from its centre, the
+// closing couplet rises out of its own mask, and the ways to reach Divi tilt up from the floor.
+const GROUND_GLOW =
+  "radial-gradient(circle, rgba(255,196,96,0.55) 0%, rgba(242,150,58,0.30) 26%, rgba(143,23,18,0.14) 52%, transparent 74%)";
+const FOOT_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.55) 0%, rgba(7,5,4,0.30) 42%, rgba(7,5,4,0.82) 100%)";
+
 export function Footer() {
+  const root = useRef<HTMLElement>(null);
   const contacts = [
     { Icon: Phone, label: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}` },
     { Icon: Mail, label: site.email, href: `mailto:${site.email}` },
@@ -216,34 +258,108 @@ export function Footer() {
     { Icon: MapPin, label: "Find your way", href: site.maps },
   ];
   const external = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noreferrer noopener" } : {});
+
+  useGSAP(
+    () => {
+      const q = gsap.utils.selector(root);
+      const start = "top 72%";
+
+      // The ground mandala rises and opens as the closing page arrives.
+      gsap.fromTo(
+        q("[data-ground]"),
+        { yPercent: 38, scale: 0.8, opacity: 0.35 },
+        { yPercent: 22, scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom bottom", scrub: 1 } },
+      );
+
+      // Each couplet line lifts out of its own overflow mask.
+      gsap.fromTo(
+        q("[data-couplet]"),
+        { yPercent: 108, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1.5, stagger: 0.12, ease: "power4.out", scrollTrigger: { trigger: root.current, start } },
+      );
+      gsap.fromTo(
+        q("[data-rise]"),
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", scrollTrigger: { trigger: root.current, start } },
+      );
+      // The contact cards tip up from the floor rather than simply fading in.
+      gsap.fromTo(
+        q("[data-card]"),
+        { y: 60, rotateX: -34, opacity: 0 },
+        { y: 0, rotateX: 0, opacity: 1, duration: 1.1, stagger: 0.09, ease: "power3.out", scrollTrigger: { trigger: q("[data-cards]")[0], start: "top 88%" } },
+      );
+    },
+    { scope: root },
+  );
+
   return (
-    <footer id="footer" className="relative overflow-hidden px-5 pt-10 pb-10 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
-      <Backdrop />
-      <div aria-hidden className="bg-jaali jaali-fade pointer-events-none absolute inset-0 opacity-[0.06]" style={{ zIndex: "var(--z-atmosphere)" }} />
-      <MandalaArt className="-bottom-[min(62vw,520px)] left-1/2 h-[min(124vw,1040px)] w-[min(124vw,1040px)] -translate-x-1/2 text-antique opacity-[0.24]" turn={70} />
-      <div className="divider-carved relative mb-10" style={{ zIndex: "var(--z-content)" }}>
-        <Rosette />
+    <footer ref={root} id="footer" className="relative flex min-h-[115svh] flex-col justify-end overflow-hidden px-5 pt-40 pb-10 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
+      <picture aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-background)" }}>
+        <source media="(min-width: 640px)" srcSet={media.heroBg.webp} type="image/webp" />
+        <source media="(min-width: 640px)" srcSet={media.heroBg.file} />
+        <source srcSet={media.heroBg.webpMobile} type="image/webp" />
+        <img src={media.heroBg.fileMobile} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+      </picture>
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: "rgba(7,5,4,0.55)" }} />
+
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)", perspective: "1200px" }}>
+        <div data-ground className="absolute bottom-[-42%] left-1/2 aspect-square w-[min(170vw,1400px)] -translate-x-1/2 origin-bottom" style={{ transform: "translate(-50%, 38%) rotateX(50deg)" }}>
+          <div className="absolute inset-0 rounded-full" style={{ background: GROUND_GLOW }} />
+          <MandalaArt className="inset-[10%] opacity-70" spin={200} strokeWidth={0.36} />
+          <MandalaArt variant="chakra" className="inset-[26%] opacity-60" spin={130} reverse strokeWidth={0.44} />
+        </div>
       </div>
-      <div className="relative mx-auto max-w-5xl" style={{ zIndex: "var(--z-content)" }}>
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: FOOT_SCRIM }} />
+
+      <div className="relative mx-auto w-full max-w-416" style={{ zIndex: "var(--z-content)" }}>
+        <p data-rise className="label text-antique">
+          <span lang="gu">પરોઢ</span> · Dawn
+        </p>
+        <h2 className="display-type mt-4 text-[clamp(2.8rem,9vw,8.6rem)] leading-[0.95] text-ivory [text-shadow:0_10px_50px_rgba(0,0,0,0.55)]" style={{ perspective: "1000px" }}>
+          {["The Chakra turns", "until the sun returns."].map((line) => (
+            <span key={line} className="block overflow-hidden pb-[0.1em]">
+              <span data-couplet className="block will-change-transform" style={{ transformOrigin: "50% 100%" }}>
+                {line}
+              </span>
+            </span>
+          ))}
+        </h2>
+
+        <div data-rise className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-2 text-lg text-ivory/85">
+          <span className="text-mukut">{site.dates}</span>
+          <span>{site.location}</span>
+        </div>
+
+        <div data-rise className="mt-8 flex flex-wrap gap-3">
+          <button type="button" data-cursor="cta" onClick={() => document.getElementById("buy-btn")?.click()} className="cta-label min-h-12 cursor-pointer rounded-full border border-mukut bg-mukut px-7 py-3 text-obsidian transition-colors duration-500 hover:border-gold hover:bg-gold">
+            Book ticket
+          </button>
+          <a href={site.maps} target="_blank" rel="noreferrer noopener" className="cta-label inline-flex min-h-12 items-center rounded-full border border-ivory/35 bg-obsidian/40 px-7 py-3 text-ivory transition-colors duration-500 hover:border-mukut hover:text-mukut">
+            Get directions
+          </a>
+        </div>
+
+        <div aria-hidden className="mt-16 h-px bg-[linear-gradient(90deg,transparent,rgba(201,162,74,0.55),transparent)]" />
+
+        <ul data-cards className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" style={{ perspective: "900px" }}>
           {contacts.map(({ Icon, label, href }) => (
-            <li key={label} className="frame-ancient bg-maroon/25">
-              <a href={href} {...external(href)} className="flex flex-col items-center gap-2 px-4 py-5 text-ivory/60 transition-colors hover:text-ivory">
-                <Icon size={16} strokeWidth={1.2} className="text-antique" aria-hidden />
+            <li key={label} data-card className="origin-bottom will-change-transform">
+              <a href={href} {...external(href)} className="flex min-h-14 items-center gap-3 rounded-2xl border border-antique/25 bg-obsidian/65 px-5 py-4 text-ivory/80 transition-colors hover:border-mukut hover:text-ivory">
+                <Icon size={18} strokeWidth={1.4} className="shrink-0 text-mukut" aria-hidden />
                 <span className="text-sm">{label}</span>
               </a>
             </li>
           ))}
         </ul>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a href={site.terms} className="label inline-flex min-h-11 items-center rounded-full border border-antique/20 px-4 py-2 text-ivory/60 transition-colors hover:border-antique/50 hover:text-ivory">
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 text-center text-sm text-ivory/65 sm:flex-row sm:text-left">
+          <p>
+            {site.brandLine} organised by <span className="text-mukut">{site.organiserName}</span>. All photographs and content owned by {site.brandLine}.
+          </p>
+          <a href={site.terms} className="label inline-flex min-h-11 items-center rounded-full border border-antique/25 px-4 py-2 text-ivory/70 transition-colors hover:border-antique/60 hover:text-ivory">
             T&amp;Cs
           </a>
         </div>
-        <p className="mt-8 text-center text-sm text-ivory/70">
-          {site.brandLine.split(" ").slice(0, 2).join(" ")} organised by <span className="text-mukut">{site.organiserName}</span>.
-        </p>
-        <p className="mt-3 text-center text-sm text-ivory/70">All photographs and content owned by {site.brandLine}.</p>
       </div>
     </footer>
   );
