@@ -163,8 +163,12 @@ function Flipbook() {
     <div className="mx-auto flex w-full max-w-[min(90vh,700px)] flex-col pb-8 sm:pb-3 lg:max-w-[calc(150vh-320px)]" onPointerEnter={finePointer ? () => setHovering(true) : undefined} onPointerLeave={finePointer ? () => setHovering(false) : undefined}>
       {/* Size containment keeps the frame at its aspect ratio while the page-flip library measures and lays out its pages
           (without it the frame briefly grows and shifts the hero). */}
-      <div ref={frame} onClick={onClick} className="aspect-3/4 w-full shrink-0 cursor-pointer [contain:size] min-[600px]:aspect-3/2">
+      <div ref={frame} onClick={onClick} className={`aspect-3/4 w-full shrink-0 cursor-pointer transition-transform duration-500 ease-out [contain:size] min-[600px]:aspect-3/2 ${page === 0 ? "lg:-translate-x-1/4" : page >= last ? "lg:translate-x-1/4" : ""}`}>
+        {/* react-pageflip moves its pages around the DOM itself. Reconciling a changed child list over that
+            throws NotFoundError from insertBefore and unmounts the whole app, so crossing the 600px layout
+            breakpoint remounts the book instead of re-rendering it in place. */}
         <FlipBook
+          key={wide ? "spread" : "single"}
           ref={book}
           width={900}
           height={1200}
@@ -189,7 +193,7 @@ function Flipbook() {
           disableFlipByClick={false}
           style={{}}
           onFlip={(e: { data: number }) => setPage(e.data)}
-          className={`mx-auto transition-transform duration-500 ease-out ${page === 0 ? "lg:-translate-x-1/4" : page >= last ? "lg:translate-x-1/4" : ""}`}
+          className="mx-auto"
         >
           {pages.map((p, i) => {
             if (p.kind === "cover")

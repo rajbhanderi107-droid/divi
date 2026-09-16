@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useHashRoute } from "@/site/hooks";
 import { Chapters } from "@/site/chapters";
 import { Darshan } from "@/site/darshan";
@@ -15,18 +14,17 @@ const pages: Record<string, () => React.ReactElement> = { terms: Terms, "privacy
 
 export default function App() {
   const route = useHashRoute();
-  const [ready, setReady] = useState(false);
   const Page = pages[route];
   if (Page) return <Page />;
   return (
     <SmoothScroll>
-      <Loader onDone={() => setReady(true)} />
+      <Loader />
       <Atmosphere />
       <Cursor />
       <Grain />
       <Header />
       <main id="top" className="relative" style={{ zIndex: "var(--z-content)" }}>
-        <Opening start={ready} />
+        <Opening />
         <Darshan />
         <Album />
         <Chapters />

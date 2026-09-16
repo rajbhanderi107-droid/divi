@@ -7,12 +7,16 @@ import { gsap, useGSAP } from "./hooks";
 // size, and the title rises one grapheme cluster at a time out of its own mask — Gujarati matras sit above
 // and below the baseline, so the mask is padded rather than clipped tight.
 
+// The wide scrim assumes the copy sits left of the photograph. On a phone the copy is full-width, so the
+// same gradient compresses to 0.94 black across the whole frame and buries the canopy of lights; narrow
+// viewports get a vertical scrim instead, dark only where the type actually sits.
 const SIDE_SCRIM = "linear-gradient(90deg, rgba(7,5,4,0.94) 0%, rgba(7,5,4,0.72) 38%, rgba(7,5,4,0.30) 72%, rgba(7,5,4,0.20) 100%)";
+const PHONE_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.55) 0%, rgba(7,5,4,0.20) 34%, rgba(7,5,4,0.72) 76%, rgba(7,5,4,0.94) 100%)";
 const TOP_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.72) 0%, rgba(7,5,4,0) 26%, rgba(7,5,4,0.55) 74%, rgba(7,5,4,0.92) 100%)";
 
 const factIcons = [Calendar, MapPin, Clock];
 
-export function Opening({ start = true }: { start?: boolean }) {
+export function Opening() {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -21,17 +25,14 @@ export function Opening({ start = true }: { start?: boolean }) {
       const clusters = q("[data-cluster]");
       const rise = q("[data-rise]");
 
-      gsap.set(clusters, { yPercent: 115, opacity: 0 });
-      gsap.set(rise, { y: 34, opacity: 0 });
-      gsap.set(q("[data-plate]"), { scale: 1.08 });
-
-      if (start) {
-        gsap
-          .timeline({ defaults: { ease: "power3.out" } })
-          .to(q("[data-plate]"), { scale: 1, duration: 2.6, ease: "power2.out" }, 0)
-          .to(clusters, { yPercent: 0, opacity: 1, duration: 1.3, stagger: 0.07 }, 0.25)
-          .to(rise, { y: 0, opacity: 1, duration: 1, stagger: 0.09 }, 0.7);
-      }
+      // The entrance runs on mount and FROM the offset state, so the resting DOM is the visible one. It is
+      // deliberately not gated on the loader: the loader covers this section opaquely while it plays, and
+      // gating the timeline on a prop that flips after mount left the copy stuck invisible on a phone.
+      gsap
+        .timeline({ defaults: { ease: "power3.out" }, delay: 0.85 })
+        .from(q("[data-plate]"), { scale: 1.08, duration: 2.6, ease: "power2.out" }, 0)
+        .from(clusters, { yPercent: 115, opacity: 0, duration: 1.3, stagger: 0.07 }, 0.25)
+        .from(rise, { y: 34, opacity: 0, duration: 1, stagger: 0.09 }, 0.7);
 
       // Leaving the opening, the lights sink slower than the page and the words lift off them.
       gsap.to(q("[data-plate]"), {
@@ -46,15 +47,16 @@ export function Opening({ start = true }: { start?: boolean }) {
         scrollTrigger: { trigger: root.current, start: "25% top", end: "bottom top", scrub: true },
       });
     },
-    { scope: root, dependencies: [start] },
+    { scope: root },
   );
 
   return (
     <section ref={root} className="relative h-svh overflow-hidden bg-obsidian" style={{ zIndex: "var(--z-content)" }} aria-label={`${site.name} — ${opening.titlePlain}`}>
       <div data-plate className="absolute inset-0 will-change-transform">
         <img src={opening.backdrop} alt="" fetchPriority="high" decoding="async" className="h-full w-full object-cover" style={{ objectPosition: opening.focal }} />
-        <div aria-hidden className="absolute inset-0" style={{ background: SIDE_SCRIM }} />
-        <div aria-hidden className="absolute inset-0" style={{ background: TOP_SCRIM }} />
+        <div aria-hidden className="absolute inset-0 hidden sm:block" style={{ background: SIDE_SCRIM }} />
+        <div aria-hidden className="absolute inset-0 sm:hidden" style={{ background: PHONE_SCRIM }} />
+        <div aria-hidden className="absolute inset-0 hidden sm:block" style={{ background: TOP_SCRIM }} />
       </div>
 
       <div data-copy className="relative mx-auto flex h-full w-full max-w-416 flex-col justify-end px-5 pb-[9svh] sm:px-10" style={{ zIndex: "var(--z-content)" }}>
