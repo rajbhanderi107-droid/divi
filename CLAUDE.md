@@ -38,7 +38,7 @@ Add both, or the image disappears.
 
 ## Two files named content.ts
 
-- `web/src/site/content.ts` — event details, media paths, `nights`, `scenes`. **This is the one you usually want.**
+- `web/src/site/content.ts` — event details, media paths, `opening`, `chapters`, `nights`, `loops`, `figures`. **This is the one you usually want.**
 - `web/src/content.ts` — venue-map data only (route, landmarks), consumed by `components/venue-map.tsx`.
 
 Event facts (dates, venue, phone, gate times) live in the first one and are
@@ -95,9 +95,20 @@ fails the build rather than shipping.
 
 ## Deploy
 
-Publish the contents of `web/build` to the `gh-pages` branch. `.nojekyll` is
-**not** produced by the build — add it yourself, or GitHub Pages drops
-`_`-prefixed files.
+```
+./scripts/deploy.sh          # build and stage locally, push nothing
+./scripts/deploy.sh --push   # publish to gh-pages
+```
+
+The script refuses to run on a dirty tree, stamps each deploy commit with the
+source branch and SHA, adds `.nojekyll` (the build does not emit it, and
+without it Pages drops `_`-prefixed paths), replaces the published tree
+wholesale, and prints the previous gh-pages SHA as a rollback command.
+
+**Always commit and push the source before deploying.** The site that was live
+on 2026-09-16 was built from a working copy that was never committed: only the
+minified bundle survived, and its source had to be reconstructed from the
+deployed DOM. `gh-pages` holds build output only — it is not a backup.
 
 `.openai/hosting.json` still points `static.directory` at `dist/`, a directory
 removed on 2026-09-15. It is stale; it does not affect the GitHub Pages deploy.
