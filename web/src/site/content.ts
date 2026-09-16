@@ -39,16 +39,16 @@ export const media = {
 export type Shot = Media & { n: string; title: string; line?: string; focal?: string };
 
 export const nights: Shot[] = [
-  ["01", "the-invitation", "The Invitation"],
-  ["02", "dhol-comes-first", "Dhol Comes First"],
-  ["03", "the-turn", "The Turn"],
-  ["04", "the-step", "The Step"],
-  ["05", "the-circle", "The Circle"],
-  ["06", "the-center", "The Center"],
-  ["07", "aajrakh", "Aajrakh"],
-  ["08", "blurr", "Blurr"],
-  ["09", "rny00498", "The Ground"],
-].map(([n, slug, title]) => ({ n, file: a(`/assets/gallery/${slug}.jpg`), title, alt: `${title} — Divi Garba` }));
+  ["૦૧", "the-invitation", "આમંત્રણ"],
+  ["૦૨", "dhol-comes-first", "પહેલાં ઢોલ"],
+  ["૦૩", "the-turn", "ઘૂમર"],
+  ["૦૪", "the-step", "પગલું"],
+  ["૦૫", "the-circle", "વર્તુળ"],
+  ["૦૬", "the-center", "માંડવી"],
+  ["૦૭", "aajrakh", "અજરખ"],
+  ["૦૮", "blurr", "ઘૂમતું"],
+  ["૦૯", "rny00498", "મેદાન"],
+].map(([n, slug, title]) => ({ n, file: a(`/assets/gallery/${slug}.jpg`), title, alt: `${title} — દિવી ગરબા` }));
 
 export const installations: Media[] = [
   ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ file: a(`/assets/installations/installation-${n}.jpg`), alt: `Divi Garba installation ${n}` })),
@@ -57,30 +57,34 @@ export const installations: Media[] = [
   { file: a("/assets/installations/moment-circle-aerial.jpg"), alt: "The Divi Garba ground from above, red fabric strips radiating from the centre of the circle" },
 ];
 
-// ---------------------------------------------------------------- the opening page
-// The head page, in Gujarati. Copy is the organiser's and is reproduced verbatim.
+// ---------------------------------------------------------------- the ritual scroll
+// Five photographs of the ground that cross-fade under one pinned frame, carried over from the approved
+// divigarba.vercel.app design. Real photography, the organiser's copy, in English as it was written.
 
-export const opening = {
-  backdrop: a("/assets/scenes/lighting.webp"),
-  // The backdrop crop is set in opening.tsx rather than here: it differs between a phone and a wide screen,
-  // which is a layout concern rather than content.
-  eyebrow: "નવરાત્રિ ૨૦૨૬ · અમદાવાદ",
-  /** The title, split into grapheme clusters so each can rise on its own. */
-  title: ["સાં", "જ", "થી", " ", "પ", "રો", "ઢ"],
-  titlePlain: "સાંજથી પરોઢ",
-  line: "માસ્ટર ફાર્મ ખાતે દસ રાતનો ગરબો — સાંજથી પરોઢ સુધી ફરતું એક વર્તુળ.",
-  book: "ટિકિટ બુક કરો",
-  enter: "વર્તુળમાં પ્રવેશો",
-  facts: [
-    { head: "૧૧ — ૨૦ ઓક્ટોબર ૨૦૨૬", sub: "દસ રાત" },
-    { head: "માસ્ટર ફાર્મ", sub: "વૈષ્ણોદેવી સર્કલ" },
-    { head: "રાત્રે ૮:૦૦ થી", sub: "છેલ્લો પ્રવેશ ૨:૦૦" },
-  ],
+export type Scene = {
+  id: string;
+  /** Where in the pinned scroll this scene starts and ends, 0-1. */
+  from: number;
+  to: number;
+  side: "left" | "right";
+  align: "start" | "center" | "end";
+  eyebrow: string;
+  heading: string;
+  body: string;
+  image: { file: string; fileMobile: string; alt: string; focal: string };
 };
 
-// ---------------------------------------------------------------- the five chapters
-// Each chapter is a full-bleed film that plays while its section is pinned. The heading is split so the
-// gold word can fall at the start or the end of the line, which it does in both places.
+export const scenes: Scene[] = [
+  { id: "opening", from: 0.02, to: 0.19, side: "left", align: "start", eyebrow: "દિવી ગરબા ૨૦૨૬", heading: "આપણી દિવી ઝળહળે", body: "જ્યાં પરંપરા જીવંત થાય છે.", image: { file: a("/assets/img-1.jpg"), fileMobile: a("/assets/img1-mobile.jpg"), alt: "સાંજના અજવાળે, ફૂલોથી ઘેરાયેલી માંડવી નીચે શણગારેલો ચંદરવો", focal: "center 40%" } },
+  { id: "dhol", from: 0.22, to: 0.39, side: "right", align: "center", eyebrow: "આમંત્રણ", heading: "ઢોલનો પહેલો તાલ", body: "તાલ બોલાવે છે અને પગ તાલે ચાલે છે.", image: { file: a("/assets/scene-invitation.jpg"), fileMobile: a("/assets/scene-invitation.jpg"), alt: "માંડવીની આસપાસ ઢોલ અને શરણાઈ વાગે છે, પાછળ મેદાન ભરાય છે", focal: "center 46%" } },
+  { id: "circle", from: 0.41, to: 0.58, side: "left", align: "end", eyebrow: "વર્તુળ", heading: "એક ડગલું. એક વર્તુળ. એક ઊર્જા.", body: "દસ રાત, એની આસપાસ ફરતું.", image: { file: a("/assets/scene-circle.jpg"), fileMobile: a("/assets/scene-circle.jpg"), alt: "મેદાનની વચ્ચે ફૂલોથી ઘેરાયેલી માંડવી, ઉપર ચંદરવો", focal: "center 45%" } },
+  { id: "ground", from: 0.61, to: 0.78, side: "right", align: "center", eyebrow: "એક દિશા", heading: "તાલ", body: "હજારો લોકોને એક સાથે દોરે છે.", image: { file: a("/assets/img-4.jpg"), fileMobile: a("/assets/img4-mobile.jpg"), alt: "રાતની ભીડમાં ઢોલીઓ આગળ ચાલતા", focal: "center 48%" } },
+  { id: "everyone", from: 0.8, to: 0.97, side: "left", align: "end", eyebrow: "મેદાન", heading: "તમે જાણો છો એ સૌ અહીં છે", body: "જૂના મિત્રો, નવી યાદો, અને સતત વધતું વર્તુળ.", image: { file: a("/assets/scene-everyone.jpg"), fileMobile: a("/assets/scene-everyone.jpg"), alt: "રોશનીની નીચે મિત્રો હાથમાં હાથ પરોવીને મેદાનમાં", focal: "center 30%" } },
+];
+
+// ---------------------------------------------------------------- generated design elements
+// Loops, painted figures and covers produced through Higgsfield. They are used as ornament — ambient light
+// behind a section, a figure set into its geometry layer — never as a stand-in for the event's own photography.
 
 export const loops = {
   headCircle: a("/assets/loops/head-circle.mp4"),
@@ -102,57 +106,3 @@ export const cover = {
   matajiMukut: { jpg: a("/assets/cover/mataji-mukut.jpg"), webp: a("/assets/cover/mataji-mukut.webp") },
 };
 
-export type Chapter = {
-  id: string;
-  /** Gujarati numeral. */
-  n: string;
-  eyebrow: string;
-  /** Heading, in three parts: the gold word sits between `before` and `after`. Either may be empty. */
-  before: string;
-  accent: string;
-  after: string;
-  video: string;
-  poster: string;
-  side: "left" | "center" | "right";
-  /** object-position for the film, so the subject stays clear of the type. */
-  focal: string;
-  /** The line held on its own after this chapter. The last chapter has none. */
-  interlude?: { before: string; accent: string; after: string };
-};
-
-export const chapters: Chapter[] = [
-  {
-    id: "circle", n: "૦૧", eyebrow: "મેદાન ફરે છે",
-    before: "દસ રાત. એક ", accent: "વર્તુળ", after: ".",
-    video: a("/assets/scenes/circle.mp4"), poster: a("/assets/scenes/circle.webp"),
-    side: "center", focal: "50% 50%",
-    interlude: { before: "એક વર્તુળ, દસ રાત સુધી ", accent: "ફરતું", after: "." },
-  },
-  {
-    id: "dhol", n: "૦૨", eyebrow: "પહેલાં ઢોલ",
-    before: "ઢોલનો પહેલો ", accent: "તાલ", after: ".",
-    video: a("/assets/scenes/dhol.mp4"), poster: a("/assets/scenes/dhol.webp"),
-    side: "left", focal: "58% 46%",
-    interlude: { before: "સાંભળતાં પહેલાં ", accent: "અનુભવાય", after: " છે." },
-  },
-  {
-    id: "rangoli", n: "૦૩", eyebrow: "દરરોજ નવી રંગોળી",
-    before: "", accent: "હાથે", after: " દોરેલી.",
-    video: a("/assets/scenes/rangoli.mp4"), poster: a("/assets/scenes/rangoli.webp"),
-    side: "right", focal: "40% 56%",
-    interlude: { before: "સૌ આવે તે પહેલાં હાથે દોરાય ", accent: "છે", after: "." },
-  },
-  {
-    id: "aarti", n: "૦૪", eyebrow: "મધ્યમાં આરતી",
-    before: "", accent: "આરતીની", after: " ક્ષણ.",
-    video: a("/assets/scenes/aarti.mp4"), poster: a("/assets/scenes/aarti.webp"),
-    side: "left", focal: "50% 40%",
-    interlude: { before: "આખું મેદાન ", accent: "સ્થિર", after: " થઈ જાય છે." },
-  },
-  {
-    id: "dawn", n: "૦૫", eyebrow: "પરોઢ",
-    before: "", accent: "સૂરજ", after: " પાછો આવે ત્યાં સુધી.",
-    video: a("/assets/scenes/dawn.mp4"), poster: a("/assets/scenes/dawn.webp"),
-    side: "right", focal: "42% 58%",
-  },
-];

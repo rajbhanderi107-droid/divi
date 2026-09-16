@@ -283,8 +283,8 @@ export function Album() {
       <Figure src={figures.garbo} at="top-[8%] -left-[6%] h-[min(74vw,520px)] w-[min(74vw,520px)] opacity-70 sm:left-[2%]" glow={0.19} />
       <div className="relative mx-auto max-w-6xl" style={{ zIndex: "var(--z-content)" }}>
         <div className="mb-10 text-center">
-          <span className="label text-antique">The album</span>
-          <h2 className="display-type mt-2 text-[clamp(1.6rem,3.4vw,2.4rem)] text-ivory">Relive the nights.</h2>
+          <span lang="gu" className="label-gu text-antique">આલબમ</span>
+          <h2 lang="gu" className="display-gu mt-2 text-[clamp(1.4rem,3vw,2.1rem)] text-ivory">રાતો ફરી જીવો.</h2>
           <div className="divider-carved mt-4">
             <Rosette />
           </div>

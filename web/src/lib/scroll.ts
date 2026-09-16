@@ -28,7 +28,15 @@ export function startSmoothScroll() {
   const instance = new Lenis({ duration: 1.05, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.6 });
   lenis = instance;
 
-  const onScroll = () => ScrollTrigger.update();
+  // Lenis knows how hard the page was thrown. Publishing that velocity as a custom property lets motion
+  // respond to the gesture rather than to a fixed duration — the ring leans into a flick and settles when
+  // the scroll does. Clamped hard, because unbounded velocity turns a lean into a smear.
+  const MAX_LEAN = 3.2;
+  const onScroll = () => {
+    ScrollTrigger.update();
+    const lean = Math.max(-MAX_LEAN, Math.min(MAX_LEAN, instance.velocity * 0.09));
+    document.documentElement.style.setProperty("--scroll-lean", lean.toFixed(2) + "deg");
+  };
   instance.on("scroll", onScroll);
 
   const step = (time: number) => instance.raf(time * 1000);

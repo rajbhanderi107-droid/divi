@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { figures, nights, site, type Shot } from "./content";
-import { gsap, useGSAP, useReducedMotion } from "./hooks";
+import { figures, nights, scenes, site, type Shot } from "./content";
+import { gsap, useGSAP, useIsMobile, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
 import { Backdrop, Figure } from "./shell";
@@ -10,6 +10,106 @@ import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
 
 const cx = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(" ");
+// ---------------------------------------------------------------- the ritual: five photographs that cross-fade on scroll
+
+const sideClass = { left: "left-[6vw] sm:left-[8vw] items-start text-left", right: "right-[6vw] sm:right-[8vw] items-end text-right" };
+const alignClass = { start: "top-[22%]", center: "top-1/2 -translate-y-1/2", end: "bottom-[22%]" };
+
+export function Ritual() {
+  const root = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const mobile = useIsMobile();
+
+  useGSAP(
+    () => {
+      const q = gsap.utils.selector(root);
+      scenes.forEach((scene, i) => {
+        const copy = q(`[data-scene="${scene.id}"]`);
+        const photo = q(`[data-photo="${scene.id}"]`);
+        const first = i === 0;
+        if (first) gsap.set(photo, { opacity: 1 });
+        if (reduced) {
+          gsap.set(copy, { opacity: 1, y: 0 });
+          gsap.set(photo, { opacity: 1 });
+          return;
+        }
+        gsap
+          .timeline({ scrollTrigger: { trigger: root.current, start: `${scene.from * 100}% top`, end: `${scene.to * 100}% top`, scrub: 1 } })
+          .fromTo(copy, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
+          .to(copy, { duration: 1.4 })
+          .to(copy, { opacity: 0, y: -34, duration: 1, ease: "power2.in" });
+        gsap
+          .timeline({ scrollTrigger: { trigger: root.current, start: `${Math.max(0, scene.from - 0.05) * 100}% top`, end: `${Math.min(1, scene.to + 0.05) * 100}% top`, scrub: 1 } })
+          .fromTo(photo, { opacity: first ? 1 : 0, scale: 1.06 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
+          .to(photo, { scale: 1, duration: 3.4, ease: "none" }, 0)
+          .to(photo, { opacity: 0, duration: 0.5, ease: "power2.in" }, 2.9);
+      });
+      if (!reduced) gsap.fromTo(q("[data-outro]"), { opacity: 0 }, { opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "88% top", end: "bottom bottom", scrub: true } });
+    },
+    { scope: root, dependencies: [reduced] },
+  );
+
+  // Decode the five photographs ahead of time (off the main thread) as the section approaches, so the cross-fades never
+  // wait on a large image decode mid-scroll.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        el.querySelectorAll("img").forEach((img) => void img.decode?.().catch(() => {}));
+      },
+      { rootMargin: "150% 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [mobile]);
+
+  // Reduced motion: no pinned cross-fade (the stacked captions would overlap), just the five photographs in sequence.
+  if (reduced)
+    return (
+      <section ref={root} id="film" className="relative bg-obsidian" aria-label="Divi Garba — the ritual">
+        {scenes.map((s) => (
+          <div key={s.id} className="relative flex min-h-[80svh] w-full overflow-hidden">
+            <picture className="contents">
+              <source srcSet={(mobile ? s.image.fileMobile : s.image.file).replace(/\.jpg$/, ".webp")} type="image/webp" />
+              <img src={mobile ? s.image.fileMobile : s.image.file} alt={s.image.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: s.image.focal }} />
+            </picture>
+            <div aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(7,5,4,0.72) 0%, rgba(7,5,4,0.30) 40%, rgba(7,5,4,0.86) 100%)" }} />
+            <div className={cx("relative mx-auto flex w-full max-w-6xl flex-col justify-end px-[6vw] py-20", s.side === "right" ? "items-end text-right" : "items-start text-left")}>
+              <span lang="gu" className="label-gu text-[clamp(0.85rem,1.2vw,1.05rem)] text-antique/90">{s.eyebrow}</span>
+              <h2 lang="gu" className="display-gu mt-5 max-w-[min(86vw,38rem)] text-[clamp(1.9rem,4.8vw,3.9rem)] text-ivory">{s.heading}</h2>
+              {s.body && <p lang="gu" className="mt-4 max-w-[40ch] text-base leading-[1.85] text-ivory/75 sm:text-lg">{s.body}</p>}
+            </div>
+          </div>
+        ))}
+      </section>
+    );
+
+  return (
+    <section ref={root} id="film" className="relative" style={{ height: "520vh" }} aria-label="Divi Garba — the ritual">
+      <div className="sticky top-0 h-svh w-full overflow-hidden bg-obsidian">
+        {scenes.map((s) => (
+          <picture key={s.id} className="contents">
+            <source srcSet={(mobile ? s.image.fileMobile : s.image.file).replace(/\.jpg$/, ".webp")} type="image/webp" />
+            <img data-photo={s.id} src={mobile ? s.image.fileMobile : s.image.file} alt={s.image.alt} decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-0 will-change-[transform,opacity]" style={{ objectPosition: s.image.focal, zIndex: "var(--z-background)" }} />
+          </picture>
+        ))}
+        <div aria-hidden className="absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: "linear-gradient(180deg, rgba(7,5,4,0.78) 0%, rgba(7,5,4,0.30) 34%, rgba(7,5,4,0.86) 100%), radial-gradient(70% 55% at 50% 48%, rgba(216,100,30,0.16), transparent 72%)" }} />
+        {scenes.map((s) => (
+          <div key={s.id} data-scene={s.id} className={cx("absolute flex max-w-[min(86vw,38rem)] flex-col opacity-0", sideClass[s.side], alignClass[s.align])} style={{ zIndex: "var(--z-content)" }}>
+            <span lang="gu" className="label-gu text-[clamp(0.85rem,1.2vw,1.05rem)] text-antique/90">{s.eyebrow}</span>
+            <h2 lang="gu" className="display-gu mt-5 text-[clamp(1.9rem,4.8vw,3.9rem)] text-ivory">{s.heading}</h2>
+            <p lang="gu" className="mt-4 max-w-[40ch] text-base leading-[1.85] text-ivory/70 sm:text-lg">{s.body}</p>
+          </div>
+        ))}
+        <div data-outro aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-foreground)", background: "linear-gradient(180deg, rgba(26,11,13,0.6), var(--color-obsidian) 78%)" }} />
+      </div>
+    </section>
+  );
+}
+
 
 // ---------------------------------------------------------------- the nights: a slow marquee of photographs with a lightbox
 
@@ -120,25 +220,23 @@ export function Gallery() {
   return (
     <section ref={root} id="gallery" className="relative" style={{ height: "320vh" }} aria-label="The nights">
       <div className="sticky top-0 flex h-svh w-full flex-col items-center justify-center overflow-hidden px-5">
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.16]" style={{ zIndex: "var(--z-background)" }}>
-          <Mandala className="top-1/2 left-1/2 w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" seconds={220} />
-        </div>
         <MandalaArt className="top-1/2 -left-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.3] sm:-left-[16vw] sm:h-[36vw] sm:w-[36vw]" turn={140} strokeWidth={0.5} />
         <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: "radial-gradient(75% 60% at 50% 50%, rgba(7,5,4,0.62) 0%, rgba(7,5,4,0.88) 100%)" }} />
 
         <div data-head className="relative mb-6 text-center sm:mb-10" style={{ zIndex: "var(--z-content)" }}>
-          <span className="label text-antique">The nights</span>
-          <h2 className="display-type mt-2 text-[clamp(1.8rem,4vw,3rem)] text-ivory [text-shadow:0_6px_30px_rgba(0,0,0,0.6)]">Ten nights, as they happen.</h2>
+          <span lang="gu" className="label-gu text-antique">રાતો</span>
+          <h2 lang="gu" className="display-gu mt-2 text-[clamp(1.5rem,3.4vw,2.5rem)] text-ivory [text-shadow:0_6px_30px_rgba(0,0,0,0.6)]">દસ રાત, જેવી છે તેવી.</h2>
           <div className="divider-carved mx-auto mt-4 w-[min(80vw,420px)]">
             <Rosette />
           </div>
+          <p lang="gu" className="label-gu mt-4 text-ivory/55">વર્તુળ ફેરવવા સ્ક્રોલ કરો · પૂરા પડદે જોવા રાત પર ટૅપ કરો</p>
         </div>
 
         <div ref={stage} className="relative h-[50svh] w-full sm:h-[56svh]" style={{ zIndex: "var(--z-content)", perspective: "2200px" }}>
           {/* Pull the cylinder back by its own radius so the front card sits on the screen plane. */}
           <div className="absolute inset-0" style={{ transformStyle: "preserve-3d", transform: `translateZ(-${radius}px) rotateX(-6deg)` }}>
             {/* A slow idle turn underneath the scroll-driven one, so the ring is never completely still. */}
-            <div className={cx("absolute inset-0", !reduced && "ring-drift")}>
+            <div className={cx("absolute inset-0 lean-with-scroll-soft", !reduced && "ring-drift")}>
               <div data-ring className="absolute inset-0 will-change-transform" style={{ transformStyle: "preserve-3d" }}>
                 {nights.map((shot, i) => (
                   <button
@@ -163,9 +261,6 @@ export function Gallery() {
           </div>
         </div>
 
-        <p className="relative mt-6 text-center text-xs text-ivory/60" style={{ zIndex: "var(--z-content)" }}>
-          Scroll to turn the circle · tap a night to view it full screen
-        </p>
       </div>
       {open && <Lightbox shot={open} onClose={() => setOpen(null)} />}
     </section>
@@ -223,9 +318,6 @@ export function Details() {
     <section id="details" className="relative overflow-hidden px-5 py-28 sm:px-10 sm:py-36" aria-label="The details">
       <Backdrop />
       <Figure src={figures.diyaLotus} at="top-[6%] right-[2%] h-[min(58vw,380px)] w-[min(58vw,380px)] opacity-75" glow={0.24} />
-      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
-        <Mandala className="top-1/2 left-1/2 w-[min(120vw,860px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" seconds={180} reverse />
-      </div>
       <MandalaArt className="top-1/2 -left-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.3] md:-left-[14%] md:h-[40vw] md:max-h-[620px] md:w-[40vw] md:max-w-[620px]" turn={100} />
       <MandalaArt variant="chakra" className="top-1/2 -right-[30vw] h-[60vw] w-[60vw] -translate-y-1/2 text-antique opacity-[0.3] md:-right-[14%] md:h-[40vw] md:max-h-[620px] md:w-[40vw] md:max-w-[620px]" turn={-100} reverse />
       <div className="frame-ancient frame-pips bg-jaali-soft relative mx-auto max-w-3xl bg-maroon/25 px-6 py-12 text-center sm:px-14 sm:py-14" style={{ zIndex: "var(--z-content)" }}>
@@ -263,7 +355,7 @@ export function Venue() {
       <MandalaArt variant="chakra" className="-right-[20%] -bottom-[35%] h-[min(110vw,640px)] w-[min(110vw,640px)] text-antique opacity-[0.26]" turn={-110} reverse />
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-10" style={{ zIndex: "var(--z-content)" }}>
         <FadeUp className="mt-0">
-          <h2 className="text-[clamp(2.6rem,6vw,4.4rem)] leading-[1.05] font-semibold text-ivory">Location</h2>
+          <h2 lang="gu" className="display-gu text-[clamp(2.1rem,5vw,3.6rem)] font-semibold text-ivory">સ્થળ</h2>
           <p className="mt-5 text-xl tracking-[0.06em] text-mukut sm:text-2xl">{site.venueName}</p>
           <p className="mt-2 text-lg leading-relaxed text-ivory/70 sm:text-xl">{site.venueStreet}</p>
           <p className="mt-6 max-w-[42ch] text-sm leading-relaxed text-ivory/55">{venueMap.routeNote}</p>
