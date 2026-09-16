@@ -62,8 +62,8 @@ export const installations: Media[] = [
 
 export const opening = {
   backdrop: a("/assets/scenes/lighting.webp"),
-  /** object-position for the backdrop, keeping the lit canopy out from under the type. */
-  focal: "72% 55%",
+  // The backdrop crop is set in opening.tsx rather than here: it differs between a phone and a wide screen,
+  // which is a layout concern rather than content.
   eyebrow: "નવરાત્રિ ૨૦૨૬ · અમદાવાદ",
   /** The title, split into grapheme clusters so each can rise on its own. */
   title: ["સાં", "જ", "થી", " ", "પ", "રો", "ઢ"],

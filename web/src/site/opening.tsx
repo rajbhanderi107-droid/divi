@@ -11,7 +11,10 @@ import { gsap, useGSAP } from "./hooks";
 // same gradient compresses to 0.94 black across the whole frame and buries the canopy of lights; narrow
 // viewports get a vertical scrim instead, dark only where the type actually sits.
 const SIDE_SCRIM = "linear-gradient(90deg, rgba(7,5,4,0.94) 0%, rgba(7,5,4,0.72) 38%, rgba(7,5,4,0.30) 72%, rgba(7,5,4,0.20) 100%)";
-const PHONE_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.55) 0%, rgba(7,5,4,0.20) 34%, rgba(7,5,4,0.72) 76%, rgba(7,5,4,0.94) 100%)";
+// lighting.webp is a night frame — it measures about 19/255 average, so any meaningful scrim over it reads
+// as flat black on a phone. The copy sits in the lower half here, so the top is left almost clear and the
+// gradient only does its work where the type actually lands.
+const PHONE_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.28) 0%, rgba(7,5,4,0.04) 26%, rgba(7,5,4,0.58) 64%, rgba(7,5,4,0.93) 100%)";
 const TOP_SCRIM = "linear-gradient(180deg, rgba(7,5,4,0.72) 0%, rgba(7,5,4,0) 26%, rgba(7,5,4,0.55) 74%, rgba(7,5,4,0.92) 100%)";
 
 const factIcons = [Calendar, MapPin, Clock];
@@ -53,7 +56,15 @@ export function Opening() {
   return (
     <section ref={root} className="relative h-svh overflow-hidden bg-obsidian" style={{ zIndex: "var(--z-content)" }} aria-label={`${site.name} — ${opening.titlePlain}`}>
       <div data-plate className="absolute inset-0 will-change-transform">
-        <img src={opening.backdrop} alt="" fetchPriority="high" decoding="async" className="h-full w-full object-cover" style={{ objectPosition: opening.focal }} />
+        {/* The frame carries its light at roughly 58% x 63%. A portrait box crops only horizontally — object-cover
+            scales it to the height — so the phone takes the brightest column while the wide crop keeps its own. */}
+        <img
+          src={opening.backdrop}
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="h-full w-full object-cover brightness-[1.22] contrast-[1.05] [object-position:58%_55%] sm:brightness-100 sm:contrast-100 sm:[object-position:72%_55%]"
+        />
         <div aria-hidden className="absolute inset-0 hidden sm:block" style={{ background: SIDE_SCRIM }} />
         <div aria-hidden className="absolute inset-0 sm:hidden" style={{ background: PHONE_SCRIM }} />
         <div aria-hidden className="absolute inset-0 hidden sm:block" style={{ background: TOP_SCRIM }} />
