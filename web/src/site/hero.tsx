@@ -367,10 +367,8 @@ export function Hero({ start = true }: { start?: boolean }) {
           </div>
         </div>
         <div data-mataji className="absolute inset-0 opacity-0" style={{ maskImage: PORTRAIT_MASK, WebkitMaskImage: PORTRAIT_MASK }}>
-          <picture className="contents">
-            <source srcSet={media.mataji.webp} type="image/webp" />
-            <img src={media.mataji.file} alt={media.mataji.alt} width={900} height={1200} fetchPriority="high" decoding="async" className="h-full w-full object-cover" />
-          </picture>
+          {/* The poster is this film's own first frame, so there is no shift when it starts playing. */}
+          <video src={media.mataji.file} poster={media.mataji.poster} aria-label={media.mataji.alt} autoPlay muted loop playsInline preload="auto" width={900} height={1200} className="h-full w-full object-cover" />
           <div data-glow className="absolute top-[47%] left-[25%] h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 will-change-[opacity]" style={{ background: "radial-gradient(closest-side, rgba(255,196,92,0.30), rgba(240,160,60,0.10) 62%, transparent)" }} />
         </div>
       </div>
