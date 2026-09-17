@@ -28,6 +28,7 @@ export const brand = { logo: a("/assets/logo-divi.png"), panchatva: a("/assets/p
 export type Media = { file: string; alt: string; poster?: string };
 
 export const media = {
+  mataji: { file: a("/assets/loops/mataji-mukut.mp4"), poster: a("/assets/cover/mataji-mukut.jpg"), alt: "Maa Durga, painted on aged canvas and crowned with a mukut" },
   video: { file: a("/assets/graba.mp4"), poster: a("/assets/posters/graba.webp"), alt: "Garba on the ground at night" },
   reelOne: { file: a("/assets/reel/reel-1.mp4"), poster: a("/assets/posters/reel-1.webp"), alt: "Garba on the ground" },
   reelTwo: { file: a("/assets/reel/reel-2.mp4"), poster: a("/assets/posters/reel-2.webp"), alt: "Garba on the ground" },

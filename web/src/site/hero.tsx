@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Calendar, MapPin, Music } from "lucide-react";
-import { a, installations, media, site, type Media } from "./content";
+import { installations, media, site, type Media } from "./content";
 import { gsap, useGSAP, useMediaQuery, useReducedMotion } from "./hooks";
 import { BookBack, BookCover, PaperPage } from "./book";
 import { MandalaArt, Rosette } from "./mandala-art";
@@ -368,10 +368,9 @@ export function Hero({ start = true }: { start?: boolean }) {
           </div>
         </div>
         <div data-mataji className="absolute inset-0 opacity-0" style={{ maskImage: PORTRAIT_MASK, WebkitMaskImage: PORTRAIT_MASK }}>
-          <picture className="contents">
-            <source srcSet={a("/assets/cover/mataji.webp")} type="image/webp" />
-            <img src={a("/assets/cover/mataji.jpg")} alt="Maa Durga, painted on aged canvas" width={900} height={1200} fetchPriority="high" decoding="async" className="h-full w-full object-cover" />
-          </picture>
+          {/* A quiet, silent loop of Mataji crowned with the mukut — the poster is the first frame, so the video
+              never causes a flash or layout shift once it can play. */}
+          <video src={media.mataji.file} poster={media.mataji.poster} aria-label={media.mataji.alt} autoPlay muted loop playsInline preload="auto" width={900} height={1200} className="h-full w-full object-cover" />
           <div data-glow className="absolute top-[47%] left-[25%] h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 will-change-[opacity]" style={{ background: "radial-gradient(closest-side, rgba(255,196,92,0.30), rgba(240,160,60,0.10) 62%, transparent)" }} />
         </div>
       </div>

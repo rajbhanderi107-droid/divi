@@ -4,7 +4,6 @@ import { nights, scenes, site, type Shot } from "./content";
 import { gsap, useGSAP, useIsMobile, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
-import { Backdrop } from "./shell";
 import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
 
@@ -33,8 +32,10 @@ export function Ritual() {
           gsap.set(photo, { opacity: 1 });
           return;
         }
+        // A short scrub (rather than the photos' lazier one) so a caption finishes fading out before the next
+        // scene's scrub has caught up to fading its own in — otherwise the two captions read as overlapping text.
         gsap
-          .timeline({ scrollTrigger: { trigger: root.current, start: `${scene.from * 100}% top`, end: `${scene.to * 100}% top`, scrub: 1 } })
+          .timeline({ scrollTrigger: { trigger: root.current, start: `${scene.from * 100}% top`, end: `${scene.to * 100}% top`, scrub: 0.3 } })
           .fromTo(copy, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
           .to(copy, { duration: 1.4 })
           .to(copy, { opacity: 0, y: -34, duration: 1, ease: "power2.in" });
@@ -284,7 +285,6 @@ function FadeUp({ children, className }: { children: React.ReactNode; className?
 export function Details() {
   return (
     <section id="details" className="relative overflow-hidden px-5 py-20 sm:px-10 sm:py-24" aria-label="The details">
-      <Backdrop />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="top-1/2 left-1/2 w-[min(120vw,860px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" seconds={180} reverse />
       </div>
@@ -317,7 +317,6 @@ export function Details() {
 export function Venue() {
   return (
     <section id="venue" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-16 lg:py-14" aria-label="Location">
-      <Backdrop />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="-top-[18%] -left-[12%] w-[min(70vw,520px)] opacity-[0.16]" seconds={200} />
       </div>

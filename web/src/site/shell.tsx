@@ -83,13 +83,21 @@ export function Atmosphere() {
   const embers = Array.from({ length: mobile ? 8 : 22 });
   return (
     <div ref={root} aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden" style={{ zIndex: "var(--z-background)" }}>
+      {/* The same venue photograph sits fixed behind every section (rather than each section stretching its own
+          copy to its own height), so the ground the page stands on never restarts at a section boundary. */}
+      <picture className="contents">
+        <source media="(min-width: 640px)" srcSet={media.heroBg.webp} type="image/webp" />
+        <source media="(min-width: 640px)" srcSet={media.heroBg.file} />
+        <source srcSet={media.heroBg.webpMobile} type="image/webp" />
+        <img src={media.heroBg.fileMobile} alt="" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+      </picture>
       <div
         data-burn
         className="absolute inset-x-0 top-0 h-[220%] will-change-transform"
         style={{
           backgroundSize: "100% 100%",
           backgroundImage:
-            "radial-gradient(120% 60% at 50% 0%, rgba(240,193,75,0.20), transparent 60%), radial-gradient(80% 50% at 12% 28%, rgba(168,121,44,0.18), transparent 64%), radial-gradient(80% 50% at 88% 64%, rgba(143,23,18,0.22), transparent 62%), linear-gradient(180deg, #120a04 0%, #241206 40%, #100805 74%, #070504 100%)",
+            "radial-gradient(120% 60% at 50% 0%, rgba(240,193,75,0.20), transparent 60%), radial-gradient(80% 50% at 12% 28%, rgba(168,121,44,0.18), transparent 64%), radial-gradient(80% 50% at 88% 64%, rgba(143,23,18,0.22), transparent 62%), linear-gradient(180deg, rgba(18,10,4,0.86) 0%, rgba(36,18,6,0.8) 40%, rgba(16,8,5,0.88) 74%, rgba(7,5,4,0.94) 100%)",
         }}
       />
       {embers.map((_, i) => (
@@ -184,20 +192,6 @@ export function Header() {
   );
 }
 
-export function Backdrop({ scrim = "rgba(7,5,4,0.55)" }: { scrim?: string }) {
-  return (
-    <>
-      <picture aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-background)" }}>
-        <source media="(min-width: 640px)" srcSet={media.heroBg.webp} type="image/webp" />
-        <source media="(min-width: 640px)" srcSet={media.heroBg.file} />
-        <source srcSet={media.heroBg.webpMobile} type="image/webp" />
-        <img src={media.heroBg.fileMobile} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-      </picture>
-      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-atmosphere)", background: scrim }} />
-    </>
-  );
-}
-
 function Instagram({ size = 24, strokeWidth = 2, ...rest }: React.SVGProps<SVGSVGElement> & { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...rest}>
@@ -218,7 +212,6 @@ export function Footer() {
   const external = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noreferrer noopener" } : {});
   return (
     <footer id="footer" className="relative overflow-hidden px-5 pt-10 pb-10 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
-      <Backdrop />
       <div aria-hidden className="bg-jaali jaali-fade pointer-events-none absolute inset-0 opacity-[0.06]" style={{ zIndex: "var(--z-atmosphere)" }} />
       <MandalaArt className="-bottom-[min(62vw,520px)] left-1/2 h-[min(124vw,1040px)] w-[min(124vw,1040px)] -translate-x-1/2 text-antique opacity-[0.24]" turn={70} />
       <div className="divider-carved relative mb-10" style={{ zIndex: "var(--z-content)" }}>
