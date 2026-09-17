@@ -28,13 +28,24 @@ export const brand = { logo: a("/assets/logo-divi.png"), panchatva: a("/assets/p
 export type Media = { file: string; alt: string; poster?: string };
 
 export const media = {
-  mataji: { file: a("/assets/loops/mataji-mukut.mp4"), poster: a("/assets/cover/mataji-mukut.jpg"), alt: "Maa Durga, painted on aged canvas and crowned with a mukut" },
+  mataji: { file: a("/assets/cover/mataji.jpg"), webp: a("/assets/cover/mataji.webp"), alt: "Maa Durga, painted on aged canvas" },
   video: { file: a("/assets/graba.mp4"), poster: a("/assets/posters/graba.webp"), alt: "Garba on the ground at night" },
   reelOne: { file: a("/assets/reel/reel-1.mp4"), poster: a("/assets/posters/reel-1.webp"), alt: "Garba on the ground" },
   reelTwo: { file: a("/assets/reel/reel-2.mp4"), poster: a("/assets/posters/reel-2.webp"), alt: "Garba on the ground" },
   heroBg: { file: a("/assets/master-bg-divi.jpg"), fileMobile: a("/assets/master-bg-divi-mobile.jpg"), webp: a("/assets/master-bg-divi.webp"), webpMobile: a("/assets/master-bg-divi-mobile.webp") },
   bell: { file: a("/assets/bell.png"), webp: a("/assets/bell.webp") },
   vector: { file: a("/assets/vector.png"), webp: a("/assets/vector.webp") },
+  // The dawn film closes the page on the line the details card ends with, "until the sun returns".
+  dawn: { file: a("/assets/scenes/dawn.mp4"), poster: a("/assets/scenes/dawn.webp"), alt: "A diya burning on at dawn as the horizon brightens" },
+};
+
+// The painted objects the nights are built around, used one to a place rather than scattered. Each is a short
+// film of the painting — only its flame and light move — cut to the object's own outline by its matching still,
+// which shares the film's frame exactly and so doubles as both the mask and the poster.
+export const figures = {
+  garbo: { file: a("/assets/figures/garbo.mp4"), mask: a("/assets/figures/garbo.webp"), alt: "A pierced garbo pot lit from within" },
+  diya: { file: a("/assets/figures/diya-lotus.mp4"), mask: a("/assets/figures/diya-lotus.webp"), alt: "A brass diya resting on an open lotus" },
+  dhol: { file: a("/assets/figures/dhol-toran.mp4"), mask: a("/assets/figures/dhol-toran.webp"), alt: "A dhol with crossed dandiya sticks" },
 };
 
 export type Shot = Media & { n: string; title: string; line?: string; focal?: string };

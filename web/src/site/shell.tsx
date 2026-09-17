@@ -106,6 +106,40 @@ export function Atmosphere() {
   );
 }
 
+/**
+ * One of the painted objects, playing as a film but cut to its own outline: the still that was painted alongside
+ * the film shares its frame exactly, so it serves as the mask and, until the film can play, as the poster. The
+ * film is only fetched once the section is near, and callers hide it entirely where there is no room for it.
+ */
+export function Figure({ figure, className }: { figure: { file: string; mask: string; alt: string }; className?: string }) {
+  const holder = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = holder.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "50% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const mask = { maskImage: `url(${figure.mask})`, WebkitMaskImage: `url(${figure.mask})`, maskSize: "100% 100%", WebkitMaskSize: "100% 100%", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat" } as const;
+  return (
+    <div ref={holder} aria-hidden className={`pointer-events-none absolute aspect-828/1108 ${className ?? ""}`} style={{ zIndex: "var(--z-geometry)" }}>
+      {near ? (
+        <video src={figure.file} poster={figure.mask} autoPlay muted loop playsInline preload="none" className="h-full w-full object-cover" style={mask} />
+      ) : (
+        <img src={figure.mask} alt="" decoding="async" loading="lazy" className="h-full w-full object-cover" />
+      )}
+    </div>
+  );
+}
+
 const cursorStates: Record<string, gsap.TweenVars> = {
   default: { scale: 1, opacity: 0.9, borderWidth: 1 },
   link: { scale: 1.9, opacity: 0.8, borderWidth: 1 },

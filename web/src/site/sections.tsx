@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { nights, scenes, site, type Shot } from "./content";
+import { figures, media, nights, scenes, site, type Shot } from "./content";
 import { gsap, useGSAP, useIsMobile, useReducedMotion } from "./hooks";
 import { Mandala } from "./mandala";
 import { MandalaArt, Rosette } from "./mandala-art";
+import { Figure } from "./shell";
 import { VenueMap } from "@/components/venue-map";
 import { venueMap } from "@/content";
 
@@ -221,7 +222,7 @@ export function Gallery() {
           </div>
         </div>
         <div data-row className="overflow-hidden">
-          <div className="flex w-max gap-4 will-change-transform sm:gap-6" style={reduced ? undefined : { animation: "marquee-left 91s linear infinite" }}>
+          <div className={cx("flex w-max gap-4 will-change-transform sm:gap-6", !reduced && "nights-marquee")}>
             {[...nights, ...nights].map((shot, i) => (
               <button
                 key={`${shot.file}-${i}`}
@@ -294,9 +295,38 @@ function FadeUp({ children, className }: { children: React.ReactNode; className?
 
 // ---------------------------------------------------------------- details and location
 
+// The details card ends on "until the sun returns", so the dawn film plays behind it — deep in the ground,
+// masked away at both edges so it never becomes a panel of its own, and only fetched once the section is near.
+const DAWN_MASK = "linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%)";
+
+function Dawn() {
+  const holder = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = holder.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "60% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={holder} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden" style={{ zIndex: "var(--z-background)", maskImage: DAWN_MASK, WebkitMaskImage: DAWN_MASK }}>
+      {near && <video src={media.dawn.file} poster={media.dawn.poster} autoPlay muted loop playsInline preload="none" className="h-full w-full object-cover opacity-[0.2]" />}
+    </div>
+  );
+}
+
 export function Details() {
   return (
     <section id="details" className="relative overflow-x-clip px-5 py-20 sm:px-10 sm:py-24" aria-label="The details">
+      <Dawn />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="top-1/2 left-1/2 w-[min(120vw,860px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" seconds={180} reverse />
       </div>
@@ -333,6 +363,8 @@ export function Venue() {
         <Mandala className="-top-[18%] -left-[12%] w-[min(70vw,520px)] opacity-[0.16]" seconds={200} />
       </div>
       <MandalaArt variant="chakra" className="-right-[20%] -bottom-[35%] h-[min(110vw,640px)] w-[min(110vw,640px)] text-antique opacity-[0.26]" turn={-110} reverse />
+      {/* The dhol sits at the foot of the directions, where the ground is otherwise empty — the sound you walk towards. */}
+      <Figure figure={figures.dhol} className="-bottom-[6%] left-[1%] hidden h-[min(26vw,300px)] opacity-40 lg:block" />
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-10" style={{ zIndex: "var(--z-content)" }}>
         <FadeUp className="mt-0">
           <h2 className="text-[clamp(2.6rem,6vw,4.4rem)] leading-[1.05] font-semibold text-ivory">Location</h2>

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Calendar, MapPin, Music } from "lucide-react";
-import { installations, media, site, type Media } from "./content";
+import { figures, installations, media, site, type Media } from "./content";
 import { gsap, useGSAP, useMediaQuery, useReducedMotion } from "./hooks";
 import { BookBack, BookCover, PaperPage } from "./book";
+import { Figure } from "./shell";
 import { MandalaArt, Rosette } from "./mandala-art";
 
 type Page =
@@ -366,9 +367,10 @@ export function Hero({ start = true }: { start?: boolean }) {
           </div>
         </div>
         <div data-mataji className="absolute inset-0 opacity-0" style={{ maskImage: PORTRAIT_MASK, WebkitMaskImage: PORTRAIT_MASK }}>
-          {/* A quiet, silent loop of Mataji crowned with the mukut — the poster is the first frame, so the video
-              never causes a flash or layout shift once it can play. */}
-          <video src={media.mataji.file} poster={media.mataji.poster} aria-label={media.mataji.alt} autoPlay muted loop playsInline preload="auto" width={900} height={1200} className="h-full w-full object-cover" />
+          <picture className="contents">
+            <source srcSet={media.mataji.webp} type="image/webp" />
+            <img src={media.mataji.file} alt={media.mataji.alt} width={900} height={1200} fetchPriority="high" decoding="async" className="h-full w-full object-cover" />
+          </picture>
           <div data-glow className="absolute top-[47%] left-[25%] h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 will-change-[opacity]" style={{ background: "radial-gradient(closest-side, rgba(255,196,92,0.30), rgba(240,160,60,0.10) 62%, transparent)" }} />
         </div>
       </div>
@@ -424,6 +426,14 @@ export function Album() {
   return (
     <section id="album" aria-label="The album" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:py-24">
       <MandalaArt variant="medallion" className="top-1/2 left-1/2 h-[min(130vw,1100px)] w-[min(130vw,1100px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.12]" spin={260} strokeWidth={0.4} />
+      {/* The two lamps stand in the gutters either side of the book, the way they would either side of a shrine.
+          They only appear once the gutters are wide enough to hold them without crowding the pages. */}
+      {[
+        { figure: figures.garbo, at: "left-[2%] xl:left-[5%]" },
+        { figure: figures.diya, at: "right-[2%] xl:right-[5%]" },
+      ].map(({ figure, at }) => (
+        <Figure key={figure.file} figure={figure} className={`bottom-[6%] hidden h-[min(34vw,340px)] opacity-45 min-[1180px]:block ${at}`} />
+      ))}
       <div className="relative mx-auto max-w-6xl" style={{ zIndex: "var(--z-content)" }}>
         <div className="mb-10 text-center">
           <span className="label text-antique">The album</span>

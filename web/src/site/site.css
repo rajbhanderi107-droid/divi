@@ -126,6 +126,15 @@
     transform: translate(-50%);
   }
 }
+/* The cards are buttons, and a card that keeps sliding between mousedown and mouseup swallows the click.
+   Holding still while pointed at or focused is what makes "click a night" actually work. */
+.nights-marquee {
+  animation: marquee-left 91s linear infinite;
+}
+.nights-marquee:hover,
+.nights-marquee:focus-within {
+  animation-play-state: paused;
+}
 @keyframes mandala-spin {
   to {
     rotate: 360deg;

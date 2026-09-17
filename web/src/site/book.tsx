@@ -52,33 +52,12 @@ export function BookCover() {
 export function BookBack() {
   return (
     <div className="relative h-full w-full overflow-hidden bg-maroon [container-type:size]">
-      <picture className="contents">
-        <source srcSet={a("/assets/cover/mataji.webp")} type="image/webp" />
-        <img src={a("/assets/cover/mataji.jpg")} alt="" aria-hidden decoding="async" loading="lazy" className="absolute inset-0 h-full w-full scale-x-[-1] object-cover object-right opacity-40 blur-[1.5cqw]" />
-      </picture>
-      <svg aria-hidden viewBox="0 0 100 100" className="absolute top-1/2 left-1/2 h-[46cqw] w-[46cqw] -translate-x-1/2 -translate-y-1/2" fill="none" strokeWidth="0.7">
-        <g stroke="rgba(10,4,2,0.42)" transform="translate(0.35 0.45)">
-          <Rosette />
-        </g>
-        <g stroke="rgba(255,226,176,0.13)">
-          <Rosette />
-        </g>
-      </svg>
+      {/* The book closes on Maa Durga astride her lion, printed the way the painting actually is — on parchment,
+          filling the board — so the album ends on her rather than on an ornament. */}
+      <video src={a("/assets/cover/durga-lion.mp4")} poster={a("/assets/cover/durga-lion.webp")} aria-hidden autoPlay muted loop playsInline preload="none" className="absolute inset-0 h-full w-full object-cover opacity-85" />
+      <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(75% 60% at 50% 45%, transparent 40%, rgba(40,14,6,0.55) 100%)" }} />
       <Board spine="right" />
     </div>
-  );
-}
-
-function Rosette() {
-  return (
-    <>
-      <circle cx="50" cy="50" r="46" />
-      <circle cx="50" cy="50" r="41" />
-      {Array.from({ length: 12 }, (_, k) => (
-        <path key={k} d="M50 12 C58 24 58 36 50 46 C42 36 42 24 50 12Z" transform={`rotate(${k * 30} 50 50)`} />
-      ))}
-      <circle cx="50" cy="50" r="7" />
-    </>
   );
 }
 
