@@ -422,7 +422,7 @@ export function Hero({ start = true }: { start?: boolean }) {
 // The album: the Garba film, the reels and the installation photographs as a page-flip book, below the head page.
 export function Album() {
   return (
-    <section id="album" aria-label="The album" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-24">
+    <section id="album" aria-label="The album" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:py-24">
       <MandalaArt variant="medallion" className="top-1/2 left-1/2 h-[min(130vw,1100px)] w-[min(130vw,1100px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.12]" spin={260} strokeWidth={0.4} />
       <div className="relative mx-auto max-w-6xl" style={{ zIndex: "var(--z-content)" }}>
         <div className="mb-10 text-center">

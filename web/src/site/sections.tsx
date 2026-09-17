@@ -9,6 +9,10 @@ import { venueMap } from "@/content";
 
 const cx = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(" ");
 
+// What the shared Atmosphere layer reads as once its photograph and scrim are composited — the tone every
+// section that doesn't paint its own background sits on.
+const GROUND = "rgb(56,31,12)";
+
 // ---------------------------------------------------------------- the ritual: five photographs that cross-fade on scroll
 
 const sideClass = { left: "left-[6vw] sm:left-[8vw] items-start text-left", right: "right-[6vw] sm:right-[8vw] items-end text-right" };
@@ -110,8 +114,10 @@ export function Ritual() {
             <p className="mt-4 max-w-[40ch] text-base leading-relaxed text-ivory/70 sm:text-lg">{s.body}</p>
           </div>
         ))}
-        <div data-intro aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-foreground)", background: "var(--color-obsidian)" }} />
-        <div data-outro aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-foreground)", background: "linear-gradient(180deg, rgba(26,11,13,0.6), var(--color-obsidian) 78%)" }} />
+        {/* Both ends dissolve through the page's own ground tone rather than through black, so the film reads as
+            an inset in one continuous background instead of a dark card wedged between two warm sections. */}
+        <div data-intro aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-foreground)", background: GROUND }} />
+        <div data-outro aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-foreground)", background: GROUND }} />
       </div>
     </section>
   );
@@ -198,7 +204,7 @@ export function Gallery() {
     { scope: root, dependencies: [reduced] },
   );
   return (
-    <section ref={root} id="gallery" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-20" aria-label="The nights">
+    <section ref={root} id="gallery" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:py-20" aria-label="The nights">
       {/* A large mandala turns slowly behind the nights (it fades in with the section). */}
       <div data-ground aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-background)" }}>
         <Mandala className="top-1/2 left-1/2 w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" seconds={220} />
@@ -290,7 +296,7 @@ function FadeUp({ children, className }: { children: React.ReactNode; className?
 
 export function Details() {
   return (
-    <section id="details" className="relative overflow-hidden px-5 py-20 sm:px-10 sm:py-24" aria-label="The details">
+    <section id="details" className="relative overflow-x-clip px-5 py-20 sm:px-10 sm:py-24" aria-label="The details">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="top-1/2 left-1/2 w-[min(120vw,860px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" seconds={180} reverse />
       </div>
@@ -322,7 +328,7 @@ export function Details() {
 
 export function Venue() {
   return (
-    <section id="venue" className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-16 lg:py-14" aria-label="Location">
+    <section id="venue" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:py-16 lg:py-14" aria-label="Location">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-geometry)" }}>
         <Mandala className="-top-[18%] -left-[12%] w-[min(70vw,520px)] opacity-[0.16]" seconds={200} />
       </div>

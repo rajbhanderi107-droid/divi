@@ -65,13 +65,8 @@ export function Atmosphere() {
   useGSAP(
     () => {
       if (reduced || !root.current) return;
-      // The warm gradient drifts with scroll as a GPU transform on a tall layer (no full-screen repaint per frame).
-      if (!mobile)
-        gsap.to(root.current.querySelector("[data-burn]"), {
-          yPercent: -54.5,
-          ease: "none",
-          scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
-        });
+      // The warmth deliberately does not drift with scroll: on a layer behind the whole page, drifting means each
+      // section arrives at a different tint and reads as a page of its own. The embers carry the motion instead.
       if (!mobile)
         gsap.utils.toArray<HTMLElement>(root.current.querySelectorAll("[data-ember]")).forEach((ember, i) => {
           gsap.to(ember, { y: `random(-${140 + i * 10}, -${60 + i * 10})`, x: "random(-40, 40)", opacity: "random(0.08, 0.4)", duration: "random(9, 18)", repeat: -1, yoyo: true, ease: "sine.inOut", delay: i * 0.4 });
@@ -91,13 +86,17 @@ export function Atmosphere() {
         <source srcSet={media.heroBg.webpMobile} type="image/webp" />
         <img src={media.heroBg.fileMobile} alt="" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
       </picture>
+      {/* One flat scrim, not a top-to-bottom ramp: a ramp on a layer this tall means each section lands on a
+          different part of it and reads as its own page. The warmth on top is soft and wide enough to drift
+          without banding. */}
       <div
         data-burn
-        className="absolute inset-x-0 top-0 h-[220%] will-change-transform"
+        className="absolute inset-0"
         style={{
           backgroundSize: "100% 100%",
+          backgroundColor: "rgba(30,16,6,0.82)",
           backgroundImage:
-            "radial-gradient(120% 60% at 50% 0%, rgba(240,193,75,0.20), transparent 60%), radial-gradient(80% 50% at 12% 28%, rgba(168,121,44,0.18), transparent 64%), radial-gradient(80% 50% at 88% 64%, rgba(143,23,18,0.22), transparent 62%), linear-gradient(180deg, rgba(18,10,4,0.86) 0%, rgba(36,18,6,0.8) 40%, rgba(16,8,5,0.88) 74%, rgba(7,5,4,0.94) 100%)",
+            "radial-gradient(120% 60% at 50% 0%, rgba(240,193,75,0.12), transparent 62%), radial-gradient(90% 55% at 12% 30%, rgba(168,121,44,0.10), transparent 66%), radial-gradient(90% 55% at 88% 66%, rgba(143,23,18,0.12), transparent 64%)",
         }}
       />
       {embers.map((_, i) => (
@@ -211,7 +210,7 @@ export function Footer() {
   ];
   const external = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noreferrer noopener" } : {});
   return (
-    <footer id="footer" className="relative overflow-hidden px-5 pt-10 pb-10 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
+    <footer id="footer" className="relative overflow-x-clip px-5 pt-10 pb-10 sm:px-10" style={{ zIndex: "var(--z-content)" }}>
       <div aria-hidden className="bg-jaali jaali-fade pointer-events-none absolute inset-0 opacity-[0.06]" style={{ zIndex: "var(--z-atmosphere)" }} />
       <MandalaArt className="-bottom-[min(62vw,520px)] left-1/2 h-[min(124vw,1040px)] w-[min(124vw,1040px)] -translate-x-1/2 text-antique opacity-[0.24]" turn={70} />
       <div className="divider-carved relative mb-10" style={{ zIndex: "var(--z-content)" }}>
