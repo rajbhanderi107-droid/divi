@@ -48,6 +48,9 @@ export const figures = {
   dhol: { file: a("/assets/figures/dhol-toran.mp4"), mask: a("/assets/figures/dhol-toran.webp"), alt: "A dhol with crossed dandiya sticks" },
 };
 
+// A painted toran, hung the way one is: across the top of a threshold.
+export const toran = a("/assets/figures/toran.webp");
+
 export type Shot = Media & { n: string; title: string; line?: string; focal?: string };
 
 export const nights: Shot[] = [

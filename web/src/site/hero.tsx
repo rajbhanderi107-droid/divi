@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import { Calendar, MapPin, Music } from "lucide-react";
-import { figures, installations, media, site, type Media } from "./content";
+import { figures, installations, media, site, toran, type Media } from "./content";
 import { gsap, useGSAP, useMediaQuery, useReducedMotion } from "./hooks";
 import { BookBack, BookCover, PaperPage } from "./book";
 import { Figure } from "./shell";
@@ -424,10 +424,23 @@ export function Hero({ start = true }: { start?: boolean }) {
 // The album: the Garba film, the reels and the installation photographs as a page-flip book, below the head page.
 export function Album() {
   return (
-    <section id="album" aria-label="The album" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:py-24">
+    <section id="album" aria-label="The album" className="relative overflow-x-clip px-5 py-16 sm:px-10 sm:pt-40 sm:pb-24">
       <MandalaArt variant="medallion" className="top-1/2 left-1/2 h-[min(130vw,1100px)] w-[min(130vw,1100px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.12]" spin={260} strokeWidth={0.4} />
-      {/* The two lamps stand in the gutters either side of the book, the way they would either side of a shrine.
-          They only appear once the gutters are wide enough to hold them without crowding the pages. */}
+      {/* The album is dressed as a shrine: a toran hung across the threshold above, a lamp standing in either
+          gutter below. Both only appear once there is room for them without crowding the pages. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 hidden h-[clamp(96px,11vw,170px)] opacity-45 sm:block"
+        style={{
+          zIndex: "var(--z-geometry)",
+          backgroundImage: `url(${toran})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "auto 100%",
+          backgroundPosition: "top center",
+          maskImage: "linear-gradient(180deg, #000 62%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, #000 62%, transparent 100%)",
+        }}
+      />
       {[
         { figure: figures.garbo, at: "left-[2%] xl:left-[5%]" },
         { figure: figures.diya, at: "right-[2%] xl:right-[5%]" },
