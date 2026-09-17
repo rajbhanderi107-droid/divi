@@ -298,8 +298,10 @@ const bells = [{ at: "right-[6%] sm:right-[12%]", size: "w-[min(26vw,150px)] lg:
 
 // The portrait keeps Mataji's face clear: it fades out in a soft oval around her, and the mandalas turn behind it.
 const PORTRAIT_MASK = "radial-gradient(ellipse 72% 64% at 28% 47%, #000 74%, rgba(0,0,0,0.55) 88%, transparent 100%)";
-// The section background fades out at the bottom so the head page flows into the next section without an edge.
-const BOTTOM_FADE = "linear-gradient(180deg, #000 72%, transparent 100%)";
+// The section's own extra tint eases off toward the bottom so the head page flows into the next section without
+// a hard edge, but keeps a small residual (rather than fading to nothing) so Mataji's corner still reads as its
+// own lit space against the rest of the page, one shade apart rather than identical.
+const BOTTOM_FADE = "linear-gradient(180deg, #000 72%, rgba(0,0,0,0.45) 100%)";
 
 // The head page: Mataji's painting as a glowing portrait with gold mandalas turning behind her, and the event beside it.
 export function Hero({ start = true }: { start?: boolean }) {
