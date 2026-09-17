@@ -339,12 +339,8 @@ export function Hero({ start = true }: { start?: boolean }) {
 
   return (
     <section ref={root} id="home" className="relative isolate flex min-h-svh w-full overflow-hidden" aria-label={`${site.name} — Navratri 2026`}>
-      <picture aria-hidden className="absolute inset-0" style={{ zIndex: "var(--z-background)", maskImage: BOTTOM_FADE, WebkitMaskImage: BOTTOM_FADE }}>
-        <source media="(min-width: 640px)" srcSet={media.heroBg.webp} type="image/webp" />
-        <source media="(min-width: 640px)" srcSet={media.heroBg.file} />
-        <source srcSet={media.heroBg.webpMobile} type="image/webp" />
-        <img src={media.heroBg.fileMobile} alt="" fetchPriority="high" decoding="async" className="h-full w-full object-cover" />
-      </picture>
+      {/* No picture of its own: the hero sits on the same fixed Atmosphere photo as every other section, so the
+          ground never jumps to a differently-cropped copy at the boundary below. Only the extra tint is local. */}
       <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.25)_0%,rgba(7,5,4,0.35)_45%,rgba(7,5,4,0.85)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,5,4,0.15)_0%,rgba(7,5,4,0.3)_45%,rgba(7,5,4,0.78)_100%)]" style={{ zIndex: "var(--z-atmosphere)", maskImage: BOTTOM_FADE, WebkitMaskImage: BOTTOM_FADE }} />
       {vectors.map(({ at }) => (
         <picture key={at} className="contents">

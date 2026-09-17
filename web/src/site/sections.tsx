@@ -45,7 +45,12 @@ export function Ritual() {
           .to(photo, { scale: 1, duration: 3.4, ease: "none" }, 0)
           .to(photo, { opacity: 0, duration: 0.5, ease: "power2.in" }, 2.9);
       });
-      if (!reduced) gsap.fromTo(q("[data-outro]"), { opacity: 0 }, { opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "88% top", end: "bottom bottom", scrub: true } });
+      if (!reduced) {
+        gsap.fromTo(q("[data-outro]"), { opacity: 0 }, { opacity: 1, ease: "none", scrollTrigger: { trigger: root.current, start: "88% top", end: "bottom bottom", scrub: true } });
+        // The section is pinned the instant it's reached, so without this the album's paper tone would cut
+        // straight to the first photograph; this eases up out of the same dark the outro fades down into.
+        gsap.fromTo(q("[data-intro]"), { opacity: 1 }, { opacity: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "6% top", scrub: true } });
+      }
     },
     { scope: root, dependencies: [reduced] },
   );
@@ -105,6 +110,7 @@ export function Ritual() {
             <p className="mt-4 max-w-[40ch] text-base leading-relaxed text-ivory/70 sm:text-lg">{s.body}</p>
           </div>
         ))}
+        <div data-intro aria-hidden className="pointer-events-none absolute inset-0" style={{ zIndex: "var(--z-foreground)", background: "var(--color-obsidian)" }} />
         <div data-outro aria-hidden className="pointer-events-none absolute inset-0 opacity-0" style={{ zIndex: "var(--z-foreground)", background: "linear-gradient(180deg, rgba(26,11,13,0.6), var(--color-obsidian) 78%)" }} />
       </div>
     </section>
